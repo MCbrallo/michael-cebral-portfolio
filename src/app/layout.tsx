@@ -56,6 +56,7 @@ export default function RootLayout({
                           preload="auto"
                           class="absolute inset-0 w-full h-full object-cover scale-105"
                       >
+                          <source src="/galaxy.webm" type="video/webm" />
                           <source src="/galaxy.mp4" type="video/mp4" />
                       </video>
                       `
