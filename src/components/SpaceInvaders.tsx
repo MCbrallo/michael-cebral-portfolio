@@ -126,13 +126,21 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
         audioRef.current = createAudioCtx();
         const audio = audioRef.current;
 
-        const W = window.innerWidth;
-        const H = window.innerHeight;
-        canvas.width = W;
-        canvas.height = H;
+        const actualW = window.innerWidth;
+        const actualH = window.innerHeight;
+        // Logical width minimum 600. If screen is smaller (mobile), we scale down.
+        const logicalW = Math.max(600, actualW);
+        const touchScale = actualW / logicalW;
+        const logicalH = actualH / touchScale;
+
+        canvas.width = actualW;
+        canvas.height = actualH;
+
+        const W = logicalW;
+        const H = logicalH;
 
         const g: any = {
-            W, H,
+            W, H, touchScale,
             player: { x: W / 2 - PLAYER_W / 2 },
             bullets: [] as Bullet[],
             alienBullets: [] as Bullet[],
@@ -181,6 +189,47 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
         const onKeyUp = (e: KeyboardEvent) => g.keys.delete(e.key);
         window.addEventListener("keydown", onKeyDown);
         window.addEventListener("keyup", onKeyUp);
+
+        // ─── Mobile Touch Controls ───
+        let touchStartX = 0;
+        let playerStartX = 0;
+        let isTouching = false;
+
+        const onTouchStart = (e: TouchEvent) => {
+            const g = gameRef.current;
+            if (!g || g.gameOver || g.won) return;
+            if (e.cancelable) e.preventDefault(); // Prevent scrolling
+            
+            if (gameMusicRef.current && gameMusicRef.current.paused && !g.bossMode) {
+                gameMusicRef.current.play().catch(() => {});
+            }
+
+            isTouching = true;
+            touchStartX = e.touches[0].clientX / g.touchScale;
+            playerStartX = g.player.x;
+            g.keys.add(" "); // Auto-fire while touching
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+            const g = gameRef.current;
+            if (!g || !isTouching || g.gameOver || g.won) return;
+            if (e.cancelable) e.preventDefault();
+            
+            const currentX = e.touches[0].clientX / g.touchScale;
+            const deltaX = currentX - touchStartX;
+            g.player.x = Math.max(0, Math.min(g.W - PLAYER_W, playerStartX + deltaX));
+        };
+
+        const onTouchEnd = (e: TouchEvent) => {
+            const g = gameRef.current;
+            isTouching = false;
+            if (g) g.keys.delete(" ");
+        };
+
+        window.addEventListener("touchstart", onTouchStart, { passive: false });
+        window.addEventListener("touchmove", onTouchMove, { passive: false });
+        window.addEventListener("touchend", onTouchEnd);
+        window.addEventListener("touchcancel", onTouchEnd);
 
         // ─── Drawing helpers ───
         const drawShip = (x: number, y: number) => {
@@ -590,6 +639,9 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             g.particles = (g.particles as Particle[]).filter(p => { p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life -= 0.02; return p.life > 0; });
 
             // === DRAW ===
+            ctx.save();
+            ctx.scale(g.touchScale, g.touchScale);
+
             ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.fillRect(0, 0, W, H);
@@ -824,6 +876,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 startLevel(0);
             }
 
+            ctx.restore();
             g.animFrame = requestAnimationFrame(loop);
         };
 
@@ -832,6 +885,10 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
         return () => {
             window.removeEventListener("keydown", onKeyDown);
             window.removeEventListener("keyup", onKeyUp);
+            window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
+            window.removeEventListener("touchcancel", onTouchEnd);
             if (gameRef.current) cancelAnimationFrame(gameRef.current.animFrame);
             if (audioRef.current) audioRef.current.close();
             if (doomMusicRef.current) { doomMusicRef.current(); doomMusicRef.current = null; }
@@ -879,7 +936,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 <div className="absolute inset-0 flex items-center justify-center" style={{ top: '65%' }}>
                     <button
                         onClick={activateDoomMode}
-                        className="px-8 py-4 bg-red-700 hover:bg-red-600 text-white font-mono font-bold text-xl tracking-wider uppercase rounded-sm border-2 border-red-500 shadow-lg shadow-red-500/50 hover:shadow-red-400/70 transition-all duration-300 hover:scale-105 animate-pulse"
+                        className="px-4 sm:px-8 py-3 sm:py-4 bg-red-700 hover:bg-red-600 text-white font-mono font-bold text-sm sm:text-xl tracking-wider uppercase rounded-sm border-2 border-red-500 shadow-lg shadow-red-500/50 hover:shadow-red-400/70 transition-all duration-300 hover:scale-105 animate-pulse"
                         style={{ textShadow: "0 0 10px rgba(255,0,0,0.5)" }}
                     >
                         ☠ ACTIVATE DOOM MODE ☠
