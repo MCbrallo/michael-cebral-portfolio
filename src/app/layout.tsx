@@ -44,16 +44,23 @@ export default function RootLayout({
         <LanguageProvider>
           {/* Global Video Background */}
           <div className="fixed inset-0 z-[-1] pointer-events-none bg-black">
-              <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  className="absolute inset-0 w-full h-full object-cover scale-105"
-              >
-                  <source src="/galaxy.mp4" type="video/mp4" />
-              </video>
+              <div 
+                  className="absolute inset-0 w-full h-full"
+                  dangerouslySetInnerHTML={{
+                      __html: `
+                      <video
+                          autoplay
+                          loop
+                          muted
+                          playsinline
+                          preload="auto"
+                          class="absolute inset-0 w-full h-full object-cover scale-105"
+                      >
+                          <source src="/galaxy.mp4" type="video/mp4" />
+                      </video>
+                      `
+                  }}
+              />
               {/* Dark Overlay for Text Readability */}
               <div className="absolute inset-0 bg-black/60" />
           </div>
