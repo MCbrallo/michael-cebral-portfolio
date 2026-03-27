@@ -419,7 +419,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 }
 
                 // Level complete
-                if ((g.aliens as Alien[]).every(a => !a.alive)) {
+                if (!g.bossMode && (g.aliens as Alien[]).every(a => !a.alive)) {
                     if (g.level >= LEVEL_CONFIGS.length - 1) {
                         g.won = true;
                         setShowDoomButton(true);
