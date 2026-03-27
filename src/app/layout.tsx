@@ -49,8 +49,8 @@ export default function RootLayout({
                   muted
                   loop
                   playsInline
+                  preload="auto"
                   className="absolute inset-0 w-full h-full object-cover scale-105"
-                  poster="/poster-galaxy.jpg"
               >
                   <source src="/galaxy.mp4" type="video/mp4" />
               </video>
