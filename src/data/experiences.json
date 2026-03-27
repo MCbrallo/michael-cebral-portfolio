@@ -1,0 +1,300 @@
+{
+  "SE": [
+    {
+      "type": "career",
+      "title": {
+        "en": "Research Engineer",
+        "es": "Ingeniero de Investigación"
+      },
+      "organization": "Giacomello Lab | ScilifeLab (KTH)",
+      "dates": "Nov 24 - Ago 25",
+      "logo": "/logos/scilifelab.png",
+      "description": {
+        "en": [
+          "Delivered analysis reports on spatial transcriptomics data from NASA Rodent Research 9.",
+          "Built reusable R and Python pipelines for biological datasets."
+        ],
+        "es": [
+          "Entregué informes de análisis de datos de transcriptómica espacial del proyecto NASA Rodent Research 9.",
+          "Construí pipelines reutilizables en R y Python para conjuntos de datos biológicos."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Bioinformatics",
+          "Space Science"
+        ],
+        "es": [
+          "Bioinformática",
+          "Ciencia Espacial"
+        ]
+      }
+    },
+    {
+      "type": "career",
+      "title": {
+        "en": "Research Assistant",
+        "es": "Asistente de Investigación"
+      },
+      "organization": "Anna Rising Lab | Karolinska Institutet",
+      "dates": "Mar 24 - Jun 24",
+      "logo": "/logos/ki.png",
+      "description": {
+        "en": [
+          "Produced recombinant spider-silk proteins and assembled 3D scaffolds.",
+          "Generated protocols for structural characterisation."
+        ],
+        "es": [
+          "Produje proteínas recombinantes de seda de araña y ensamblé andamios 3D.",
+          "Generé protocolos para caracterización estructural."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Biomaterials"
+        ],
+        "es": [
+          "Biomateriales"
+        ]
+      }
+    },
+    {
+      "type": "education",
+      "title": {
+        "en": "Master's Program of Biomedicine",
+        "es": "Máster en Biomedicina"
+      },
+      "organization": "Karolinska Institutet (KI)",
+      "dates": "Ago 23 - Ago 25",
+      "logo": "/logos/ki.png",
+      "description": {
+        "en": [
+          "Full MSc Scholarship awarded by <a href='https://fundacionlacaixa.org/en/scholarships-research-leaders' target='_blank' rel='noopener noreferrer' class='text-white border-b border-white/30 hover:border-white pb-0.5 transition-all duration-300'>'la Caixa' Foundation</a>.",
+          "Grade: VG"
+        ],
+        "es": [
+          "Beca completa de máster otorgada por la <a href='https://fundacionlacaixa.org/es/becas-posgrado-europe-100' target='_blank' rel='noopener noreferrer' class='text-white border-b border-white/30 hover:border-white pb-0.5 transition-all duration-300'>Fundación 'la Caixa'</a>.",
+          "Calificación: VG"
+        ]
+      },
+      "tags": {
+        "en": [
+          "Education"
+        ],
+        "es": [
+          "Educación"
+        ]
+      }
+    }
+  ],
+  "GB": [
+    {
+      "type": "career",
+      "title": {
+        "en": "Research Intern",
+        "es": "Becario de Investigación"
+      },
+      "organization": "Pereira-Acedo Lab | ILDH (UCL)",
+      "dates": "Jul 22 - Sep 22",
+      "logo": "/logos/ucl.png",
+      "description": {
+        "en": [
+          "Generated 3D tumour spheroids to test novel photosensitive therapeutic compounds."
+        ],
+        "es": [
+          "Generé esferoides tumorales 3D para probar nuevos compuestos terapéuticos fotosensibles."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Oncology",
+          "Research"
+        ],
+        "es": [
+          "Oncología",
+          "Investigación"
+        ]
+      }
+    }
+  ],
+  "ES": [
+    {
+      "type": "career",
+      "title": {
+        "en": "Bachelor Thesis Researcher",
+        "es": "Investigador de Proyecto de Fin de Grado"
+      },
+      "organization": "CiMUS (USC)",
+      "dates": "Nov 22 - Jul 23",
+      "logo": "/logos/cimus_logo.png",
+      "description": {
+        "en": [
+          "Investigated novel low molecular weight compounds for treating Rheumatoid Arthritis using gene expression assays (qPCR).",
+          "Explored efficacy of eprinomectin in reducing pro-inflammatory cytokine secretion in vitro."
+        ],
+        "es": [
+          "Investigué compuestos novedosos de bajo peso molecular para el tratamiento de la artritis reumatoide mediante ensayos de expresión génica (qPCR).",
+          "Exploré la eficacia de la eprinomectina en la reducción de la secreción de citoquinas proinflamatorias in vitro."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Immunology",
+          "Research"
+        ],
+        "es": [
+          "Inmunología",
+          "Investigación"
+        ]
+      }
+    },
+    {
+      "type": "career",
+      "title": {
+        "en": "Research Intern",
+        "es": "Becario de Investigación"
+      },
+      "organization": "Prionlab | CiMUS (USC)",
+      "dates": "Sep 22 - Nov 22",
+      "logo": "/logos/cimus_logo.png",
+      "description": {
+        "en": [
+          "Studied prion biology and protein misfolding diseases.",
+          "Learned proteomics research techniques for protein structural elucidation."
+        ],
+        "es": [
+          "Estudié la biología de los priones y enfermedades de plegamiento incorrecto de proteínas.",
+          "Aprendí técnicas de investigación proteómica para la elucidación estructural de proteínas."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Proteomics",
+          "Research"
+        ],
+        "es": [
+          "Proteómica",
+          "Investigación"
+        ]
+      }
+    },
+    {
+      "type": "career",
+      "title": {
+        "en": "Research Intern",
+        "es": "Becario de Investigación"
+      },
+      "organization": "Immunity & Small Molecules Lab | CiMUS (USC)",
+      "dates": "Feb 22 - Jun 22",
+      "logo": "/logos/cimus_logo.png",
+      "description": {
+        "en": [
+          "Developed cell culture skills with suspension and adherent cells.",
+          "Performed colorimetric quantification (ELISA) and flow cytometry analysis."
+        ],
+        "es": [
+          "Desarrollé habilidades de cultivo celular con células en suspensión y adherentes.",
+          "Realicé cuantificación colorimétrica (ELISA) y análisis de citometría de flujo."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Immunology",
+          "Cell Culture"
+        ],
+        "es": [
+          "Inmunología",
+          "Cultivo Celular"
+        ]
+      }
+    },
+    {
+      "type": "education",
+      "title": {
+        "en": "Bachelor's in Biotechnology",
+        "es": "Grado en Biotecnología"
+      },
+      "organization": "Universidad de Santiago de Compostela (USC)",
+      "dates": "Sep 19 - Jul 23",
+      "logo": "/logos/usc.png",
+      "description": {
+        "en": [
+          "Grade: 9.2/10",
+          "Academic Excellence Scholarship"
+        ],
+        "es": [
+          "Calificación: 9.2/10",
+          "Beca de Excelencia Académica"
+        ]
+      },
+      "tags": {
+        "en": [
+          "Education"
+        ],
+        "es": [
+          "Educación"
+        ]
+      }
+    }
+  ],
+  "FR": [
+    {
+      "type": "education",
+      "title": {
+        "en": "Master's in Space Science",
+        "es": "Máster en Ciencia Espacial"
+      },
+      "organization": "International Space University (ISU)",
+      "dates": "Ago 25 - Feb 27",
+      "logo": "/logos/isu.png",
+      "description": {
+        "en": [
+          "Space Business and Entrepreneurship.",
+          "Full MSS Scholarship awarded by <a href='https://www.fundacionbarrie.org/en/grants/postgraduate-grants' target='_blank' rel='noopener noreferrer' class='text-white border-b border-white/30 hover:border-white pb-0.5 transition-all duration-300'>Barrié Foundation</a>."
+        ],
+        "es": [
+          "Negocios y Emprendimiento Espacial.",
+          "Beca completa MSS otorgada por la <a href='https://www.fundacionbarrie.org/es/becas/becas-de-posgrado' target='_blank' rel='noopener noreferrer' class='text-white border-b border-white/30 hover:border-white pb-0.5 transition-all duration-300'>Fundación Barrié</a>."
+        ]
+      },
+      "tags": {
+        "en": [
+          "Education"
+        ],
+        "es": [
+          "Educación"
+        ]
+      }
+    }
+  ],
+  "BE": [
+    {
+      "type": "education",
+      "title": {
+        "en": "ESA/ELGRA Summer School",
+        "es": "Escuela de Verano ESA/ELGRA"
+      },
+      "organization": "European Space Agency (ESA)",
+      "dates": "Jun 24",
+      "logo": "/logos/esa.png",
+      "description": {
+        "en": [
+          "Gravity Related Research Summer School."
+        ],
+        "es": [
+          "Escuela de verano de investigación relacionada con la gravedad."
+        ]
+      },
+      "tags": {
+        "en": [
+          "ESA",
+          "Space"
+        ],
+        "es": [
+          "ESA",
+          "Espacio"
+        ]
+      }
+    }
+  ]
+}

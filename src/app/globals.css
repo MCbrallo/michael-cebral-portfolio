@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* Ultra-Premium Theme */
+  --background: #050505;
+  /* Pure, deep black */
+  --foreground: #FFFFFF;
+  /* Stark white */
+
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-surface: rgba(20, 20, 20, 0.6);
+
+  --font-sans: var(--font-inter);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --font-bodoni: var(--font-bodoni);
+
+  /* Deep Space Palette */
+  --color-deep-space: #050505;
+  --color-stark-white: #F5F5F7;
+  --color-gold: #D4AF37;
+  /* Champagne Gold */
+  --color-gold-dim: #AA8C2C;
+
+  --color-background: var(--color-deep-space);
+  --color-foreground: var(--color-stark-white);
+
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  /* Slightly more visible for structure */
+  --color-glass-surface: rgba(10, 10, 10, 0.4);
+  /* Darker, more substantial */
+  --color-glass-highlight: rgba(255, 255, 255, 0.03);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  /* Bodoni allows for bold, but 400/500 is elegant */
+  letter-spacing: -0.03em;
+  /* Tight editorial tracking */
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes spectrum {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spectrum 8s linear infinite;
+}
+
+.glass-panel {
+  background: var(--glass-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out both;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Chromatic Aberration Effect */
+.chromatic-layer {
+  opacity: 0;
+  transform: translate(0, 0);
+  mix-blend-mode: screen;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chromatic-host:hover .chromatic-layer {
+  opacity: 0.6;
+  transform: translate(var(--cx), var(--cy));
+}
+
+/* Rainbow Shimmer */
+@keyframes rainbow-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.rainbow-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ff000060 15%,
+    #ff880060 25%,
+    #ffff0060 35%,
+    #00ff0060 45%,
+    #00ffff60 55%,
+    #0088ff60 65%,
+    #8800ff60 75%,
+    #ff00ff60 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.chromatic-host:hover .rainbow-shimmer {
+  opacity: 1;
+  animation: rainbow-sweep 2s linear infinite;
+}
+
+/* Nebula Blobs */
+@keyframes nebula-drift {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: var(--nebula-opacity, 0.45);
+  }
+  20% {
+    transform: translate(60px, -40px) scale(1.2) rotate(8deg);
+    opacity: calc(var(--nebula-opacity, 0.45) * 1.3);
+  }
+  40% {
+    transform: translate(-20px, 50px) scale(0.85) rotate(-5deg);
+    opacity: calc(var(--nebula-opacity, 0.45) * 0.7);
+  }
+  60% {
+    transform: translate(-50px, -20px) scale(1.15) rotate(3deg);
+    opacity: calc(var(--nebula-opacity, 0.45) * 1.2);
+  }
+  80% {
+    transform: translate(30px, 30px) scale(0.95) rotate(-8deg);
+    opacity: calc(var(--nebula-opacity, 0.45) * 0.85);
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: var(--nebula-opacity, 0.45);
+  }
+}
+
+.nebula-blob {
+  animation: nebula-drift 25s ease-in-out infinite;
+  filter: blur(60px);
+  will-change: transform, opacity;
+}
