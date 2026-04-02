@@ -16,6 +16,7 @@ export function Header() {
     const navItems = [
         { name: t.nav.articles, href: "/articles" },
         { name: t.nav.about, href: "/about" },
+        { name: t.nav.cv, href: "/about/cv" },
         { name: t.nav.contact, href: "/contact" },
     ];
     const [isGameActive, setIsGameActive] = React.useState(false);
@@ -53,7 +54,9 @@ export function Header() {
                 {/* Navigation - Ultra Minimal */}
                 <nav className="flex items-center gap-8 md:gap-12">
                     {navItems.map((item) => {
-                        const isActive = pathname.startsWith(item.href);
+                        const isActive = item.href === '/about'
+                            ? pathname === '/about'
+                            : pathname.startsWith(item.href);
                         return (
                             <Magnetic key={item.href} strength={0.4}>
                                 <Link

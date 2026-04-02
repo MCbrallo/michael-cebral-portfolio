@@ -6,7 +6,13 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 export function LanguageToggle() {
-    const { language, toggleLanguage } = useLanguage();
+    const { language, setLanguage } = useLanguage();
+
+    const langs = [
+        { code: "en" as const, label: "EN" },
+        { code: "es" as const, label: "ES" },
+        { code: "gl" as const, label: "GL" },
+    ];
 
     return (
         <motion.div
@@ -16,14 +22,24 @@ export function LanguageToggle() {
             className="fixed bottom-8 right-6 md:right-12 lg:right-16 z-50 mix-blend-difference"
         >
             <Magnetic strength={0.2}>
-                <button
-                    onClick={toggleLanguage}
-                    className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/80 hover:text-white transition-colors uppercase"
-                >
-                    <span className={cn(language === "en" ? "text-white" : "text-white/40")}>EN</span>
-                    <span className="text-white/20">|</span>
-                    <span className={cn(language === "es" ? "text-white" : "text-white/40")}>ES</span>
-                </button>
+                <div className="flex items-center gap-2 text-xs font-medium tracking-widest uppercase">
+                    {langs.map((lang, i) => (
+                        <span key={lang.code} className="flex items-center gap-2">
+                            <button
+                                onClick={() => setLanguage(lang.code)}
+                                className={cn(
+                                    "transition-colors duration-300 hover:text-white cursor-pointer",
+                                    language === lang.code ? "text-white" : "text-white/40"
+                                )}
+                            >
+                                {lang.label}
+                            </button>
+                            {i < langs.length - 1 && (
+                                <span className="text-white/20">|</span>
+                            )}
+                        </span>
+                    ))}
+                </div>
             </Magnetic>
         </motion.div>
     );

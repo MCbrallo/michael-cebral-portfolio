@@ -71,7 +71,7 @@ export function HeroSection() {
     }, [quoteIndex]);
 
     const activeQuote = quoteIndex !== null ? {
-        text: language === 'es' ? quotes[quoteIndex].es : quotes[quoteIndex].en,
+        text: language === 'en' ? quotes[quoteIndex].en : quotes[quoteIndex].es,
         author: quotes[quoteIndex].author
     } : null;
 
@@ -79,8 +79,7 @@ export function HeroSection() {
         <>
         {!showGame && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
-        <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden">
-            {/* Background Layer */}
+        <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
             {/* Background Layer (moved to global layout, just keeping placeholder space) */}
             <div className="absolute inset-0 z-0 pointer-events-none" />
 
@@ -126,12 +125,34 @@ export function HeroSection() {
                     </div>
 
                     {/* Quotes - Bodoni (The "First Font") */}
-                    <div className="h-32 flex items-start justify-center mt-6 w-full max-w-2xl px-6 font-bodoni overflow-visible">
+                    <div className="min-h-[120px] flex items-start justify-center mt-6 w-full max-w-2xl px-6 font-bodoni overflow-visible">
                         <QuotesDisplay quote={activeQuote} />
                     </div>
 
                 </motion.div>
             </div>
+            )}
+
+            {/* Alien Warning - absolute bottom left, hidden during game */}
+            {!showGame && (
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 2 }}
+                    className="fixed bottom-2 left-4 md:bottom-4 md:left-6 z-[100] pointer-events-none"
+                >
+                    <div className="relative group">
+                        {/* Subtle red glow */}
+                        <div className="absolute inset-0 bg-red-600/10 blur-xl rounded-full animate-pulse-slow" />
+                        
+                        <p className="relative text-red-500/60 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase max-w-[220px] leading-relaxed drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">
+                            <span className="animate-pulse inline-block mr-1">⚠</span>
+                            {language === 'en' && 'Warning: Alien activity has been detected in this sector. They could be hostile.'}
+                            {language === 'es' && 'Cuidado: Se han avistado aliens en este sector. Podrían ser agresivos.'}
+                            {language === 'gl' && 'Coidado: Avistáronse aliens neste sector. Poderían ser agresivos.'}
+                        </p>
+                    </div>
+                </motion.div>
             )}
         </section>
         </>

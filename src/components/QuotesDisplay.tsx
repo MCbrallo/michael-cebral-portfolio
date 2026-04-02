@@ -16,7 +16,7 @@ export function QuotesDisplay({ quote }: QuotesDisplayProps) {
     if (!quote) return null;
 
     return (
-        <div className="h-24 w-full flex items-center justify-center pointer-events-none">
+        <div className="min-h-[120px] py-2 w-full flex items-center justify-center pointer-events-none">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={quote.text} // Triggers animation on change

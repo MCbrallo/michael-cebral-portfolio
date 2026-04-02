@@ -23,7 +23,7 @@ export default function ContactPage() {
     ];
 
     return (
-        <section className="h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
+        <section className="h-screen flex flex-col items-center justify-center px-6 pt-24 overflow-hidden">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -31,7 +31,7 @@ export default function ContactPage() {
                 className="max-w-xl w-full text-center"
             >
                 {/* Title */}
-                <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-4 tracking-tight">
+                <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-medium mb-4 tracking-tight py-2">
                     {t.contact?.title || "Let's Connect"}
                 </h1>
 

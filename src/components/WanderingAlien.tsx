@@ -236,12 +236,12 @@ export function WanderingAlien({ onCatch }: WanderingAlienProps) {
                         )}
                     </svg>
 
-                    {/* Glow */}
+                    {/* Glow - only during dying/calling, no green glow */}
                     <div
                         className="absolute inset-0 rounded-full blur-xl pointer-events-none"
                         style={{
                             background: alienColor,
-                            opacity: isDying ? 0.5 : isCalling ? 0.6 : 0.25,
+                            opacity: isDying ? 0.5 : isCalling ? 0.6 : 0,
                             transform: "scale(2)",
                             transition: "opacity 0.3s, background 0.3s",
                         }}

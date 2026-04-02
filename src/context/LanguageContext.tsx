@@ -2,12 +2,13 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-type Language = "en" | "es";
+type Language = "en" | "es" | "gl";
 
 interface Translations {
     nav: {
         articles: string;
         about: string;
+        cv: string;
         contact: string;
     };
     hero: {
@@ -40,6 +41,7 @@ const translations: Record<Language, Translations> = {
         nav: {
             articles: "Projects",
             about: "About me",
+            cv: "My CV",
             contact: "Contact",
         },
         hero: {
@@ -70,6 +72,7 @@ const translations: Record<Language, Translations> = {
         nav: {
             articles: "Proyectos",
             about: "Sobre mí",
+            cv: "Mi CV",
             contact: "Contacto",
         },
         hero: {
@@ -95,8 +98,41 @@ const translations: Record<Language, Translations> = {
             space: "Ciencia Espacial",
             technical: "Técnico"
         }
+    },
+    gl: {
+        nav: {
+            articles: "Proxectos",
+            about: "Sobre min",
+            cv: "O meu CV",
+            contact: "Contacto",
+        },
+        hero: {
+            subtitle: "Comunicación Científica",
+        },
+        contact: {
+            title: "Conectemos",
+            subtitle: "Aberto a discutir novos proxectos, ideas creativas ou oportunidades para colaborar en iniciativas de comunicación científica.",
+            emailDesc: "Envíame un correo para consultas e colaboracións",
+            linkedinDesc: "Conecta comigo profesionalmente",
+            footer: "Normalmente respondo en 24-48 horas"
+        },
+        about: {
+            title: "Traxectoria Científica",
+            subtitle: "Investigador con experiencia interdisciplinar en biotecnoloxía, ciencia espacial e biomedicina. Centrado en conectar bioloxía molecular, bioinformática e investigación traslacional para abordar desafíos científicos complexos.",
+            filterAll: "Todo",
+            filterEducation: "Educación",
+            filterExperience: "Experiencia Profesional",
+            education: "Educación",
+            experience: "Experiencia",
+            skillsTitle: "Competencias Principais",
+            biotech: "Biotecnoloxía",
+            space: "Ciencia Espacial",
+            technical: "Técnico"
+        }
     }
 };
+
+const languageOrder: Language[] = ["en", "es", "gl"];
 
 interface LanguageContextType {
     language: Language;
@@ -111,7 +147,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<Language>("en");
 
     const toggleLanguage = () => {
-        setLanguage((prev) => (prev === "en" ? "es" : "en"));
+        setLanguage((prev) => {
+            const idx = languageOrder.indexOf(prev);
+            return languageOrder[(idx + 1) % languageOrder.length];
+        });
     };
 
     return (

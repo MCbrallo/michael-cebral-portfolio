@@ -36,11 +36,51 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
+html {
+  zoom: 0.8;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL EFFECTS
+   ══════════════════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.title-shimmer {
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.7) 20%,
+    rgba(255,255,255,1) 40%,
+    rgba(255,255,255,1) 60%,
+    rgba(255,255,255,0.7) 80%
+  ) !important;
+  background-size: 200% auto !important;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: shimmer 8s linear infinite;
+  padding-bottom: 0.1em; /* Prevent clipping of descenders */
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FUTURISTIC SPACE SCROLLBAR
+   ══════════════════════════════════════════════════════════════ */
+/* Hide browser scrollbar for a clean native app feel */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 h1,
