@@ -52,7 +52,7 @@ export function Header() {
                 </Link>
 
                 {/* Navigation - Ultra Minimal */}
-                <nav className="flex items-center gap-8 md:gap-12">
+                <nav className="flex items-center gap-3 md:gap-12 overflow-x-auto no-scrollbar">
                     {navItems.map((item) => {
                         const isActive = item.href === '/about'
                             ? pathname === '/about'
@@ -62,7 +62,7 @@ export function Header() {
                                 <Link
                                     href={item.href}
                                     className={cn(
-                                        "text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all duration-300 relative block py-2",
+                                        "text-[9px] md:text-xs uppercase tracking-widest md:tracking-[0.2em] transition-all duration-300 relative block py-2 whitespace-nowrap",
                                         isActive ? "text-gold font-semibold" : "text-white/60 hover:text-white"
                                     )}
                                 >

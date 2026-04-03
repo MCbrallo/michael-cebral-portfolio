@@ -15,6 +15,8 @@ export const Magnetic = ({ children, strength = 0.35, active = true }: MagneticP
 
     const handleMouse = (e: React.MouseEvent) => {
         if (!active) return;
+        // Disable on non-hover (touch) devices
+        if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(hover: none)").matches) return;
 
         const { clientX, clientY } = e;
         const { height, width, left, top } = ref.current?.getBoundingClientRect() || { height: 0, width: 0, left: 0, top: 0 };
@@ -36,6 +38,7 @@ export const Magnetic = ({ children, strength = 0.35, active = true }: MagneticP
             ref={ref}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
+            onClick={reset}
             animate={{ x, y }}
             transition={{ type: "spring", stiffness: 140, damping: 15, mass: 0.1 }}
             className="inline-block" // Ensure it doesn't break layout

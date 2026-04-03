@@ -31,7 +31,7 @@ export default function ContactPage() {
                 className="max-w-xl w-full text-center"
             >
                 {/* Title */}
-                <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-medium mb-4 tracking-tight py-2">
+                <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-bold mb-4 tracking-tight py-2">
                     {t.contact?.title || "Let's Connect"}
                 </h1>
 

@@ -61,12 +61,12 @@ function startDoomMusic(): () => void {
 
 // ─── Game Constants ───
 const LEVEL_CONFIGS = [
-    { cols: 10, rows: 4, speed: 1.2, shootInterval: 900, alienHp: 1, label: "SECTOR 1" },
-    { cols: 11, rows: 4, speed: 1.5, shootInterval: 800, alienHp: 1, label: "SECTOR 2" },
-    { cols: 12, rows: 5, speed: 1.7, shootInterval: 700, alienHp: 1, label: "SECTOR 3" },
-    { cols: 12, rows: 5, speed: 2.0, shootInterval: 600, alienHp: 2, label: "SECTOR 4" },
-    { cols: 13, rows: 5, speed: 2.2, shootInterval: 500, alienHp: 2, label: "SECTOR 5" },
-    { cols: 14, rows: 6, speed: 2.5, shootInterval: 400, alienHp: 2, label: "FINAL SECTOR" },
+    { cols: 10, rows: 4, speed: 1.5, shootInterval: 800, alienHp: 1, label: "SECTOR 1" },
+    { cols: 11, rows: 4, speed: 1.8, shootInterval: 700, alienHp: 1, label: "SECTOR 2" },
+    { cols: 12, rows: 5, speed: 2.1, shootInterval: 600, alienHp: 1, label: "SECTOR 3" },
+    { cols: 12, rows: 5, speed: 2.5, shootInterval: 500, alienHp: 2, label: "SECTOR 4" },
+    { cols: 13, rows: 5, speed: 2.8, shootInterval: 400, alienHp: 2, label: "SECTOR 5" },
+    { cols: 14, rows: 6, speed: 3.2, shootInterval: 300, alienHp: 2, label: "FINAL SECTOR" },
 ];
 
 const POWERUP_COLORS: Record<string, string> = { double: "#00ccff", laser: "#ff3366", shield: "#ffcc00", rapid: "#33ff99", life: "#ff69b4", triple: "#66ffff", berserker: "#ff0000" };
@@ -128,8 +128,8 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
 
         const actualW = window.innerWidth;
         const actualH = window.innerHeight;
-        // Logical width minimum 600. If screen is smaller (mobile), we scale down.
-        const logicalW = Math.max(600, actualW);
+        // Logical width minimum 700 to ensure all aliens fit even on max level.
+        const logicalW = Math.max(700, actualW);
         const touchScale = actualW / logicalW;
         const logicalH = actualH / touchScale;
 
@@ -147,6 +147,11 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             aliens: [] as Alien[],
             particles: [] as Particle[],
             powerUps: [] as PowerUp[],
+            stars: Array.from({ length: 150 }, () => ({
+                x: Math.random() * W, y: Math.random() * H,
+                size: Math.random() * 1.5 + 0.5, speed: Math.random() * 2 + 0.5
+            })),
+            shake: 0, glitchTimer: 0,
             dirX: LEVEL_CONFIGS[0].speed,
             score: 0, lives: 5, level: 0,
             gameOver: false, won: false,
@@ -164,6 +169,8 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             boss: null as Boss | null,
             bossMinions: [] as Alien[],
             bossDead: false,
+            isMobile: actualW <= 768,
+            shipMargin: actualW <= 768 ? 160 : 30,
         };
         g.aliens = buildAliens(W, 0);
         gameRef.current = g;
@@ -217,7 +224,8 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             
             const currentX = e.touches[0].clientX / g.touchScale;
             const deltaX = currentX - touchStartX;
-            g.player.x = Math.max(0, Math.min(g.W - PLAYER_W, playerStartX + deltaX));
+            g.player.x = Math.max(0, Math.min(g.W - PLAYER_W, g.player.x + deltaX));
+            touchStartX = currentX;
         };
 
         const onTouchEnd = (e: TouchEvent) => {
@@ -339,39 +347,41 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
 
             if (!g.gameOver && !g.won && !g.levelTransition && g.countdownPhase === "playing") {
                 // Player
-                const speed = 6;
+                const speed = 9;
                 if (g.keys.has("ArrowLeft")) g.player.x = Math.max(0, g.player.x - speed);
                 if (g.keys.has("ArrowRight")) g.player.x = Math.min(W - PLAYER_W, g.player.x + speed);
 
                 // Shoot
-                const shootCooldown = (g.rapidFire || g.berserkerMode) ? 80 : 200;
+                const shootCooldown = (g.rapidFire || g.berserkerMode) ? 70 : 160;
                 if (g.keys.has(" ") && now - g.lastShot > shootCooldown) {
                     const cx = g.player.x + PLAYER_W / 2;
-                    const by = H - 50;
+                    const by = H - g.shipMargin - 20;
                     if (g.berserkerMode) {
                         // BERSERKER: spread of 5 bullets + 2 lasers
-                        g.bullets.push({ x: cx - 1, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx - 12, y: by, dy: -9, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx + 10, y: by, dy: -9, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx - 20, y: by + 5, dy: -7, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx + 18, y: by + 5, dy: -7, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx - 6, y: by - 5, dy: -12, w: 4, h: 16, isLaser: true });
-                        g.bullets.push({ x: cx + 4, y: by - 5, dy: -12, w: 4, h: 16, isLaser: true });
+                        g.bullets.push({ x: cx - 1, y: by, dy: -12, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 12, y: by, dy: -11, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx + 10, y: by, dy: -11, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 20, y: by + 5, dy: -9, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx + 18, y: by + 5, dy: -9, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 6, y: by - 5, dy: -16, w: 4, h: 16, isLaser: true });
+                        g.bullets.push({ x: cx + 4, y: by - 5, dy: -16, w: 4, h: 16, isLaser: true });
                         sfxLaser(audio);
+                        g.shake = Math.max(g.shake, 2);
                     } else if (g.weapon === "triple") {
-                        g.bullets.push({ x: cx - 1, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx - 8, y: by + 4, dy: -7, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx + 6, y: by + 4, dy: -7, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 1, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 8, y: by + 4, dy: -9, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx + 6, y: by + 4, dy: -9, w: BULLET_W, h: BULLET_H });
                         sfxShoot(audio);
                     } else if (g.weapon === "double") {
-                        g.bullets.push({ x: cx - 10, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx + 8, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 10, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx + 8, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
                         sfxShoot(audio);
                     } else if (g.weapon === "laser") {
-                        g.bullets.push({ x: cx - 2, y: by, dy: -12, w: 5, h: 20, isLaser: true });
+                        g.bullets.push({ x: cx - 2, y: by, dy: -16, w: 5, h: 20, isLaser: true });
                         sfxLaser(audio);
+                        g.shake = Math.max(g.shake, 1);
                     } else {
-                        g.bullets.push({ x: cx - 1, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 1, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
                         sfxShoot(audio);
                     }
                     g.lastShot = now;
@@ -401,7 +411,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                     const alive = (g.aliens as Alien[]).filter(a => a.alive);
                     if (alive.length > 0) {
                         const shooter = alive[Math.floor(Math.random() * alive.length)];
-                        g.alienBullets.push({ x: shooter.x + ALIEN_W / 2, y: shooter.y + ALIEN_H, dy: 4.5, w: BULLET_W, h: BULLET_H });
+                        g.alienBullets.push({ x: shooter.x + ALIEN_W / 2, y: shooter.y + ALIEN_H, dy: 6, w: BULLET_W, h: BULLET_H });
                         g.lastAlienShot = now;
                     }
                 }
@@ -417,6 +427,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                                 g.score += (10 + g.level * 5) * (6 - a.row);
                                 spawnExplosion(g, a.x + ALIEN_W / 2, a.y + ALIEN_H / 2, alienColors[a.row % alienColors.length], 12);
                                 sfxHit(audio);
+                                g.shake = Math.max(g.shake, 1.5);
                                 // Weighted power-up drop (18% chance)
                                 if (Math.random() < 0.18) {
                                     g.powerUps.push({ x: a.x + ALIEN_W / 2, y: a.y + ALIEN_H / 2, type: rollPowerUp(), vy: 2 });
@@ -431,12 +442,12 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 g.powerUps = (g.powerUps as PowerUp[]).filter(p => {
                     p.y += p.vy;
                     // Collect
-                    if (p.x >= g.player.x - 8 && p.x <= g.player.x + PLAYER_W + 8 && p.y >= H - 55 && p.y <= H - 20) {
+                    if (p.x >= g.player.x - 8 && p.x <= g.player.x + PLAYER_W + 8 && p.y >= H - g.shipMargin - 25 && p.y <= H - g.shipMargin + 10) {
                         sfxPowerUp(audio);
                         if (p.type === "berserker") {
                             g.berserkerMode = true; g.berserkerTimer = 480; g.weapon = "berserker"; g.rapidFire = true; g.rapidTimer = 480;
-                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#ff0000", 20);
-                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 60, "#ffcc00", 15);
+                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#ff0000", 20);
+                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 30, "#ffcc00", 15);
                         }
                         else if (p.type === "life") { g.lives = Math.min(g.lives + 1, 9); }
                         else if (p.type === "triple") { g.weapon = "triple"; g.weaponTimer = 600; }
@@ -451,12 +462,14 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
 
                 // Collision: alien bullets → player
                 for (const b of g.alienBullets as Bullet[]) {
-                    if (b.x >= g.player.x && b.x <= g.player.x + PLAYER_W && b.y >= H - PLAYER_H - 30 && b.y <= H - 30) {
+                    if (b.x >= g.player.x && b.x <= g.player.x + PLAYER_W && b.y >= H - PLAYER_H - g.shipMargin && b.y <= H - g.shipMargin) {
                         b.y = H + 100;
-                        if (g.shieldActive) { g.shieldActive = false; g.shieldTimer = 0; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#ffcc00", 6); }
+                        if (g.shieldActive) { g.shieldActive = false; g.shieldTimer = 0; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#ffcc00", 6); }
                         else {
                             g.lives--;
-                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#00ff88", 15);
+                            g.shake = 15;
+                            g.glitchTimer = 15;
+                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#00ff88", 15);
                             if (g.lives <= 0) { g.gameOver = true; sfxGameOver(audio); }
                         }
                     }
@@ -464,7 +477,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
 
                 // Aliens reach bottom
                 for (const a of g.aliens as Alien[]) {
-                    if (a.alive && a.y + ALIEN_H >= H - 60) { g.gameOver = true; sfxGameOver(audio); }
+                    if (a.alive && a.y + ALIEN_H >= H - g.shipMargin - 30) { g.gameOver = true; sfxGameOver(audio); }
                 }
 
                 // Level complete
@@ -487,21 +500,21 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 boss.y = 40 + Math.sin(boss.timer * 0.008) * 20;
 
                 // Player movement during boss
-                if (g.keys.has("ArrowLeft")) g.player.x = Math.max(0, g.player.x - 6);
-                if (g.keys.has("ArrowRight")) g.player.x = Math.min(W - PLAYER_W, g.player.x + 6);
+                if (g.keys.has("ArrowLeft")) g.player.x = Math.max(0, g.player.x - 9);
+                if (g.keys.has("ArrowRight")) g.player.x = Math.min(W - PLAYER_W, g.player.x + 9);
 
                 // Player shooting during boss
-                const shootCd = g.rapidFire ? 100 : 200;
+                const shootCd = g.rapidFire ? 70 : 160;
                 if (g.keys.has(" ") && now - g.lastShot > shootCd) {
                     const cx = g.player.x + PLAYER_W / 2;
-                    const by = H - 50;
+                    const by = H - g.shipMargin - 20;
                     if (g.weapon === "double") {
-                        g.bullets.push({ x: cx - 10, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
-                        g.bullets.push({ x: cx + 8, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 10, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx + 8, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
                     } else if (g.weapon === "laser") {
-                        g.bullets.push({ x: cx - 2, y: by, dy: -12, w: 5, h: 20, isLaser: true });
+                        g.bullets.push({ x: cx - 2, y: by, dy: -16, w: 5, h: 20, isLaser: true });
                     } else {
-                        g.bullets.push({ x: cx - 1, y: by, dy: -8, w: BULLET_W, h: BULLET_H });
+                        g.bullets.push({ x: cx - 1, y: by, dy: -10, w: BULLET_W, h: BULLET_H });
                     }
                     g.lastShot = now;
                 }
@@ -519,7 +532,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 // 1. Bullet spread every 1.2s
                 if (now - boss.lastShot > 1200) {
                     for (let i = -2; i <= 2; i++) {
-                        g.alienBullets.push({ x: boss.x + 100 + i * 30, y: boss.y + 70, dy: 4, w: 4, h: 10 });
+                        g.alienBullets.push({ x: boss.x + 100 + i * 30, y: boss.y + 70, dy: 5.5, w: 4, h: 10 });
                     }
                     boss.lastShot = now;
                     sfxBossLaser(audio);
@@ -543,30 +556,32 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 // Move minions down
                 for (const m of g.bossMinions as Alien[]) {
                     if (m.alive) {
-                        m.y += 1.5;
-                        m.x += Math.sin(m.y * 0.03) * 1;
+                        m.y += 2.0;
+                        m.x += Math.sin(m.y * 0.03) * 1.5;
                         if (m.y > H) m.alive = false;
                     }
                 }
                 // Minions shoot occasionally
                 for (const m of g.bossMinions as Alien[]) {
-                    if (m.alive && Math.random() < 0.005) {
-                        g.alienBullets.push({ x: m.x + ALIEN_W / 2, y: m.y + ALIEN_H, dy: 4, w: BULLET_W, h: BULLET_H });
+                    if (m.alive && Math.random() < 0.006) {
+                        g.alienBullets.push({ x: m.x + ALIEN_W / 2, y: m.y + ALIEN_H, dy: 5.5, w: BULLET_W, h: BULLET_H });
                     }
                 }
 
                 // Collision: player bullets → boss
                 for (const b of g.bullets as Bullet[]) {
-                    if (b.x >= boss.x && b.x <= boss.x + 200 && b.y >= boss.y && b.y <= boss.y + 70) {
+                    if (b.x + b.w >= boss.x && b.x <= boss.x + 200 && b.y + b.h >= boss.y && b.y <= boss.y + 70) {
                         boss.hp--;
                         b.y = -200;
                         g.score += 5;
                         spawnExplosion(g, b.x, b.y + 10, "#ff6633", 4);
                         sfxBossHit(audio);
+                        g.shake = Math.max(g.shake, 3);
                         boss.shakeTimer = 8;
                         if (boss.hp <= 0) {
                             g.bossDead = true;
                             g.score += 5000;
+                            g.shake = 30;
                             // Massive explosion
                             for (let i = 0; i < 40; i++) {
                                 setTimeout(() => spawnExplosion(g, boss.x + Math.random() * 200, boss.y + Math.random() * 70, alienColors[Math.floor(Math.random() * 6)], 8), i * 50);
@@ -586,6 +601,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                             g.score += 25;
                             spawnExplosion(g, m.x + ALIEN_W / 2, m.y + ALIEN_H / 2, alienColors[m.row % alienColors.length], 8);
                             sfxHit(audio);
+                            g.shake = Math.max(g.shake, 1.5);
                             if (Math.random() < 0.25) {
                                 g.powerUps.push({ x: m.x + ALIEN_W / 2, y: m.y + ALIEN_H / 2, type: rollPowerUp(), vy: 2 });
                             }
@@ -595,31 +611,39 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
 
                 // Collision: alien bullets → player (boss mode)
                 for (const b of g.alienBullets as Bullet[]) {
-                    if (b.x >= g.player.x && b.x <= g.player.x + PLAYER_W && b.y >= H - PLAYER_H - 30 && b.y <= H - 30) {
+                    if (b.x >= g.player.x && b.x <= g.player.x + PLAYER_W && b.y >= H - PLAYER_H - g.shipMargin && b.y <= H - g.shipMargin) {
                         b.y = H + 100;
                         if (g.shieldActive) { g.shieldActive = false; g.shieldTimer = 0; }
-                        else { g.lives--; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#00ff88", 15); if (g.lives <= 0) { g.gameOver = true; sfxGameOver(audio); if (doomMusicRef.current) { doomMusicRef.current(); doomMusicRef.current = null; } } }
+                        else { g.lives--; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#00ff88", 15); if (g.lives <= 0) { g.gameOver = true; sfxGameOver(audio); if (doomMusicRef.current) { doomMusicRef.current(); doomMusicRef.current = null; } } }
                     }
                 }
 
                 // Laser collision with player
                 if (boss.laserActive) {
-                    const laserEndX = boss.x + 100 + Math.sin(boss.laserAngle) * H;
+                    const lineStartX = boss.x + 100;
+                    const lineStartY = boss.y + 70;
+                    const lineEndX = boss.x + 100 + Math.sin(boss.laserAngle) * H;
+                    const lineEndY = H;
+                    const playerCenterY = H - PLAYER_H - g.shipMargin + PLAYER_H / 2;
+                    const t = (playerCenterY - lineStartY) / (lineEndY - lineStartY);
+                    const laserXAtPlayer = lineStartX + (lineEndX - lineStartX) * t;
+                    const MathAbs = Math.abs; // Cache for safety
+                    
                     const playerCX = g.player.x + PLAYER_W / 2;
-                    if (Math.abs(playerCX - laserEndX) < 30 && !g.shieldActive) {
-                        if (frameCount % 20 === 0) { g.lives--; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#ff3366", 8); if (g.lives <= 0) { g.gameOver = true; sfxGameOver(audio); if (doomMusicRef.current) { doomMusicRef.current(); doomMusicRef.current = null; } } }
+                    if (MathAbs(playerCX - laserXAtPlayer) < 30 && !g.shieldActive) {
+                        if (frameCount % 20 === 0) { g.lives--; spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#ff3366", 8); if (g.lives <= 0) { g.gameOver = true; sfxGameOver(audio); if (doomMusicRef.current) { doomMusicRef.current(); doomMusicRef.current = null; } } }
                     }
                 }
 
                 // Power-ups collection
                 g.powerUps = (g.powerUps as PowerUp[]).filter(p => {
                     p.y += p.vy;
-                    if (p.x >= g.player.x - 8 && p.x <= g.player.x + PLAYER_W + 8 && p.y >= H - 55 && p.y <= H - 20) {
+                    if (p.x >= g.player.x - 8 && p.x <= g.player.x + PLAYER_W + 8 && p.y >= H - g.shipMargin - 25 && p.y <= H - g.shipMargin + 10) {
                         sfxPowerUp(audio);
                         if (p.type === "berserker") {
                             g.berserkerMode = true; g.berserkerTimer = 480; g.weapon = "berserker"; g.rapidFire = true; g.rapidTimer = 480;
-                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 40, "#ff0000", 20);
-                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - 60, "#ffcc00", 15);
+                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 10, "#ff0000", 20);
+                            spawnExplosion(g, g.player.x + PLAYER_W / 2, H - g.shipMargin - 30, "#ffcc00", 15);
                         }
                         else if (p.type === "life") { g.lives = Math.min(g.lives + 1, 9); }
                         else if (p.type === "triple") { g.weapon = "triple"; g.weaponTimer = 600; }
@@ -642,9 +666,28 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             ctx.save();
             ctx.scale(g.touchScale, g.touchScale);
 
+            if (g.shake > 0) {
+                ctx.translate((Math.random() - 0.5) * g.shake, (Math.random() - 0.5) * g.shake);
+                g.shake *= 0.9;
+                if (g.shake < 0.5) g.shake = 0;
+            }
+
             ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.fillRect(0, 0, W, H);
+
+            // Parallax stars
+            ctx.fillStyle = "#ffffff";
+            for (const star of g.stars) {
+                ctx.globalAlpha = star.size / 2;
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+                star.y += star.speed + (g.bossMode ? 1.5 : 0);
+                if (star.y > H) star.y = 0;
+            }
+            ctx.globalAlpha = 1;
+
+            // Decrement glitch timer
+            if (g.glitchTimer > 0) g.glitchTimer--;
 
             // Scanlines
             ctx.fillStyle = "rgba(255,255,255,0.008)";
@@ -734,7 +777,7 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
             }
 
             // Player
-            drawShip(g.player.x, H - PLAYER_H - 30);
+            drawShip(g.player.x, H - PLAYER_H - g.shipMargin);
 
             // Player bullets
             for (const b of g.bullets as Bullet[]) {
@@ -834,10 +877,12 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 ctx.fillStyle = `rgba(0,0,0,${0.4 * alpha})`;
                 ctx.fillRect(0, H / 2 - 50, W, 100);
                 ctx.globalAlpha = alpha;
-                ctx.fillStyle = "#33ccff"; ctx.font = "bold 36px monospace"; ctx.textAlign = "center";
-                ctx.fillText(cfg.label, W / 2, H / 2 + 5);
+                ctx.fillStyle = g.bossMode ? "#ff0000" : "#33ccff"; ctx.font = "bold 36px monospace"; ctx.textAlign = "center";
+                ctx.shadowColor = g.bossMode ? "#ff0000" : "#33ccff"; ctx.shadowBlur = 10;
+                ctx.fillText(g.bossMode ? "MOTHERSHIP APPROACHING" : cfg.label, W / 2, H / 2 + 5);
+                ctx.shadowBlur = 0;
                 ctx.fillStyle = "#ffffff80"; ctx.font = "14px monospace";
-                ctx.fillText("GET READY", W / 2, H / 2 + 30);
+                ctx.fillText(g.bossMode ? "NO ESCAPE" : "GET READY", W / 2, H / 2 + 30);
                 ctx.globalAlpha = 1;
             }
 
@@ -874,6 +919,18 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
                 if (gameMusicRef.current) { gameMusicRef.current.currentTime = 0; gameMusicRef.current.play().catch(() => {}); }
                 setNowPlaying("Avenged Sevenfold — Hail To The King (8 bit)");
                 startLevel(0);
+            }
+
+            // Glitch effect drawing
+            if (g.glitchTimer > 0 && Math.random() > 0.3) {
+                ctx.fillStyle = "rgba(255, 0, 0, 0.15)";
+                ctx.fillRect(0, Math.random() * H, W, Math.random() * 100);
+                ctx.fillStyle = "rgba(0, 255, 255, 0.15)";
+                ctx.fillRect(0, Math.random() * H, W, Math.random() * 100);
+                if (Math.random() > 0.5) {
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.fillRect(0, Math.random() * H, W, 2);
+                }
             }
 
             ctx.restore();
@@ -922,6 +979,13 @@ export function SpaceInvaders({ onClose }: SpaceInvadersProps) {
     return (
         <div className="fixed inset-0 z-[99999] animate-fade-in">
             <canvas ref={canvasRef} className="w-full h-full" style={{ imageRendering: "pixelated" }} />
+            {/* Close button for mobile */}
+            <button 
+                onClick={onClose} 
+                className="absolute top-4 right-4 md:hidden z-[10000] w-10 h-10 flex items-center justify-center bg-black/40 rounded-full border border-white/20 text-white/80 hover:bg-black/60 active:scale-95"
+            >
+                ✕
+            </button>
             {/* Now Playing card */}
             {nowPlaying && (
                 <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm border border-white/10 rounded-md px-3 py-2 flex items-center gap-2 animate-fade-in" style={{ zIndex: 10000 }}>

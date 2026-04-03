@@ -77,7 +77,7 @@ export default function CVPage() {
 
                         <div className="flex-1 flex flex-col md:flex-row gap-8 items-center md:items-start w-full">
                             <div className="max-w-2xl relative z-10">
-                                <h1 className="title-shimmer font-serif text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight mb-4 leading-tight py-2">
+                                <h1 className="title-shimmer font-serif text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight py-2">
                                     {t.about?.title}
                                 </h1>
                                 <p className="text-white/40 text-base md:text-lg font-light leading-relaxed max-w-xl">
@@ -116,7 +116,7 @@ export default function CVPage() {
                     </div>
 
                     {/* Filter Navigation */}
-                    <div className="flex gap-6 text-sm flex-wrap">
+                    <div className="flex gap-3 md:gap-6 text-[10px] md:text-sm flex-wrap">
                         {[
                             { value: 'all', label: t.about?.filterAll || 'All' },
                             { value: 'education', label: t.about?.filterEducation || 'Education' },
@@ -126,7 +126,7 @@ export default function CVPage() {
                                 key={filter.value}
                                 onClick={() => setSelectedFilter(filter.value as ExperienceType | 'all')}
                                 className={`
-                  uppercase tracking-[0.2em] transition-all duration-500 relative pb-2 group
+                  uppercase tracking-widest md:tracking-[0.2em] transition-all duration-500 relative pb-2 group
                   ${selectedFilter === filter.value
                                         ? 'text-white font-medium'
                                         : 'text-white/40 hover:text-white/70'

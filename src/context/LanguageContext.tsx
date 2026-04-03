@@ -56,7 +56,7 @@ const translations: Record<Language, Translations> = {
         },
         about: {
             title: "Scientific Trajectory",
-            subtitle: "Researcher with interdisciplinary experience across biotechnology, space science, and biomedicine. Focused on bridging molecular biology, bioinformatics, and translational research to address complex scientific challenges.",
+            subtitle: "Bridging biotechnology and space science. I combine my background in research with a passion for clear, impactful science communication.",
             filterAll: "All",
             filterEducation: "Education",
             filterExperience: "Professional Experience",
@@ -87,7 +87,7 @@ const translations: Record<Language, Translations> = {
         },
         about: {
             title: "Trayectoria Científica",
-            subtitle: "Investigador con experiencia interdisciplinaria en biotecnología, ciencia espacial y biomedicina. Enfocado en conectar biología molecular, bioinformática e investigación traslacional para abordar desafíos científicos complejos.",
+            subtitle: "Conectando la biotecnología y la ciencia espacial. Combino mi experiencia en investigación con la pasión por una comunicación científica clara y con impacto.",
             filterAll: "Todo",
             filterEducation: "Educación",
             filterExperience: "Experiencia Profesional",
@@ -118,7 +118,7 @@ const translations: Record<Language, Translations> = {
         },
         about: {
             title: "Traxectoria Científica",
-            subtitle: "Investigador con experiencia interdisciplinar en biotecnoloxía, ciencia espacial e biomedicina. Centrado en conectar bioloxía molecular, bioinformática e investigación traslacional para abordar desafíos científicos complexos.",
+            subtitle: "Conectando a biotecnoloxía e a ciencia espacial. Combino a miña experiencia en investigación coa paixón por unha comunicación científica clara e con impacto.",
             filterAll: "Todo",
             filterEducation: "Educación",
             filterExperience: "Experiencia Profesional",

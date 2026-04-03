@@ -250,9 +250,11 @@ function MonitorWithPlayer({
     onTogglePlay: () => void; onPrevSong: () => void; onNextSong: () => void;
 }) {
     return (
-        <div className="fixed top-[55%] -translate-y-1/2 right-[4vw] w-[42vw] max-w-[620px] z-30 hidden md:flex flex-col gap-0">
+        <div className="fixed z-50 flex flex-col gap-0 shadow-2xl md:shadow-none
+            bottom-4 left-4 right-4 w-[calc(100%-2rem)] max-w-none
+            md:bottom-auto md:top-[55%] md:right-[10vw] md:left-auto md:-translate-y-1/2 md:w-[45vw]">
             {/* Photo monitor */}
-            <div className="relative w-full h-[55vh] max-h-[480px] rounded-t-sm overflow-hidden border border-white/[0.06] border-b-0 bg-[#080808]">
+            <div className="relative w-full rounded-t-sm overflow-hidden border border-white/[0.06] border-b-0 bg-[#080808] h-[26vh] min-h-[180px] md:h-[65vh] md:max-h-[85vh]">
                 {/* Monitor header */}
                 <div className="absolute top-0 left-0 right-0 z-10 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-b from-[#080808] to-transparent">
                     <div className="w-1.5 h-1.5 rounded-full bg-green-500/40" />
@@ -284,23 +286,23 @@ function MonitorWithPlayer({
                 <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#080808] to-transparent z-10" />
 
                 {/* Photo arrows */}
-                <button onClick={onPrev} className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Previous photo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                <button onClick={onPrev} className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Previous photo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 md:w-5 md:h-5"><path d="m15 18-6-6 6-6" /></svg>
                 </button>
-                <button onClick={onNext} className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Next photo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                <button onClick={onNext} className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Next photo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 md:w-5 md:h-5"><path d="m9 18 6-6-6-6" /></svg>
                 </button>
             </div>
 
             {/* Integrated music player — same width, below monitor */}
-            <div className="relative w-full rounded-b-sm border border-white/[0.06] border-t-white/[0.03] bg-[#080808] px-4 py-3">
+            <div className="relative w-full rounded-b-sm border border-white/[0.06] border-t-white/[0.03] bg-[#080808] px-4 py-3 md:px-6 md:py-4">
                 {/* Progress bar top */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.04] overflow-hidden">
                     <div className="h-full bg-white/20 transition-[width] duration-200" style={{ width: `${musicProgress * 100}%` }} />
                 </div>
 
-                <div className="flex items-center gap-3">
-                    <button onClick={onPrevSong} className="text-white/25 hover:text-white/70 transition-colors p-0.5 shrink-0">
+                <div className="flex items-center gap-3 md:gap-5">
+                    <button onClick={onPrevSong} className="text-white/25 hover:text-white/70 transition-colors p-0.5 shrink-0 hover:scale-110">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
                     </button>
                     <button onClick={onTogglePlay} className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/15 flex items-center justify-center transition-all shrink-0 border border-white/[0.06]">
@@ -319,9 +321,9 @@ function MonitorWithPlayer({
                     </button>
                     <div className="min-w-0 ml-1 flex-1">
                         <div className="flex items-center gap-2">
-                            <p className="text-white/60 text-[12px] font-light truncate">{songs[current].title}</p>
-                            <span className="text-white/15 text-[10px] shrink-0">·</span>
-                            <p className="text-white/20 text-[10px] shrink-0 truncate">{songs[current].artist}</p>
+                            <p className="text-white/60 text-[12px] md:text-[14px] font-light truncate">{songs[current].title}</p>
+                            <span className="text-white/15 text-[10px] md:text-[12px] shrink-0">·</span>
+                            <p className="text-white/20 text-[10px] md:text-[12px] shrink-0 truncate">{songs[current].artist}</p>
                             {playing && (
                                 <span className="inline-flex items-end gap-[2px] h-3 shrink-0 ml-1">
                                     <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
@@ -422,13 +424,13 @@ export default function AboutPage() {
                         <p className="font-mono text-[12px] md:text-[13px] tracking-[0.3em] text-white/20 mb-5 uppercase cursor-blink">
                             {content.signalOrigin}
                         </p>
-                        <h1 className="title-shimmer font-serif text-5xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-[1.05] text-white/90 cursor-default">
+                        <h1 className="title-shimmer font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] text-white/90 cursor-default">
                             {content.title}
                         </h1>
                     </header>
 
                     {/* ── Narrative (single column, text on left, monitor floats right) ── */}
-                    <div className="md:w-[50%] lg:w-[48%] pb-32">
+                    <div className="md:mr-auto md:w-[45%] lg:w-[42%] pb-[45vh] md:pb-32">
 
                         {language === 'en' && (<>
                         <Reveal><p className={pClass}>
@@ -766,33 +768,6 @@ export default function AboutPage() {
                         </Reveal>
                     </div>
                 </div>
-
-                {/* Mobile photo — fixed centered bottom */}
-                <div className="md:hidden fixed bottom-20 left-4 right-4 z-40">
-                    <div className="relative w-full h-48 rounded-sm overflow-hidden border border-white/[0.06] bg-[#080808]">
-                        <div className="monitor-scanline" />
-                        {photos.map((photo, i) => (
-                            <div key={i} className={`photo-slot ${i === activePhoto ? 'active' : ''}`}>
-                                <Image src={photo.src} alt={photo.alt} fill className="object-cover"
-                                    sizes="100vw" quality={75} />
-                            </div>
-                        ))}
-                        <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-gradient-to-t from-[#080808] to-transparent z-10 flex items-center justify-between">
-                            <span className="font-mono text-[8px] text-white/15 uppercase">
-                                {activePhoto >= 0 ? photos[activePhoto].label : '—'}
-                            </span>
-                            <div className="flex gap-2">
-                                <button onClick={goPrev} className="text-white/30 hover:text-white/70 transition-colors" aria-label="Previous">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6" /></svg>
-                                </button>
-                                <button onClick={goNext} className="text-white/30 hover:text-white/70 transition-colors" aria-label="Next">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" /></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </>
     );

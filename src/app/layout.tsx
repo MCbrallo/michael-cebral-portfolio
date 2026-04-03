@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { BackgroundVideo } from "@/components/BackgroundVideo";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -44,24 +45,7 @@ export default function RootLayout({
         <LanguageProvider>
           {/* Global Video Background */}
           <div className="fixed inset-0 z-[-1] pointer-events-none bg-black">
-              <div 
-                  className="absolute inset-0 w-full h-full"
-                  dangerouslySetInnerHTML={{
-                      __html: `
-                      <video
-                          autoplay
-                          loop
-                          muted
-                          playsinline
-                          preload="auto"
-                          class="absolute inset-0 w-full h-full object-cover scale-105"
-                      >
-                          <source src="/galaxy.webm" type="video/webm" />
-                          <source src="/galaxy.mp4" type="video/mp4" />
-                      </video>
-                      `
-                  }}
-              />
+              <BackgroundVideo />
               {/* Dark Overlay for Text Readability */}
               <div className="absolute inset-0 bg-black/60" />
           </div>
