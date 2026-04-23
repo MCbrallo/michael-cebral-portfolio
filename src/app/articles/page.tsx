@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Satellite, Brain } from "lucide-react";
+import { ArrowLeft, ExternalLink, Satellite, Brain, BrainCircuit } from "lucide-react";
 
 export const metadata = {
     title: "Projects | Michael Cebral",
@@ -20,8 +20,16 @@ const projects = [
         description: "Academic poster on AI and machine learning applied to exoplanet detection, spectral classification, and autonomous mission planning.",
         href: "https://mcbrallo.github.io/spaceai/posters/AI_for_Astrophysics_and_Planetary_Science/index.html",
         tags: ["Machine Learning", "Astrophysics", "Research"],
-        icon: Brain,
+        icon: BrainCircuit,
         isMinimalCard: true
+    },
+    {
+        title: "HOXE",
+        description: "A premium, editorial-grade historical timeline. Experience the exact events that defined today across time and space.",
+        href: "https://hoxe.org",
+        tags: ["Editorial", "History", "Mobile App"],
+        icon: Brain, // Not used for this specific card
+        isHoxeCard: true
     },
 ];
 
@@ -38,7 +46,7 @@ export default function Projects() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 justify-items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14 justify-items-center">
                     {projects.map((project, index) => {
                         const Icon = project.icon;
                         
@@ -52,7 +60,7 @@ export default function Projects() {
                                     className="block w-full max-w-[220px] aspect-[2.5/3.5] group relative transition-transform duration-500 hover:-translate-y-4 hover:scale-[1.05]"
                                 >
                                     {/* Poker Card Design */}
-                                    <div className="w-full h-full bg-[#f8f9fa] rounded-xl border-4 border-white shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_20px_50px_rgba(255,255,255,0.15)] text-black p-4 relative overflow-hidden flex flex-col justify-between transition-all duration-500">
+                                    <div className="w-full h-full bg-[#f8f9fa] rounded-xl border-4 border-white shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_20px_50px_rgba(255,255,255,0.15)] text-black p-4 relative overflow-hidden flex flex-col transition-all duration-500">
                                         
                                         {/* Top Left Corner */}
                                         <div className="absolute top-4 left-4 flex flex-col items-center">
@@ -66,17 +74,25 @@ export default function Projects() {
                                             <span className="text-[16px]">♠</span>
                                         </div>
 
-                                        {/* Card Content (Center) */}
-                                        <div className="flex-1 flex flex-col items-center justify-center text-center px-2 relative z-10 z-[2]">
-                                            <div className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center mb-4 transition-transform duration-500 group-hover:scale-110">
-                                                <Icon className="w-6 h-6 text-[#c49a22]" />
+                                        {/* Card Content Aligned Grid */}
+                                        <div className="flex-1 flex flex-col relative z-10 z-[2] w-full pt-8">
+                                            {/* Icon Area */}
+                                            <div className="h-[90px] flex items-center justify-center w-full mb-6">
+                                                <div className="w-32 h-32 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                                                    <img src="/all-in-space-icon.png" alt="All-In Space" className="w-[140%] h-[140%] max-w-none object-contain brightness-75 contrast-125 drop-shadow-md" />
+                                                </div>
                                             </div>
-                                            <h2 className="font-serif text-lg md:text-xl font-bold uppercase tracking-widest mb-3 text-transparent bg-clip-text bg-gradient-to-br from-[#f2d06b] via-[#c49a22] to-[#805e00] drop-shadow-sm">
-                                                {project.title}
-                                            </h2>
-                                            <p className="text-black/70 text-[9px] font-sans mb-1 leading-snug">
-                                                {project.description}
-                                            </p>
+                                            
+                                            {/* Text Area */}
+                                            <div className="flex flex-col items-center w-full">
+                                                <h2 className="font-serif text-lg font-bold uppercase tracking-widest text-center text-transparent bg-clip-text bg-gradient-to-br from-[#f2d06b] via-[#c49a22] to-[#805e00] drop-shadow-sm leading-tight mb-2 px-2">
+                                                    {project.title}
+                                                </h2>
+                                                
+                                                <p className="text-black/70 text-[9px] font-sans leading-relaxed text-center px-4">
+                                                    {project.description}
+                                                </p>
+                                            </div>
                                         </div>
                                         
                                         {/* Border Inner Line */}
@@ -99,18 +115,79 @@ export default function Projects() {
                                     rel="noopener noreferrer"
                                     className="block w-full max-w-[220px] aspect-[2.5/3.5] group relative transition-transform duration-500 hover:-translate-y-4 hover:scale-[1.05]"
                                 >
-                                    <div className="w-full h-full bg-white/[0.02] rounded-xl border border-white/10 group-hover:border-white/20 p-5 relative overflow-hidden flex flex-col items-center justify-center text-center hover:bg-white/[0.05] transition-all duration-500 shadow-lg group-hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                    <div className="w-full h-full bg-[#030712] rounded-xl border border-cyan-500/20 p-4 relative overflow-hidden flex flex-col hover:border-cyan-400/50 transition-all duration-700 shadow-lg group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]">
+                                        <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(34,211,238,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.5) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-cyan-500/10 blur-[40px] pointer-events-none" />
+
+                                        <div className="flex-1 flex flex-col relative z-10 w-full pt-8">
+                                            {/* Icon Area */}
+                                            <div className="h-[90px] flex items-center justify-center w-full mb-6 transition-transform duration-500 group-hover:scale-110">
+                                                <Icon className="w-16 h-16 text-cyan-400/80 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] group-hover:text-cyan-300 group-hover:drop-shadow-[0_0_25px_rgba(34,211,238,0.8)] transition-all duration-500" />
+                                            </div>
+                                            
+                                            {/* Text Area */}
+                                            <div className="flex flex-col items-center w-full">
+                                                <h2 className="font-sans text-[13px] font-semibold tracking-wider text-cyan-50 uppercase drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] text-center leading-tight mb-2 px-2">
+                                                    {project.title}
+                                                </h2>
+                                                
+                                                <p className="text-cyan-100/50 text-[9px] font-light leading-relaxed px-3 text-center group-hover:text-cyan-100/80 transition-colors duration-500">
+                                                    {project.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 ease-out pointer-events-none" />
+                                    </div>
+                                </a>
+                            );
+                        }
+
+                        if ((project as any).isHoxeCard) {
+                            return (
+                                <a
+                                    key={project.title}
+                                    href={project.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block w-full max-w-[220px] aspect-[2.5/3.5] group relative transition-transform duration-500 hover:-translate-y-4 hover:scale-[1.05]"
+                                >
+                                    <div className="w-full h-full bg-[#EEECE1] rounded-xl border-4 border-[#EEECE1] ring-1 ring-[#263944]/10 p-4 relative overflow-hidden flex flex-col transition-all duration-700 shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:shadow-[0_20px_40px_rgba(238,236,225,0.15)] group-hover:ring-[#263944]/30">
+                                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #263944 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+
+                                        {/* Editorial Frame Elements */}
+                                        <div className="absolute inset-3 border border-[#263944]/20 rounded-[4px] pointer-events-none" />
+                                        <div className="absolute inset-4 border border-[#263944]/5 pointer-events-none" />
                                         
-                                        <Icon className="w-10 h-10 text-white/40 mb-5 group-hover:text-white/90 transition-all duration-500 group-hover:scale-110" />
-                                        
-                                        <h2 className="font-serif text-base font-medium tracking-wide mb-3 text-white/90 group-hover:text-white transition-colors duration-500">
-                                            {project.title}
-                                        </h2>
-                                        
-                                        <p className="text-white/40 text-[10px] font-light leading-relaxed group-hover:text-white/70 transition-colors duration-500">
-                                            {project.description}
-                                        </p>
+                                        {/* Vintage Corners */}
+                                        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#263944]/40 pointer-events-none" />
+                                        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#263944]/40 pointer-events-none" />
+                                        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#263944]/40 pointer-events-none" />
+                                        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#263944]/40 pointer-events-none" />
+
+                                        <div className="flex-1 flex flex-col relative z-10 w-full pt-8">
+                                            {/* Icon Area */}
+                                            <div className="h-[90px] flex items-center justify-center w-full mb-6 transition-transform duration-500 group-hover:scale-110">
+                                                <div className="w-16 h-16">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="#263944" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full drop-shadow-sm">
+                                                        <path d="M 40 15 L 20 15 C 14 15 10 19 10 25 L 10 85 C 10 91 14 95 20 95 L 80 95 C 86 95 90 91 90 85 L 90 25 C 90 19 86 15 80 15 L 60 15" />
+                                                        <path d="M 32 35 L 68 75 M 68 35 L 32 75" strokeWidth="9" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Text Area */}
+                                            <div className="flex flex-col items-center w-full">
+                                                <h2 className="font-serif text-2xl font-black tracking-[0.2em] text-[#263944] uppercase drop-shadow-md text-center mb-1">
+                                                    {project.title}
+                                                </h2>
+                                                
+                                                <div className="w-6 h-[1px] bg-[#263944]/30 mb-2 group-hover:w-12 transition-all duration-500" />
+                                                
+                                                <p className="text-[#263944]/70 text-[9px] font-sans leading-relaxed px-3 font-medium text-center group-hover:text-[#263944] transition-colors duration-500">
+                                                    {project.description}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </a>
                             );

@@ -50,7 +50,7 @@ function FluidStars({ count = 800 }) {
 
             let x = positionsArray[i3];
             let y = positionsArray[i3 + 1];
-            let z = positionsArray[i3 + 2];
+            const z = positionsArray[i3 + 2];
 
             // Standard Fluid Drift
             x += Math.sin(state.clock.elapsedTime * 0.1 + i) * 0.005;
