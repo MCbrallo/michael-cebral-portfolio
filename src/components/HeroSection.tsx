@@ -83,7 +83,7 @@ export function HeroSection() {
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="absolute select-none h-[78%] md:h-[92%] w-auto max-w-none right-[3%] md:right-[6%] top-1/2 -translate-y-1/2"
+                        className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[12%] top-[57%] -translate-y-1/2"
                         style={{
                             opacity: 0.3,
                             filter: "grayscale(1) contrast(1.05)",
