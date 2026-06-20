@@ -16,7 +16,7 @@ export function QuotesDisplay({ quote }: QuotesDisplayProps) {
     if (!quote) return null;
 
     return (
-        <div className="min-h-[120px] py-2 w-full flex items-center justify-center pointer-events-none">
+        <div className="min-h-[120px] py-2 w-full flex items-center justify-start pointer-events-none">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={quote.text} // Triggers animation on change
@@ -24,7 +24,7 @@ export function QuotesDisplay({ quote }: QuotesDisplayProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="flex flex-col items-center gap-2 max-w-lg text-center px-4"
+                    className="flex flex-col items-start gap-2 max-w-lg text-left"
                 >
                     <p className="font-bodoni text-base md:text-lg text-white/90 italic leading-relaxed tracking-wide">
                         "{quote.text}"

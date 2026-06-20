@@ -78,12 +78,12 @@ export function HeroSection() {
         <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
-                <div aria-hidden="true" className="absolute inset-y-0 right-0 z-0 w-[60%] md:w-[46%] overflow-hidden pointer-events-none flex items-end justify-end">
+                <div aria-hidden="true" className="absolute inset-y-0 right-0 z-0 w-[60%] md:w-[44%] overflow-hidden pointer-events-none flex items-end justify-end pr-[3vw] md:pr-[5vw]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="h-[90%] w-auto max-w-none select-none"
+                        className="h-[88%] w-auto max-w-none select-none"
                         style={{
                             opacity: 0.12,
                             filter: "grayscale(1) contrast(1.04)",
@@ -99,17 +99,17 @@ export function HeroSection() {
 
             {/* Content Layer - hidden during game */}
             {!showGame && (
-            <div className="relative z-10 text-center px-6 md:px-8 w-full max-w-6xl mx-auto flex flex-col items-center justify-start h-full pt-[calc(5rem+50px)] md:pt-[calc(6rem+50px)] pb-16">
+            <div className="relative z-10 text-left w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center pt-20 pb-16">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} // Slow, elegant ease
-                    className="flex flex-col items-center gap-6"
+                    className="flex flex-col items-start gap-6 max-w-xl"
                 >
                     {/* Main Title - Playfair Display (Normal, Elegant) */}
                     <div className="pointer-events-auto" onClick={handleNextQuote}>
-                        <div className="text-6xl md:text-8xl lg:text-9xl font-serif font-medium tracking-normal text-white leading-none flex flex-col items-center">
+                        <div className="text-6xl md:text-8xl lg:text-9xl font-serif font-medium tracking-normal text-white leading-none flex flex-col items-start">
                             <Magnetic strength={0.20} active={true}>
                                 <ChromaticText text="Michael" />
                             </Magnetic>
@@ -120,7 +120,7 @@ export function HeroSection() {
                     </div>
 
                     {/* Subtitle - Plain, no effects */}
-                    <div className="overflow-hidden pointer-events-auto mt-4 px-8">
+                    <div className="overflow-hidden pointer-events-auto mt-3">
                         <motion.p
                             key={t.hero.subtitle}
                             initial={{ y: "100%", opacity: 0 }}
@@ -136,7 +136,7 @@ export function HeroSection() {
                     </div>
 
                     {/* Quotes - Bodoni (The "First Font") */}
-                    <div className="min-h-[120px] flex items-start justify-center mt-6 w-full max-w-2xl px-6 font-bodoni overflow-visible">
+                    <div className="min-h-[120px] flex items-start justify-start mt-5 w-full font-bodoni overflow-visible">
                         <QuotesDisplay quote={activeQuote} />
                     </div>
 
