@@ -89,11 +89,17 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-serif);
+  font-family: "Playfair Display", var(--font-playfair), Georgia, serif;
   font-weight: 400;
   /* Bodoni allows for bold, but 400/500 is elegant */
   letter-spacing: -0.03em;
   /* Tight editorial tracking */
+}
+
+/* The font-serif utility was resolving to the sans stack on some pages; pin it
+   to Playfair so every serif title (Projects, Contact, CV, About) is consistent. */
+.font-serif {
+  font-family: "Playfair Display", var(--font-playfair), Georgia, serif !important;
 }
 
 @layer utilities {
@@ -273,7 +279,7 @@ h6 {
   letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.35); transition: color 0.3s;
 }
 .proj-name {
-  font-family: var(--font-serif); font-weight: 600;
+  font-family: "Playfair Display", var(--font-playfair), Georgia, serif; font-weight: 600;
   font-size: clamp(24px, 3.6vw, 46px); line-height: 1; letter-spacing: -0.02em;
   color: transparent; -webkit-text-stroke: 1px rgba(245, 245, 247, 0.42);
   transition: -webkit-text-stroke 0.35s, color 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
