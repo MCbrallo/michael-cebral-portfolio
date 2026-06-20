@@ -28,22 +28,21 @@ const projects: Project[] = [
         type: "Space Intelligence",
         year: "2025",
         blurb:
-            "Interactive geopolitical dashboard mapping global space-agency capabilities, satellite infrastructure and communication networks.",
+            "A space-intelligence workspace that aggregates launches, satellite operations and industry data into one explorable view — a live launch tracker and a documented source registry for professionals, researchers and enthusiasts who need organised access to space data.",
         logo: "/projects/all-in-space.svg",
         logoBg: "rgba(10,12,28,0.55)",
-        links: [{ label: "Live ↗", href: "https://allinspace.xyz" }],
-        status: "Live",
+        links: [{ label: "Live ↗", href: "https://allinspace.xyz/explore" }],
     },
     {
         id: "ariadne",
         name: "ARIADNE",
-        type: "Space R&D Router",
+        type: "Research-to-Orbit Router",
         year: "2025",
         blurb:
-            "The red thread of space research. Software that routes a scientific project toward the right orbital host, launcher and funding, then generates the dossier — data aggregation, a matching engine and AI-assisted proposal packaging.",
+            "The red thread through space research. Ariadne routes a scientific project to the right commercial launch provider, orbital host and funding agency, and manages the regulatory path from idea to flight readiness — indexing 22+ providers and programmes against your experiment, with a first response in 48 hours.",
         logo: "/projects/ariadne.svg",
         logoBg: "#0c0e1a",
-        status: "In development",
+        links: [{ label: "Live ↗", href: "https://ariadne-gamma.vercel.app" }],
     },
     {
         id: "abil",
@@ -51,20 +50,21 @@ const projects: Project[] = [
         type: "Environmental Intelligence",
         year: "2025",
         blurb:
-            "Turns Earth observation and geospatial data into actionable, explainable environmental diagnostics per physical asset — global site map, multi-axis scoring, alerts, executive reports and a conversational AI analyst grounded in the data.",
+            "Environmental Site Intelligence. ABIL turns Earth observation and geospatial data into actionable, explainable diagnostics per physical asset — a global site map, multi-axis scoring, alerts, executive reports and a conversational AI analyst grounded in the data.",
         logo: "/projects/abil.svg",
         logoBg: "rgba(8,16,14,0.6)",
-        status: "In development",
+        links: [{ label: "Live ↗", href: "https://clearesg.vercel.app" }],
     },
     {
         id: "nexum",
         name: "NEXUM",
-        type: "Venture · Management",
+        type: "Marketplace · Advisory",
         year: "2025",
         blurb:
-            "Nexum Xestión — a venture recognised as a Santander X Emprende finalist and accepted into the University of Santiago de Compostela (USC) startup incubator.",
+            "Nexum Xestión — el nexo entre empresas y asesorías: a marketplace that links companies with the right advisory and consulting firms. Santander X Emprende finalist and accepted into the University of Santiago de Compostela (USC) startup incubator; currently in beta.",
         logo: "/projects/nexum.png",
         logoBg: "rgba(10,12,20,0.6)",
+        links: [{ label: "Live ↗", href: "https://nexumxestion.com" }],
         status: "Santander X · USC Incubator",
     },
     {
@@ -76,6 +76,7 @@ const projects: Project[] = [
             "A strategic creative concept and interdisciplinary mission roadmap developed within the International Space University (Master of Space Studies, MSS 2026).",
         logo: "/projects/roadmap.svg",
         logoBg: "rgba(10,12,24,0.55)",
+        links: [{ label: "Live ↗", href: "https://roadmap-project-five.vercel.app" }],
         status: "ISU · MSS 2026",
     },
     {
@@ -88,7 +89,6 @@ const projects: Project[] = [
         logo: "hoxe",
         logoBg: "#EEECE1",
         links: [{ label: "Live ↗", href: "https://hoxe.org" }],
-        status: "Live",
     },
 ];
 
