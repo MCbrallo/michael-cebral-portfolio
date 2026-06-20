@@ -67,7 +67,6 @@ const projects: Project[] = [
         accent: "#e0ae3e",
         logo: "/projects/nexum.png",
         links: [{ label: "Live ↗", href: "https://nexumxestion.com" }],
-        status: "Santander X · USC Incubator",
     },
     {
         id: "roadmap",
