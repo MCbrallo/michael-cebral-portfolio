@@ -76,22 +76,21 @@ export function HeroSection() {
         {!showGame && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
         <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
-            {/* Faint portrait, blended into the nebula (abdomen-up, feathered) */}
+            {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
-                <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center">
+                <div aria-hidden="true" className="absolute inset-y-0 right-0 z-0 w-[60%] md:w-[46%] overflow-hidden pointer-events-none flex items-end justify-end">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="h-[132%] w-auto max-w-none select-none"
+                        className="h-[90%] w-auto max-w-none select-none"
                         style={{
-                            opacity: 0.17,
-                            filter: "grayscale(1) contrast(1.05)",
-                            mixBlendMode: "luminosity",
+                            opacity: 0.12,
+                            filter: "grayscale(1) contrast(1.04)",
                             WebkitMaskImage:
-                                "radial-gradient(60% 58% at 50% 36%, #000 36%, transparent 80%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 38%, #000 72%)",
                             maskImage:
-                                "radial-gradient(60% 58% at 50% 36%, #000 36%, transparent 80%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 38%, #000 72%)",
                         }}
                     />
                 </div>
