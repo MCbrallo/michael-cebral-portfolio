@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Magnetic } from '@/components/Magnetic';
+import { DisplayTitle } from '@/components/DisplayTitle';
 import experiencesData from '@/data/experiences.json';
 
 type ExperienceType = 'education' | 'career' | 'travel';
@@ -65,33 +66,54 @@ export default function CVPage() {
 
 
 
-                {/* Header Section */}
-                <div className="mb-10 animate-fade-in">
-                    <div className="border-b border-white/10 pb-8 mb-8 relative flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-                        {/* Premium accent line */}
-                        <div className="absolute bottom-0 left-0 h-px w-24 bg-gradient-to-r from-white/50 to-transparent" />
+                {/* Header Section — same display format as Projects / Contact */}
+                <div className="mb-12 animate-fade-in">
+                    <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-gold/70 mb-4">
+                        Curriculum · Dossier
+                    </p>
+                    <DisplayTitle text={t.about?.title || ''} />
+                    <p className="mt-6 text-white/45 text-base md:text-lg font-light leading-relaxed max-w-xl">
+                        {t.about?.subtitle}
+                    </p>
 
-                        <div className="flex-1 flex flex-col md:flex-row gap-8 items-center md:items-start w-full">
-                            <div className="max-w-2xl relative z-10">
-                                <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-gold/70 mb-3">
-                                    Curriculum · Dossier
-                                </p>
-                                <h1 className="title-shimmer font-serif text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight py-2">
-                                    {t.about?.title}
-                                </h1>
-                                <p className="text-white/40 text-base md:text-lg font-light leading-relaxed max-w-xl">
-                                    {t.about?.subtitle}
-                                </p>
-                            </div>
+                    {/* Filters + Download */}
+                    <div className="mt-9 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-6">
+                        <div className="flex gap-3 md:gap-6 text-[10px] md:text-sm flex-wrap">
+                            {[
+                                { value: 'all', label: t.about?.filterAll || 'All' },
+                                { value: 'education', label: t.about?.filterEducation || 'Education' },
+                                { value: 'career', label: t.about?.filterExperience || 'Professional Experience' }
+                            ].map((filter) => (
+                                <button
+                                    key={filter.value}
+                                    type="button"
+                                    onClick={() => setSelectedFilter(filter.value as ExperienceType | 'all')}
+                                    className={`
+                    uppercase tracking-widest md:tracking-[0.2em] transition-all duration-500 relative pb-2 group
+                    ${selectedFilter === filter.value
+                                            ? 'text-gold font-medium'
+                                            : 'text-white/40 hover:text-white/70'
+                                        }
+                  `}
+                                >
+                                    {filter.label}
+                                    {selectedFilter === filter.value && (
+                                        <span className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent animate-shimmer" />
+                                    )}
+                                    {selectedFilter !== filter.value && (
+                                        <span className="absolute bottom-0 left-0 right-0 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                                    )}
+                                </button>
+                            ))}
                         </div>
 
                         <Magnetic>
                             <a
                                 href="/Michael_Cebral_CV.pdf"
                                 download="Michael_Cebral_CV.pdf"
-                                className="group relative inline-flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 backdrop-blur-sm"
+                                className="group relative inline-flex items-center gap-3 px-6 py-3 bg-gold/10 hover:bg-gold/20 border border-gold/30 hover:border-gold/60 rounded-full transition-all duration-300 backdrop-blur-sm"
                             >
-                                <span className="text-sm uppercase tracking-widest text-white/80 group-hover:text-white transition-colors">
+                                <span className="text-sm uppercase tracking-widest text-gold/90 group-hover:text-gold transition-colors">
                                     {language === 'en' ? 'Download CV' : 'Descargar CV'}
                                 </span>
                                 <svg
@@ -104,7 +126,7 @@ export default function CVPage() {
                                     strokeWidth="2"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="text-white/60 group-hover:text-white group-hover:translate-y-0.5 transition-all duration-300"
+                                    className="text-gold/70 group-hover:text-gold group-hover:translate-y-0.5 transition-all duration-300"
                                 >
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                     <polyline points="7 10 12 15 17 10" />
@@ -112,35 +134,6 @@ export default function CVPage() {
                                 </svg>
                             </a>
                         </Magnetic>
-                    </div>
-
-                    {/* Filter Navigation */}
-                    <div className="flex gap-3 md:gap-6 text-[10px] md:text-sm flex-wrap">
-                        {[
-                            { value: 'all', label: t.about?.filterAll || 'All' },
-                            { value: 'education', label: t.about?.filterEducation || 'Education' },
-                            { value: 'career', label: t.about?.filterExperience || 'Professional Experience' }
-                        ].map((filter) => (
-                            <button
-                                key={filter.value}
-                                onClick={() => setSelectedFilter(filter.value as ExperienceType | 'all')}
-                                className={`
-                  uppercase tracking-widest md:tracking-[0.2em] transition-all duration-500 relative pb-2 group
-                  ${selectedFilter === filter.value
-                                        ? 'text-gold font-medium'
-                                        : 'text-white/40 hover:text-white/70'
-                                    }
-                `}
-                            >
-                                {filter.label}
-                                {selectedFilter === filter.value && (
-                                    <span className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer" />
-                                )}
-                                {selectedFilter !== filter.value && (
-                                    <span className="absolute bottom-0 left-0 right-0 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                                )}
-                            </button>
-                        ))}
                     </div>
                 </div>
 

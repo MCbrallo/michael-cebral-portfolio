@@ -90,11 +90,6 @@ export default function ContactPage() {
                         </a>
                     ))}
                 </div>
-
-                {/* Footer meta */}
-                <p className="mt-12 font-sans text-[11px] tracking-[0.22em] uppercase text-white/30">
-                    {copy.meta}
-                </p>
             </div>
         </section>
     );

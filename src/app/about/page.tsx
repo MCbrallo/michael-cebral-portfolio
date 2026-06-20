@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { DisplayTitle } from '@/components/DisplayTitle';
 
 /* ══════════════════════════════════════════════════════════════
    HOOKS
@@ -417,13 +418,11 @@ export default function AboutPage() {
                     </div>
 
                     {/* Hero */}
-                    <header className="pt-16 md:pt-24 pb-10 max-w-[560px]">
-                        <p className="font-mono text-[12px] md:text-[13px] tracking-[0.3em] text-gold/60 mb-5 uppercase cursor-blink">
+                    <header className="pt-16 md:pt-24 pb-10 max-w-[720px]">
+                        <p className="font-sans text-[11px] md:text-[12px] tracking-[0.34em] text-gold/70 mb-5 uppercase">
                             {content.signalOrigin}
                         </p>
-                        <h1 className="title-shimmer font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] text-white/90 cursor-default">
-                            {content.title}
-                        </h1>
+                        <DisplayTitle text={content.title} />
                     </header>
 
                     {/* ── Narrative (single column, text on left, monitor floats right) ── */}
