@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
+import { Mail, Linkedin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const channels = [
@@ -12,6 +13,7 @@ const channels = [
         href: "mailto:michaelcebralclase@gmail.com",
         accent: "#d8b878",
         external: false,
+        Icon: Mail,
     },
     {
         num: "02",
@@ -20,6 +22,7 @@ const channels = [
         href: "https://www.linkedin.com/in/michaelceb/",
         accent: "#6ea8ff",
         external: true,
+        Icon: Linkedin,
     },
 ];
 
@@ -60,7 +63,7 @@ export default function ContactPage() {
                     {/* Display title — filled + outlined, echoing the home marquee */}
                     <h1 className="font-serif font-bold leading-[0.92] tracking-tight text-[clamp(56px,12vw,150px)]">
                         <span className="block title-shimmer">Let&rsquo;s</span>
-                        <span className="block outline-word">Connect.</span>
+                        <span className="block title-shimmer">Connect.</span>
                     </h1>
 
                     <p className="mt-6 max-w-xl text-base md:text-lg text-white/55 font-light leading-relaxed">
@@ -81,7 +84,10 @@ export default function ContactPage() {
                         >
                             <div className="proj-row">
                                 <span className="proj-num">{c.num}</span>
-                                <span className="proj-name">{c.name}</span>
+                                <span className="ch-namewrap">
+                                    <c.Icon className="ch-icon" strokeWidth={1.5} aria-hidden="true" />
+                                    <span className="proj-name">{c.name}</span>
+                                </span>
                                 <span className="proj-meta">
                                     {c.addr}
                                     <span className="proj-arrow" aria-hidden="true">↗</span>

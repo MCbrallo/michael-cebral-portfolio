@@ -369,6 +369,13 @@ h6 {
 /* Contact channels reuse the index, but addresses keep their natural case */
 .contact-ch { cursor: pointer; }
 .contact-ch .proj-meta { text-transform: none; letter-spacing: 0.02em; font-size: 13px; }
+.ch-namewrap { display: flex; align-items: center; gap: clamp(12px, 1.5vw, 20px); min-width: 0; }
+.ch-icon {
+  flex: none;
+  width: clamp(22px, 2.4vw, 30px); height: clamp(22px, 2.4vw, 30px);
+  color: var(--accent, #fff); opacity: 0.85; transition: opacity 0.3s, transform 0.3s;
+}
+.contact-ch:hover .ch-icon, .contact-ch:focus-within .ch-icon { opacity: 1; transform: translateX(2px); }
 
 @media (max-width: 700px) {
   .proj-panel-inner { padding-left: 6px; }

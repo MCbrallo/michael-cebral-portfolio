@@ -8,7 +8,7 @@
 export function DisplayTitle({
     text,
     className = "",
-    split = true,
+    split = false,
 }: {
     text: string;
     className?: string;
