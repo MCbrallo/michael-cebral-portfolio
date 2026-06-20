@@ -97,7 +97,7 @@ const designCSS = `
   position: absolute;
   left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(to right, transparent 5%, rgba(255,255,255,0.04) 50%, transparent 95%);
+  background: linear-gradient(to right, transparent 5%, rgba(212,175,55,0.07) 50%, transparent 95%);
   animation: monitor-scan 8s linear infinite;
   pointer-events: none;
   z-index: 5;
@@ -120,15 +120,15 @@ const designCSS = `
 @keyframes eq-bar-3 { 0%, 100% { height: 45%; } 50% { height: 90%; } }
 .eq-bar {
   display: inline-block; width: 2px; border-radius: 1px;
-  background: rgba(74, 222, 128, 0.7); vertical-align: bottom;
+  background: rgba(212, 175, 55, 0.85); vertical-align: bottom;
 }
 .eq-bar:nth-child(1) { animation: eq-bar-1 0.8s ease-in-out infinite; }
 .eq-bar:nth-child(2) { animation: eq-bar-2 0.6s ease-in-out infinite 0.1s; }
 .eq-bar:nth-child(3) { animation: eq-bar-3 0.7s ease-in-out infinite 0.2s; }
 
 @keyframes music-glow {
-  0%, 100% { box-shadow: 0 0 8px 0 rgba(74, 222, 128, 0.1); }
-  50%      { box-shadow: 0 0 18px 2px rgba(74, 222, 128, 0.2); }
+  0%, 100% { box-shadow: 0 0 8px 0 rgba(212, 175, 55, 0.12); }
+  50%      { box-shadow: 0 0 18px 2px rgba(212, 175, 55, 0.22); }
 }
 .music-playing { animation: music-glow 2s ease-in-out infinite; }
 
@@ -249,87 +249,106 @@ function MonitorWithPlayer({
     onTogglePlay: () => void; onPrevSong: () => void; onNextSong: () => void;
 }) {
     return (
-        <div className="fixed z-50 flex flex-col gap-0 shadow-2xl md:shadow-none
+        <div className="fixed z-50 flex flex-col
             bottom-4 left-4 right-4 w-[calc(100%-2rem)] max-w-none
-            md:bottom-auto md:top-[55%] md:right-[10vw] md:left-auto md:-translate-y-1/2 md:w-[45vw]">
-            {/* Photo monitor */}
-            <div className="relative w-full rounded-t-sm overflow-hidden border border-white/[0.06] border-b-0 bg-[#080808] h-[26vh] min-h-[180px] md:h-[65vh] md:max-h-[85vh]">
-                {/* Monitor header */}
-                <div className="absolute top-0 left-0 right-0 z-10 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-b from-[#080808] to-transparent">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500/40" />
-                    <span className="font-mono text-[9px] tracking-[0.2em] text-white/15 uppercase">
-                        {activeIndex >= 0 && activeIndex < photos.length
-                            ? photos[activeIndex].label
-                            : 'awaiting signal…'
-                        }
-                    </span>
-                    <span className="ml-auto font-mono text-[9px] text-white/10">
-                        {activeIndex >= 0 ? `${activeIndex + 1}/${photos.length}` : '—'}
-                    </span>
-                </div>
+            md:bottom-auto md:top-[55%] md:right-[8vw] md:left-auto md:-translate-y-1/2 md:w-[44vw]">
+            {/* Unified glass console */}
+            <div className={`relative rounded-2xl overflow-hidden border border-white/10
+                bg-[#06070d]/85 backdrop-blur-xl
+                shadow-[0_30px_80px_-24px_rgba(0,0,0,0.85)] ${playing ? 'music-playing' : ''}`}>
 
-                <div className="monitor-scanline" />
+                {/* inner sheen */}
+                <div className="pointer-events-none absolute inset-0 z-30 rounded-2xl" style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)' }} />
+                {/* decorative gold corner brackets */}
+                <span className="pointer-events-none absolute top-2 left-2 z-30 w-4 h-4 border-l border-t border-gold/40 rounded-tl-md" />
+                <span className="pointer-events-none absolute top-2 right-2 z-30 w-4 h-4 border-r border-t border-gold/40 rounded-tr-md" />
+                <span className="pointer-events-none absolute bottom-2 left-2 z-30 w-4 h-4 border-l border-b border-gold/40 rounded-bl-md" />
+                <span className="pointer-events-none absolute bottom-2 right-2 z-30 w-4 h-4 border-r border-b border-gold/40 rounded-br-md" />
 
-                {photos.map((photo, i) => (
-                    <div key={i} className={`photo-slot ${i === activeIndex ? 'active' : ''}`}>
-                        <Image src={photo.src} alt={photo.alt} fill className="object-cover" sizes="45vw" quality={85} priority={i < 3} />
+                {/* Photo monitor */}
+                <div className="relative w-full overflow-hidden bg-[#06070d] h-[26vh] min-h-[180px] md:h-[60vh] md:max-h-[80vh]">
+                    {/* header */}
+                    <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-2.5 px-4 py-3 bg-gradient-to-b from-[#06070d] via-[#06070d]/70 to-transparent">
+                        <span className="relative flex h-1.5 w-1.5 shrink-0">
+                            <span className="absolute inline-flex h-full w-full rounded-full bg-gold/60 animate-ping" />
+                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+                        </span>
+                        <span className="font-mono text-[9px] tracking-[0.22em] text-gold/50 uppercase truncate">
+                            {activeIndex >= 0 && activeIndex < photos.length ? photos[activeIndex].label : 'awaiting signal…'}
+                        </span>
+                        <span className="ml-auto shrink-0 font-mono text-[9px] tracking-[0.1em] text-white/40 px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03]">
+                            {activeIndex >= 0 ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}` : '—'}
+                        </span>
                     </div>
-                ))}
 
-                {activeIndex < 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <p className="font-mono text-[11px] text-white/10 tracking-wider">use arrows to browse ↔</p>
-                    </div>
-                )}
+                    <div className="monitor-scanline" />
 
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#080808] to-transparent z-10" />
-
-                {/* Photo arrows */}
-                <button onClick={onPrev} className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Previous photo">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 md:w-5 md:h-5"><path d="m15 18-6-6 6-6" /></svg>
-                </button>
-                <button onClick={onNext} className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.08] text-white/30 hover:text-white/80 hover:bg-black/60 hover:border-white/20 transition-all backdrop-blur-sm" aria-label="Next photo">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 md:w-5 md:h-5"><path d="m9 18 6-6-6-6" /></svg>
-                </button>
-            </div>
-
-            {/* Integrated music player — same width, below monitor */}
-            <div className="relative w-full rounded-b-sm border border-white/[0.06] border-t-white/[0.03] bg-[#080808] px-4 py-3 md:px-6 md:py-4">
-                {/* Progress bar top */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.04] overflow-hidden">
-                    <div className="h-full bg-white/20 transition-[width] duration-200" style={{ width: `${musicProgress * 100}%` }} />
-                </div>
-
-                <div className="flex items-center gap-3 md:gap-5">
-                    <button onClick={onPrevSong} className="text-white/25 hover:text-white/70 transition-colors p-0.5 shrink-0 hover:scale-110">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
-                    </button>
-                    <button onClick={onTogglePlay} className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/15 flex items-center justify-center transition-all shrink-0 border border-white/[0.06]">
-                        {playing ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white/80">
-                                <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
-                            </svg>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-white/80 ml-0.5">
-                                <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                        )}
-                    </button>
-                    <button onClick={onNextSong} className="text-white/25 hover:text-white/70 transition-colors p-0.5 shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
-                    </button>
-                    <div className="min-w-0 ml-1 flex-1">
-                        <div className="flex items-center gap-2">
-                            <p className="text-white/60 text-[12px] md:text-[14px] font-light truncate">{songs[current].title}</p>
-                            <span className="text-white/15 text-[10px] md:text-[12px] shrink-0">·</span>
-                            <p className="text-white/20 text-[10px] md:text-[12px] shrink-0 truncate">{songs[current].artist}</p>
-                            {playing && (
-                                <span className="inline-flex items-end gap-[2px] h-3 shrink-0 ml-1">
-                                    <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
-                                </span>
-                            )}
+                    {photos.map((photo, i) => (
+                        <div key={i} className={`photo-slot ${i === activeIndex ? 'active' : ''}`}>
+                            <Image src={photo.src} alt={photo.alt} fill className="object-cover" sizes="45vw" quality={85} priority={i < 3} />
                         </div>
-                        <p className="text-white/10 text-[9px] font-mono tracking-wider mt-0.5">Songs that have stayed with me.</p>
+                    ))}
+
+                    {/* interior vignette + bottom fade */}
+                    <div className="pointer-events-none absolute inset-0 z-10" style={{ boxShadow: 'inset 0 0 90px 12px rgba(0,0,0,0.5)' }} />
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#06070d] to-transparent z-10" />
+
+                    {activeIndex < 0 && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <p className="font-mono text-[11px] text-white/15 tracking-wider">use arrows to browse ↔</p>
+                        </div>
+                    )}
+
+                    {/* arrows */}
+                    <button onClick={onPrev} className="group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-gold hover:border-gold/40 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Previous photo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-0.5"><path d="m15 18-6-6 6-6" /></svg>
+                    </button>
+                    <button onClick={onNext} className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-gold hover:border-gold/40 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Next photo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-0.5"><path d="m9 18 6-6-6-6" /></svg>
+                    </button>
+                </div>
+
+                {/* gold divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
+                {/* Integrated music player */}
+                <div className="relative w-full bg-[#0a0d18]/70 px-4 py-3.5 md:px-6 md:py-4">
+                    {/* progress */}
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05] overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-gold/60 to-gold transition-[width] duration-200" style={{ width: `${musicProgress * 100}%` }} />
+                    </div>
+
+                    <div className="flex items-center gap-3 md:gap-4">
+                        <button onClick={onPrevSong} className="text-white/35 hover:text-gold transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Previous song">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+                        </button>
+                        <button onClick={onTogglePlay} className="w-9 h-9 rounded-full bg-gold hover:bg-gold/90 flex items-center justify-center transition-all shrink-0 shadow-[0_0_20px_-4px_rgba(212,175,55,0.65)]" aria-label={playing ? 'Pause' : 'Play'}>
+                            {playing ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18">
+                                    <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18" className="ml-0.5">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                            )}
+                        </button>
+                        <button onClick={onNextSong} className="text-white/35 hover:text-gold transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Next song">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+                        </button>
+                        <div className="min-w-0 ml-1 flex-1">
+                            <div className="flex items-center gap-2">
+                                <p className="text-white/85 text-[12px] md:text-[14px] font-medium truncate">{songs[current].title}</p>
+                                <span className="text-gold/40 text-[10px] shrink-0">·</span>
+                                <p className="text-white/35 text-[10px] md:text-[12px] shrink-0 truncate">{songs[current].artist}</p>
+                                {playing && (
+                                    <span className="inline-flex items-end gap-[2px] h-3 shrink-0 ml-1">
+                                        <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
+                                    </span>
+                                )}
+                            </div>
+                            <p className="text-gold/30 text-[9px] font-mono tracking-[0.15em] mt-0.5 uppercase">Songs that have stayed with me</p>
+                        </div>
                     </div>
                 </div>
             </div>
