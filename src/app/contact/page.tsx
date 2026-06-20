@@ -30,6 +30,11 @@ export default function ContactPage() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="max-w-xl w-full text-center"
             >
+                {/* Eyebrow */}
+                <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-3">
+                    Transmission · Open Channel
+                </p>
+
                 {/* Title */}
                 <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-bold mb-4 tracking-tight py-2">
                     {t.contact?.title || "Let's Connect"}

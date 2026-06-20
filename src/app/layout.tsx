@@ -28,8 +28,35 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Michael Cebral | Science Communication",
-  description: "Personal portfolio of Michael Cebral, Science Communicator.",
+  metadataBase: new URL("https://mcebral.com"),
+  title: {
+    default: "Michael Cebral | Science Communication",
+    template: "%s | Michael Cebral",
+  },
+  description:
+    "Portfolio of Michael Cebral — science communicator working at the intersection of biology, space science and storytelling.",
+  keywords: [
+    "Michael Cebral",
+    "science communication",
+    "space",
+    "biotechnology",
+    "portfolio",
+  ],
+  authors: [{ name: "Michael Cebral" }],
+  openGraph: {
+    type: "website",
+    url: "https://mcebral.com",
+    siteName: "Michael Cebral",
+    title: "Michael Cebral | Science Communication",
+    description:
+      "Science communicator working at the intersection of biology, space science and storytelling.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Michael Cebral | Science Communication",
+    description:
+      "Science communicator working at the intersection of biology, space science and storytelling.",
+  },
 };
 
 export default function RootLayout({

@@ -33,16 +33,10 @@ export default async function ArticlePage({ params }: PageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden">
-            {/* Premium Background Elements */}
-            <div className="absolute inset-0 opacity-30 fixed pointer-events-none">
-                <div className="absolute top-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse-slow" />
-                <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[100px] opacity-20" />
-            </div>
-
-            <article className="max-w-[1200px] mx-auto px-6 md:px-12 pt-20 pb-20 relative z-10">
-                <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen text-white relative overflow-hidden">
+            <article className="max-w-[1200px] mx-auto px-6 md:px-12 pt-28 pb-20 relative z-10">
+                {/* Readability panel — keeps long-form prose legible over the live nebula */}
+                <div className="max-w-4xl mx-auto rounded-2xl border border-white/[0.08] bg-[#05060c]/70 backdrop-blur-md px-6 py-10 md:px-12 md:py-14">
                     <div className="mb-8 animate-fade-in">
                         <Link
                             href="/articles"
