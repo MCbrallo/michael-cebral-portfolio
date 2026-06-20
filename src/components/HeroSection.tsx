@@ -78,19 +78,19 @@ export function HeroSection() {
         <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
-                <div aria-hidden="true" className="absolute inset-y-0 right-0 z-0 w-[60%] md:w-[44%] overflow-hidden pointer-events-none flex items-end justify-end pr-[3vw] md:pr-[5vw]">
+                <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="h-[88%] w-auto max-w-none select-none"
+                        className="absolute select-none h-[80%] md:h-[106%] w-auto max-w-none right-[4%] md:right-[9%] bottom-[-8%] md:bottom-[-14%]"
                         style={{
-                            opacity: 0.12,
-                            filter: "grayscale(1) contrast(1.04)",
+                            opacity: 0.26,
+                            filter: "grayscale(1) contrast(1.05)",
                             WebkitMaskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 38%, #000 72%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 42%, #000 80%)",
                             maskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 38%, #000 72%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 42%, #000 80%)",
                         }}
                     />
                 </div>
@@ -99,7 +99,7 @@ export function HeroSection() {
 
             {/* Content Layer - hidden during game */}
             {!showGame && (
-            <div className="relative z-10 text-left w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center pt-20 pb-16">
+            <div className="relative z-10 text-left w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center pb-12">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -119,24 +119,24 @@ export function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Subtitle - Plain, no effects */}
-                    <div className="overflow-hidden pointer-events-auto mt-3">
-                        <motion.p
-                            key={t.hero.subtitle}
-                            initial={{ y: "100%", opacity: 0 }}
-                            animate={{ y: 0, opacity: 0.8 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="text-xs md:text-sm text-white/90 font-sans tracking-[0.4em] uppercase"
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-                            {t.hero.subtitle}
-                        </motion.p>
+                    {/* Subtitle - with a gold accent rule */}
+                    <div className="flex items-center gap-4 mt-2 pointer-events-auto">
+                        <span className="h-px w-12 bg-gold/50 shrink-0" />
+                        <div className="overflow-hidden">
+                            <motion.p
+                                key={t.hero.subtitle}
+                                initial={{ y: "100%", opacity: 0 }}
+                                animate={{ y: 0, opacity: 0.85 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="text-xs md:text-sm text-white/85 font-sans tracking-[0.38em] uppercase"
+                            >
+                                {t.hero.subtitle}
+                            </motion.p>
+                        </div>
                     </div>
 
                     {/* Quotes - Bodoni (The "First Font") */}
-                    <div className="min-h-[120px] flex items-start justify-start mt-5 w-full font-bodoni overflow-visible">
+                    <div className="min-h-[110px] flex items-start justify-start mt-3 w-full max-w-md font-bodoni overflow-visible">
                         <QuotesDisplay quote={activeQuote} />
                     </div>
 
