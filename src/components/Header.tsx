@@ -13,6 +13,9 @@ export function Header() {
     const pathname = usePathname();
     const { t } = useLanguage();
 
+    // The /journey film carries its own immersive chrome.
+    const onJourney = pathname?.startsWith("/journey");
+
     const navItems = [
         { name: t.nav.articles, href: "/articles" },
         { name: t.nav.about, href: "/about" },
@@ -32,26 +35,20 @@ export function Header() {
         };
     }, []);
 
+    if (onJourney) return null;
+
     return (
         <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: isGameActive ? -100 : 0, opacity: isGameActive ? 0 : 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-6 md:px-12 backdrop-blur-md bg-deep-space/20 border-b border-white/5",
+                "fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-6 md:px-12",
                 isGameActive ? "pointer-events-none" : ""
             )}
         >
-            <div className="flex items-center justify-between w-full max-w-[1400px]">
-                {/* Logo - Pure Text, Bodoni */}
-                <Link href="/" className="group relative">
-                    <span className="font-serif text-2xl font-bold tracking-tighter text-stark-white">
-                        MC
-                    </span>
-                    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
-                </Link>
-
-                {/* Navigation - Ultra Minimal */}
+            <div className="flex items-center justify-end w-full max-w-[1400px]">
+                {/* Navigation - Ultra Minimal (tabs only) */}
                 <nav className="flex items-center gap-3 md:gap-12 overflow-x-auto no-scrollbar">
                     {navItems.map((item) => {
                         const isActive = item.href === '/about'
