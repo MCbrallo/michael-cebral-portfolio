@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { Mail, Linkedin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { DisplayTitle } from "@/components/DisplayTitle";
 
 const channels = [
     {
@@ -32,16 +33,19 @@ export default function ContactPage() {
     const copy = {
         en: {
             eyebrow: "Transmission · Open Channel",
+            title: "Let's Connect",
             lede: "Open to new projects, collaborations and conversations. Pick a channel.",
             meta: "Noordwijk, NL · Available from October 2026 · Replies in 24–48h",
         },
         es: {
             eyebrow: "Transmisión · Canal Abierto",
+            title: "Hablemos",
             lede: "Abierto a nuevos proyectos, colaboraciones y conversaciones. Elige un canal.",
             meta: "Noordwijk, NL · Disponible desde octubre 2026 · Responde en 24–48h",
         },
         gl: {
             eyebrow: "Transmisión · Canle Aberta",
+            title: "Falemos",
             lede: "Aberto a novos proxectos, colaboracións e conversas. Escolle unha canle.",
             meta: "Noordwijk, NL · Dispoñible desde outubro 2026 · Responde en 24–48h",
         },
@@ -60,11 +64,8 @@ export default function ContactPage() {
                         {copy.eyebrow}
                     </p>
 
-                    {/* Display title — filled + outlined, echoing the home marquee */}
-                    <h1 className="font-serif font-bold leading-[0.92] tracking-tight text-[clamp(56px,12vw,150px)]">
-                        <span className="block title-shimmer">Let&rsquo;s</span>
-                        <span className="block title-shimmer">Connect.</span>
-                    </h1>
+                    {/* Display title — same size/format as the other pages */}
+                    <DisplayTitle text={copy.title} />
 
                     <p className="mt-6 max-w-xl text-base md:text-lg text-white/55 font-light leading-relaxed">
                         {copy.lede}

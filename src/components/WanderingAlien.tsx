@@ -1,271 +1,272 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface WanderingAlienProps {
     onCatch: () => void;
 }
 
-type Phase = "hidden" | "crossing" | "dying" | "calling" | "done";
+// Classic Space-Invader sprite drawn with box-shadow pixels (two marching frames).
+const FRAME_A =
+    "18px 0px 0 0 currentColor, 72px 0px 0 0 currentColor, 27px 9px 0 0 currentColor, 63px 9px 0 0 currentColor, 18px 18px 0 0 currentColor, 27px 18px 0 0 currentColor, 36px 18px 0 0 currentColor, 45px 18px 0 0 currentColor, 54px 18px 0 0 currentColor, 63px 18px 0 0 currentColor, 72px 18px 0 0 currentColor, 9px 27px 0 0 currentColor, 18px 27px 0 0 currentColor, 36px 27px 0 0 currentColor, 45px 27px 0 0 currentColor, 54px 27px 0 0 currentColor, 72px 27px 0 0 currentColor, 81px 27px 0 0 currentColor, 0px 36px 0 0 currentColor, 9px 36px 0 0 currentColor, 18px 36px 0 0 currentColor, 27px 36px 0 0 currentColor, 36px 36px 0 0 currentColor, 45px 36px 0 0 currentColor, 54px 36px 0 0 currentColor, 63px 36px 0 0 currentColor, 72px 36px 0 0 currentColor, 81px 36px 0 0 currentColor, 90px 36px 0 0 currentColor, 0px 45px 0 0 currentColor, 18px 45px 0 0 currentColor, 27px 45px 0 0 currentColor, 36px 45px 0 0 currentColor, 45px 45px 0 0 currentColor, 54px 45px 0 0 currentColor, 63px 45px 0 0 currentColor, 72px 45px 0 0 currentColor, 90px 45px 0 0 currentColor, 0px 54px 0 0 currentColor, 18px 54px 0 0 currentColor, 72px 54px 0 0 currentColor, 90px 54px 0 0 currentColor, 27px 63px 0 0 currentColor, 36px 63px 0 0 currentColor, 54px 63px 0 0 currentColor, 63px 63px 0 0 currentColor";
+const FRAME_B =
+    "18px 0px 0 0 currentColor, 72px 0px 0 0 currentColor, 0px 9px 0 0 currentColor, 27px 9px 0 0 currentColor, 63px 9px 0 0 currentColor, 90px 9px 0 0 currentColor, 0px 18px 0 0 currentColor, 18px 18px 0 0 currentColor, 27px 18px 0 0 currentColor, 36px 18px 0 0 currentColor, 45px 18px 0 0 currentColor, 54px 18px 0 0 currentColor, 63px 18px 0 0 currentColor, 72px 18px 0 0 currentColor, 90px 18px 0 0 currentColor, 0px 27px 0 0 currentColor, 9px 27px 0 0 currentColor, 18px 27px 0 0 currentColor, 36px 27px 0 0 currentColor, 45px 27px 0 0 currentColor, 54px 27px 0 0 currentColor, 72px 27px 0 0 currentColor, 81px 27px 0 0 currentColor, 90px 27px 0 0 currentColor, 0px 36px 0 0 currentColor, 9px 36px 0 0 currentColor, 18px 36px 0 0 currentColor, 27px 36px 0 0 currentColor, 36px 36px 0 0 currentColor, 45px 36px 0 0 currentColor, 54px 36px 0 0 currentColor, 63px 36px 0 0 currentColor, 72px 36px 0 0 currentColor, 81px 36px 0 0 currentColor, 90px 36px 0 0 currentColor, 9px 45px 0 0 currentColor, 18px 45px 0 0 currentColor, 27px 45px 0 0 currentColor, 36px 45px 0 0 currentColor, 45px 45px 0 0 currentColor, 54px 45px 0 0 currentColor, 63px 45px 0 0 currentColor, 72px 45px 0 0 currentColor, 81px 45px 0 0 currentColor, 18px 54px 0 0 currentColor, 72px 54px 0 0 currentColor, 9px 63px 0 0 currentColor, 81px 63px 0 0 currentColor";
+
+const MESSAGES: Record<string, string> = {
+    en: "We have watched this coast for a long time. Its rain, its grey light, its sea that never lets go of the land.\nWe have come to reclaim Galicia.\nDecide before the tide turns.",
+    es: "Llevamos mucho tiempo observando esta costa. Su lluvia, su luz gris, su mar que nunca suelta la tierra.\nHemos venido a reclamar Galicia.\nDecide antes de que cambie la marea.",
+    gl: "Levamos moito tempo observando esta costa. A súa choiva, a súa luz gris, o seu mar que nunca solta a terra.\nViñemos reclamar Galicia.\nDecide antes de que cambie a marea.",
+};
+
+const SCRAMBLE = "#%&*+=<>/:;~!?ΞΨΔΩ░▒▓";
+const NAME_GLYPHS =
+    "⟒⊑⌖⟟⍍⟁⎔⏃⍜⋔⟓◇⌿⊰⊱ΞΨΔΩ";
 
 export function WanderingAlien({ onCatch }: WanderingAlienProps) {
-    const [phase, setPhase] = useState<Phase>("hidden");
-    const [frame, setFrame] = useState(0);
-    const [callingDots, setCallingDots] = useState(0);
-    const alienRef = useRef<HTMLDivElement>(null);
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const frameInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+    const { language } = useLanguage();
 
-    // Crossing config stored in ref to avoid re-renders
-    const crossingRef = useRef({
-        direction: "right" as "left" | "right",
-        startY: 300,
-        amplitude: 30 + Math.random() * 40,   // Y wave amplitude
-        frequency: 0.003 + Math.random() * 0.002, // Y wave speed
-        duration: 18 + Math.random() * 8,      // seconds to cross screen
-    });
+    const [pos, setPos] = useState({ ax: "-220px", ay: "140px", adur: "0ms" });
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [deco, setDeco] = useState("");
+    const [decoTarget, setDecoTarget] = useState("");
+    const [alienName, setAlienName] = useState("");
 
-    const scheduleNext = useCallback((isFirst = false) => {
-        const delay = isFirst ? 15000 + Math.random() * 15000 : 50000 + Math.random() * 20000;
-        timerRef.current = setTimeout(() => {
-            // Randomize crossing params
-            const goRight = Math.random() > 0.5;
-            crossingRef.current = {
-                direction: goRight ? "right" : "left",
-                startY: 120 + Math.random() * (window.innerHeight - 300),
-                amplitude: 25 + Math.random() * 50,
-                frequency: 0.002 + Math.random() * 0.003,
-                duration: 16 + Math.random() * 10,
-            };
-            setPhase("crossing");
-        }, delay);
-    }, []);
+    const dialogOpenRef = useRef(false);
+    const stepsRef = useRef<{ x: number; y: number; dur: number; hold: number }[]>([]);
+    const stepT = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const cycleT = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const decoT = useRef<ReturnType<typeof setInterval> | null>(null);
+    const nameT = useRef<ReturnType<typeof setInterval> | null>(null);
+    const decoTargetRef = useRef("");
+    const decoPosRef = useRef(0);
+    const langRef = useRef(language);
+    langRef.current = language;
+    const startCycleRef = useRef<() => void>(() => {});
 
-    // Schedule first crossing
     useEffect(() => {
-        scheduleNext(true);
-        return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-    }, [scheduleNext]);
+        const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+        const ri = (a: number, b: number) => Math.round(rnd(a, b));
 
-    // Animate crossing using direct DOM manipulation (no React re-renders = no flicker)
-    useEffect(() => {
-        if (phase !== "crossing") return;
-
-        const el = alienRef.current;
-        if (!el) return;
-
-        const { direction, startY, amplitude, frequency, duration } = crossingRef.current;
-        const startX = direction === "right" ? -60 : window.innerWidth + 60;
-        const endX = direction === "right" ? window.innerWidth + 80 : -80;
-        const startTime = performance.now();
-        const durationMs = duration * 1000;
-        let legFrame = 0;
-
-        // Leg animation (slower interval, won't cause flicker)
-        frameInterval.current = setInterval(() => {
-            legFrame++;
-            setFrame(legFrame);
-        }, 300);
-
-        const tick = (now: number) => {
-            const elapsed = now - startTime;
-            const t = Math.min(elapsed / durationMs, 1);
-
-            // Smooth ease-in-out for X
-            const easeT = t < 0.05 ? t * 20 * t : t > 0.95 ? 1 - (1 - t) * 20 * (1 - t) : t;
-            const x = startX + (endX - startX) * easeT;
-
-            // Organic Y drift: layered sine waves
-            const yOffset = Math.sin(elapsed * frequency) * amplitude
-                + Math.sin(elapsed * frequency * 1.7 + 2) * (amplitude * 0.4)
-                + Math.sin(elapsed * frequency * 0.5 + 5) * (amplitude * 0.3);
-            const y = startY + yOffset;
-
-            // Gentle rotation based on Y velocity
-            const yVelocity = Math.cos(elapsed * frequency) * amplitude * frequency
-                + Math.cos(elapsed * frequency * 1.7 + 2) * (amplitude * 0.4) * frequency * 1.7;
-            const rot = yVelocity * 15;
-
-            el.style.transform = `translate(${x}px, ${y}px) scaleX(${direction === "left" ? -1 : 1}) rotate(${rot}deg)`;
-
-            if (t >= 1) {
-                // Crossed the screen, schedule next
-                if (frameInterval.current) clearInterval(frameInterval.current);
-                setPhase("hidden");
-                scheduleNext(false);
+        const play = (i: number) => {
+            if (dialogOpenRef.current) return;
+            const steps = stepsRef.current;
+            if (i >= steps.length) {
+                cycleT.current = setTimeout(startCycle, ri(16000, 34000));
                 return;
             }
-
-            requestAnimationFrame(tick);
+            const s = steps[i];
+            setPos({ ax: Math.round(s.x) + "px", ay: Math.round(s.y) + "px", adur: s.dur + "ms" });
+            stepT.current = setTimeout(() => play(i + 1), s.dur + s.hold);
         };
 
-        requestAnimationFrame(tick);
+        const startCycle = () => {
+            if (dialogOpenRef.current) return;
+            const W = window.innerWidth, H = window.innerHeight, AW = 84, AH = 62;
+            const minX = 24, maxX = Math.max(minX + 40, W - AW - 24);
+            const minY = 84, maxY = Math.max(minY + 40, H - AH - 100);
+            const edge = (["left", "right", "top"] as const)[ri(0, 2)];
+            let sx, sy, px, py;
+            if (edge === "left") { sx = -AW - 20; sy = rnd(minY, maxY); px = rnd(minX, minX + W * 0.14); py = sy; }
+            else if (edge === "right") { sx = W + 20; sy = rnd(minY, maxY); px = rnd(maxX - W * 0.14, maxX); py = sy; }
+            else { sx = rnd(minX, maxX); sy = -AH - 20; px = sx; py = rnd(minY, minY + H * 0.14); }
+
+            const steps: { x: number; y: number; dur: number; hold: number }[] = [];
+            steps.push({ x: sx, y: sy, dur: 0, hold: 80 });
+            steps.push({ x: px, y: py, dur: ri(1300, 1700), hold: ri(500, 1100) });
+            if (Math.random() < 0.55) {
+                let bx = edge === "left" ? px - rnd(20, 70) : edge === "right" ? px + rnd(20, 70) : px + rnd(-50, 50);
+                const by = edge === "top" ? py - rnd(20, 55) : py + rnd(-30, 30);
+                bx = Math.max(Math.min(bx, maxX), Math.min(sx, minX));
+                steps.push({ x: bx, y: by, dur: ri(600, 950), hold: ri(300, 700) });
+            }
+            const n = ri(2, 4);
+            for (let i = 0; i < n; i++) steps.push({ x: rnd(minX, maxX), y: rnd(minY, maxY), dur: ri(1900, 3400), hold: ri(250, 950) });
+            const xe = (["left", "right", "top", "bottom"] as const)[ri(0, 3)];
+            let ex, ey;
+            if (xe === "left") { ex = -AW - 30; ey = rnd(minY, maxY); }
+            else if (xe === "right") { ex = W + 30; ey = rnd(minY, maxY); }
+            else if (xe === "top") { ex = rnd(minX, maxX); ey = -AH - 30; }
+            else { ex = rnd(minX, maxX); ey = H + 30; }
+            steps.push({ x: ex, y: ey, dur: ri(1400, 1800), hold: 0 });
+            stepsRef.current = steps;
+            play(0);
+        };
+        startCycleRef.current = startCycle;
+
+        // First appearance after a short, noticeable delay.
+        const first = setTimeout(startCycle, ri(6000, 12000));
 
         return () => {
-            if (frameInterval.current) clearInterval(frameInterval.current);
+            clearTimeout(first);
+            if (stepT.current) clearTimeout(stepT.current);
+            if (cycleT.current) clearTimeout(cycleT.current);
+            if (decoT.current) clearInterval(decoT.current);
+            if (nameT.current) clearInterval(nameT.current);
         };
-    }, [phase, scheduleNext]);
+    }, []);
 
-    const handleClick = useCallback(() => {
-        if (phase !== "crossing") return;
-        if (timerRef.current) clearTimeout(timerRef.current);
-        if (frameInterval.current) clearInterval(frameInterval.current);
+    // ---- transmission ----
+    const nameStep = () => {
+        let s = "";
+        for (let i = 0; i < 6; i++) s += NAME_GLYPHS[Math.floor(Math.random() * NAME_GLYPHS.length)];
+        setAlienName(s);
+    };
 
-        // Freeze position — the CSS will handle the dying animation
-        setPhase("dying");
+    const decodeStep = () => {
+        const target = decoTargetRef.current || "";
+        decoPosRef.current += 2;
+        const reveal = Math.floor(decoPosRef.current);
+        if (reveal >= target.length) {
+            if (decoT.current) clearInterval(decoT.current);
+            setDeco(target);
+            return;
+        }
+        let out = "";
+        for (let i = 0; i < target.length; i++) {
+            const ch = target[i];
+            if (i < reveal) out += ch;
+            else if (ch === "\n") out += "\n";
+            else if (ch === " ") out += " ";
+            else if (i < reveal + 9) out += SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
+            else out += " ";
+        }
+        setDeco(out);
+    };
 
-        // After 1.5s dying, switch to calling
-        setTimeout(() => {
-            setPhase("calling");
-            setCallingDots(0);
-            let count = 0;
-            const dotInterval = setInterval(() => {
-                count++;
-                setCallingDots(count);
-                if (count >= 6) clearInterval(dotInterval);
-            }, 280);
+    const openDialog = () => {
+        if (stepT.current) clearTimeout(stepT.current);
+        if (cycleT.current) clearTimeout(cycleT.current);
+        dialogOpenRef.current = true;
+        setDialogOpen(true);
 
-            // After 2s calling, launch game
-            setTimeout(() => {
-                setPhase("done");
-                onCatch();
-            }, 2000);
-        }, 1500);
-    }, [phase, onCatch]);
+        // alien name — glyphs that never resolve
+        if (nameT.current) clearInterval(nameT.current);
+        nameStep();
+        nameT.current = setInterval(nameStep, 95);
 
-    if (phase === "hidden" || phase === "done") return null;
+        // body — scramble that decodes
+        const text = MESSAGES[langRef.current] || MESSAGES.en;
+        if (decoT.current) clearInterval(decoT.current);
+        decoTargetRef.current = text;
+        decoPosRef.current = 0;
+        setDeco("");
+        setDecoTarget(text);
+        decoT.current = setInterval(decodeStep, 38);
+    };
 
-    const isDying = phase === "dying";
-    const isCalling = phase === "calling";
-    const alienColor = isDying ? "#ff3366" : isCalling ? "#ff6633" : "#33ff99";
+    const closeDialog = () => {
+        if (decoT.current) clearInterval(decoT.current);
+        if (nameT.current) clearInterval(nameT.current);
+        dialogOpenRef.current = false;
+        setDialogOpen(false);
+        setDeco(""); setDecoTarget(""); setAlienName("");
+        // resume wandering shortly after
+        cycleT.current = setTimeout(() => {
+            if (!dialogOpenRef.current) startCycleRef.current();
+        }, 150);
+    };
 
     return (
         <>
-            {/* Inline keyframes for dying animation */}
             <style>{`
-                @keyframes alien-die {
-                    0% { transform: scale(1) rotate(0deg); opacity: 1; }
-                    10% { transform: scale(1.2) rotate(-10deg); opacity: 1; }
-                    20% { transform: scale(0.9) rotate(12deg); opacity: 0.4; }
-                    30% { transform: scale(1.1) rotate(-8deg); opacity: 1; }
-                    40% { transform: scale(0.85) rotate(15deg); opacity: 0.3; }
-                    50% { transform: scale(1.05) rotate(-5deg); opacity: 1; }
-                    60% { transform: scale(0.8) rotate(10deg); opacity: 0.4; }
-                    70% { transform: scale(0.9) rotate(-12deg); opacity: 0.9; }
-                    80% { transform: scale(0.75) rotate(8deg); opacity: 0.5; }
-                    90% { transform: scale(0.7) rotate(-3deg); opacity: 0.8; }
-                    100% { transform: scale(0.65) rotate(0deg); opacity: 1; }
-                }
-                @keyframes alien-call-pulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.08); }
-                }
-                @keyframes sos-appear {
-                    0% { opacity: 0; transform: translateY(8px) scale(0.7); }
-                    100% { opacity: 1; transform: translateY(0) scale(1); }
-                }
-                @keyframes sos-pulse {
-                    0%, 100% { box-shadow: 0 0 8px rgba(255,50,50,0.3); }
-                    50% { box-shadow: 0 0 20px rgba(255,50,50,0.6); }
-                }
-                @keyframes sos-shake {
-                    0%, 100% { transform: translateX(-50%) rotate(0deg); }
-                    25% { transform: translateX(-50%) rotate(-2deg) translateY(-1px); }
-                    75% { transform: translateX(-50%) rotate(2deg) translateY(1px); }
+                @keyframes inv-f1 { 0%,49.9%{opacity:1} 50%,100%{opacity:0} }
+                @keyframes inv-f2 { 0%,49.9%{opacity:0} 50%,100%{opacity:1} }
+                @keyframes gz-floaty { 0%,100%{transform:translateY(0) rotate(-2.5deg)} 50%{transform:translateY(-9px) rotate(2.5deg)} }
+                @keyframes gz-fade { 0%{opacity:0} 100%{opacity:1} }
+                @keyframes gz-pop { 0%{transform:translateY(16px) scale(.97);opacity:0} 100%{transform:translateY(0) scale(1);opacity:1} }
+                @keyframes gz-blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+                @media (prefers-reduced-motion: reduce) {
+                    .alien-floaty { animation: none !important; }
                 }
             `}</style>
 
-            {/* Alien container - positioned via direct DOM in crossing, CSS anim in other phases */}
+            {/* Alien — random wander */}
             <div
-                ref={alienRef}
-                className="fixed top-0 left-0 z-[100] select-none"
+                className="fixed left-0 top-0 z-[60]"
                 style={{
-                    cursor: phase === "crossing" ? "pointer" : "default",
-                    pointerEvents: phase === "crossing" ? "auto" : "none",
+                    pointerEvents: "none",
+                    transition: `transform ${pos.adur} cubic-bezier(.37,.16,.31,1)`,
+                    transform: `translate3d(${pos.ax}, ${pos.ay}, 0)`,
                     willChange: "transform",
+                    visibility: dialogOpen ? "hidden" : "visible",
                 }}
-                onClick={handleClick}
             >
-                {/* Inner wrapper for dying/calling animations (separate from position transform) */}
                 <div
-                    style={{
-                        animation: isDying
-                            ? "alien-die 1.5s ease-in-out forwards"
-                            : isCalling
-                                ? "alien-call-pulse 0.6s ease-in-out infinite"
-                                : "none",
-                    }}
+                    onClick={openDialog}
+                    style={{ pointerEvents: "auto", cursor: "pointer", width: 99, height: 72, transform: "scale(0.8)", transformOrigin: "top left" }}
+                    role="button"
+                    aria-label="Alien"
                 >
-                    {/* SVG Alien */}
-                    <svg width="40" height="32" viewBox="0 0 40 32" style={{ imageRendering: "pixelated" }}>
-                        {frame % 2 === 0 ? (
-                            <>
-                                <rect x="16" y="0" width="8" height="4" fill={alienColor} />
-                                <rect x="8" y="4" width="24" height="4" fill={alienColor} />
-                                <rect x="4" y="8" width="32" height="4" fill={alienColor} />
-                                <rect x="4" y="12" width="8" height="4" fill={alienColor} />
-                                <rect x="20" y="12" width="8" height="4" fill={alienColor} />
-                                <rect x="0" y="12" width="4" height="12" fill={alienColor} />
-                                <rect x="28" y="12" width="4" height="12" fill={alienColor} />
-                                <rect x="12" y="8" width="4" height="4" fill="#000" />
-                                <rect x="24" y="8" width="4" height="4" fill="#000" />
-                            </>
-                        ) : (
-                            <>
-                                <rect x="16" y="0" width="8" height="4" fill={alienColor} />
-                                <rect x="8" y="4" width="24" height="4" fill={alienColor} />
-                                <rect x="4" y="8" width="32" height="4" fill={alienColor} />
-                                <rect x="4" y="12" width="8" height="4" fill={alienColor} />
-                                <rect x="20" y="12" width="8" height="4" fill={alienColor} />
-                                <rect x="8" y="16" width="4" height="8" fill={alienColor} />
-                                <rect x="24" y="16" width="4" height="8" fill={alienColor} />
-                                <rect x="12" y="8" width="4" height="4" fill="#000" />
-                                <rect x="24" y="8" width="4" height="4" fill="#000" />
-                            </>
-                        )}
-                        {/* X eyes when dying/calling */}
-                        {(isDying || isCalling) && (
-                            <>
-                                <rect x="11" y="7" width="2" height="2" fill="#fff" />
-                                <rect x="15" y="11" width="2" height="2" fill="#fff" />
-                                <rect x="13" y="9" width="2" height="2" fill="#fff" />
-                                <rect x="23" y="7" width="2" height="2" fill="#fff" />
-                                <rect x="27" y="11" width="2" height="2" fill="#fff" />
-                                <rect x="25" y="9" width="2" height="2" fill="#fff" />
-                            </>
-                        )}
-                    </svg>
-
-                    {/* Glow - only during dying/calling, no green glow */}
-                    <div
-                        className="absolute inset-0 rounded-full blur-xl pointer-events-none"
-                        style={{
-                            background: alienColor,
-                            opacity: isDying ? 0.5 : isCalling ? 0.6 : 0,
-                            transform: "scale(2)",
-                            transition: "opacity 0.3s, background 0.3s",
-                        }}
-                    />
-                </div>
-
-                {/* SOS bubble when calling */}
-                {isCalling && (
-                    <div
-                        style={{ transform: `scaleX(${crossingRef.current.direction === "left" ? -1 : 1})` }}
-                    >
+                    <div className="alien-floaty" style={{ animation: "gz-floaty 3.2s ease-in-out infinite" }}>
                         <div
-                            className="absolute -top-24 left-1/2 whitespace-nowrap"
-                            style={{ animation: "sos-appear 0.3s ease-out, sos-shake 0.15s ease-in-out infinite 0.3s", transform: "translateX(-50%)" }}
+                            style={{
+                                position: "relative",
+                                width: 99, height: 72,
+                                color: "#6CF0B0",
+                                filter: "drop-shadow(0 0 7px rgba(108,240,176,.9)) drop-shadow(0 0 20px rgba(108,240,176,.45))",
+                            }}
                         >
-                            <div className="bg-gradient-to-r from-red-600/95 to-red-800/95 text-white px-5 py-2.5 rounded-lg text-base font-mono font-black shadow-xl shadow-red-500/40 relative border border-red-400/30" style={{ textShadow: "0 0 10px rgba(255,0,0,0.8)" }}>
-                                <span className="animate-pulse tracking-wider">SCREW YOU!</span>
-                                <span className="text-red-200 tracking-wide">{" "}HELP{".".repeat(Math.min(callingDots, 3))}</span>
-                                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-red-700/95 rotate-45" />
-                            </div>
+                            <div style={{ position: "absolute", left: 0, top: 0, width: 9, height: 9, boxShadow: FRAME_A, animation: "inv-f1 .6s steps(1,end) infinite" }} />
+                            <div style={{ position: "absolute", left: 0, top: 0, width: 9, height: 9, boxShadow: FRAME_B, animation: "inv-f2 .6s steps(1,end) infinite" }} />
                         </div>
                     </div>
-                )}
+                </div>
             </div>
+
+            {/* Transmission dialog */}
+            {dialogOpen && (
+                <div
+                    className="fixed inset-0 z-[200] flex items-center justify-center p-8 overflow-hidden font-mono"
+                    style={{ background: "rgba(4,9,16,.95)", animation: "gz-fade .35s ease-out" }}
+                >
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{ background: "radial-gradient(circle at 50% 40%, rgba(34,92,160,.42), transparent 58%), radial-gradient(circle at 50% 50%, transparent 46%, rgba(0,0,0,.62))" }}
+                    />
+
+                    <button
+                        type="button"
+                        onClick={closeDialog}
+                        className="absolute top-7 right-9 z-[2] cursor-pointer bg-transparent border-0 text-[15px] transition-colors"
+                        style={{ color: "#7f93a6" }}
+                        aria-label="Close"
+                    >
+                        ✕
+                    </button>
+
+                    <div className="relative z-[1] text-center" style={{ width: "min(520px,92vw)", animation: "gz-pop .5s cubic-bezier(.2,1.04,.35,1)" }}>
+                        {/* sender — glyphs that never decode */}
+                        <div style={{ fontSize: "clamp(28px,5.5vw,46px)", letterSpacing: "13px", color: "#eaf2fb", textShadow: "0 0 20px rgba(90,160,230,.55)", paddingLeft: 13 }}>
+                            {alienName}
+                        </div>
+                        <div style={{ fontSize: "8.5px", letterSpacing: "5px", color: "#6f9bc4", marginTop: 14 }}>ORIGIN UNTRANSLATABLE</div>
+
+                        <div style={{ width: 60, height: 1, margin: "26px auto", background: "linear-gradient(90deg,transparent,rgba(90,160,230,.75),transparent)" }} />
+
+                        {/* message: scramble -> decode */}
+                        <div style={{ position: "relative", fontSize: "11.5px", lineHeight: 2.05, letterSpacing: "1.5px", maxWidth: 380, margin: "0 auto" }}>
+                            <div style={{ visibility: "hidden", whiteSpace: "pre-wrap" }}>{decoTarget}</div>
+                            <div style={{ position: "absolute", inset: 0, whiteSpace: "pre-wrap", color: "#eef3f8" }}>
+                                {deco}
+                                <span style={{ color: "#5aa0e6", animation: "gz-blink 1s steps(1) infinite" }}>▋</span>
+                            </div>
+                        </div>
+
+                        {/* single action -> launch the minigame */}
+                        <button
+                            type="button"
+                            onClick={onCatch}
+                            className="mt-9 cursor-pointer border-0 font-bold transition-transform hover:-translate-y-px"
+                            style={{ fontSize: "12px", letterSpacing: "3px", color: "#06101a", background: "#f3f8fd", borderRadius: 3, padding: "15px 38px", boxShadow: "0 6px 24px rgba(40,110,200,.45)" }}
+                        >
+                            NUNCA MÁIS!
+                        </button>
+
+                        <div style={{ fontSize: "9px", letterSpacing: "3px", color: "#3f80b0", marginTop: 28 }}>◇ BEARING · LUGO</div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

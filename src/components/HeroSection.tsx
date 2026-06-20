@@ -85,8 +85,8 @@ export function HeroSection() {
                         alt=""
                         className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[16%] top-[64%] -translate-y-1/2"
                         style={{
-                            opacity: 0.34,
-                            filter: "contrast(1.03) brightness(1.03)",
+                            opacity: 0.44,
+                            filter: "contrast(1.13) brightness(1.03)",
                             WebkitMaskImage:
                                 "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 34%, #000 82%), linear-gradient(to bottom, #000 84%, transparent 100%)",
                             maskImage:
@@ -160,9 +160,9 @@ export function HeroSection() {
                         
                         <p className="relative text-red-500/60 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase max-w-[220px] leading-relaxed drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">
                             <span className="animate-pulse inline-block mr-1">⚠</span>
-                            {language === 'en' && 'Warning: Alien activity has been detected in this sector. They could be hostile.'}
-                            {language === 'es' && 'Cuidado: Se han avistado aliens en este sector. Podrían ser agresivos.'}
-                            {language === 'gl' && 'Coidado: Avistáronse aliens neste sector. Poderían ser agresivos.'}
+                            {language === 'en' && 'Warning: If you see an alien, click on it.'}
+                            {language === 'es' && 'Aviso: Si ves un alien, haz clic en él.'}
+                            {language === 'gl' && 'Aviso: Se ves un alien, fai clic nel.'}
                         </p>
                     </div>
                 </motion.div>
