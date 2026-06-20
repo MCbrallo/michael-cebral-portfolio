@@ -75,7 +75,7 @@ export function HeroSection() {
         <>
         {!showGame && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
-        <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
+        <section className="relative w-full min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden">
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
                 <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -83,14 +83,16 @@ export function HeroSection() {
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="absolute select-none h-[80%] md:h-[106%] w-auto max-w-none right-[4%] md:right-[9%] bottom-[-8%] md:bottom-[-14%]"
+                        className="absolute select-none h-[78%] md:h-[92%] w-auto max-w-none right-[3%] md:right-[6%] top-1/2 -translate-y-1/2"
                         style={{
-                            opacity: 0.26,
+                            opacity: 0.3,
                             filter: "grayscale(1) contrast(1.05)",
                             WebkitMaskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 42%, #000 80%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 58%, transparent 96%)",
                             maskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 42%, #000 80%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 58%, transparent 96%)",
+                            WebkitMaskComposite: "source-in",
+                            maskComposite: "intersect",
                         }}
                     />
                 </div>
@@ -99,7 +101,7 @@ export function HeroSection() {
 
             {/* Content Layer - hidden during game */}
             {!showGame && (
-            <div className="relative z-10 text-left w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center pb-12">
+            <div className="relative z-10 text-left w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
