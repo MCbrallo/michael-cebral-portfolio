@@ -418,7 +418,7 @@ export default function AboutPage() {
 
                     {/* Hero */}
                     <header className="pt-16 md:pt-24 pb-10 max-w-[560px]">
-                        <p className="font-mono text-[12px] md:text-[13px] tracking-[0.3em] text-white/20 mb-5 uppercase cursor-blink">
+                        <p className="font-mono text-[12px] md:text-[13px] tracking-[0.3em] text-gold/60 mb-5 uppercase cursor-blink">
                             {content.signalOrigin}
                         </p>
                         <h1 className="title-shimmer font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] text-white/90 cursor-default">

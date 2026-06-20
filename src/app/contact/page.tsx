@@ -1,102 +1,101 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { Mail, Linkedin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function ContactPage() {
-    const { t } = useLanguage();
+const channels = [
+    {
+        num: "01",
+        name: "Email",
+        addr: "michaelcebralclase@gmail.com",
+        href: "mailto:michaelcebralclase@gmail.com",
+        accent: "#d8b878",
+        external: false,
+    },
+    {
+        num: "02",
+        name: "LinkedIn",
+        addr: "/in/michaelceb",
+        href: "https://www.linkedin.com/in/michaelceb/",
+        accent: "#6ea8ff",
+        external: true,
+    },
+];
 
-    const contacts = [
-        {
-            icon: Mail,
-            label: "Email",
-            action: "Send message",
-            href: "mailto:michaelcebralclase@gmail.com"
+export default function ContactPage() {
+    const { language } = useLanguage();
+
+    const copy = {
+        en: {
+            eyebrow: "Transmission · Open Channel",
+            lede: "Open to new projects, collaborations and conversations. Pick a channel.",
+            meta: "Noordwijk, NL · Available from October 2026 · Replies in 24–48h",
         },
-        {
-            icon: Linkedin,
-            label: "LinkedIn",
-            action: "View profile",
-            href: "https://www.linkedin.com/in/michaelceb/"
-        }
-    ];
+        es: {
+            eyebrow: "Transmisión · Canal Abierto",
+            lede: "Abierto a nuevos proyectos, colaboraciones y conversaciones. Elige un canal.",
+            meta: "Noordwijk, NL · Disponible desde octubre 2026 · Responde en 24–48h",
+        },
+        gl: {
+            eyebrow: "Transmisión · Canle Aberta",
+            lede: "Aberto a novos proxectos, colaboracións e conversas. Escolle unha canle.",
+            meta: "Noordwijk, NL · Dispoñible desde outubro 2026 · Responde en 24–48h",
+        },
+    }[language];
 
     return (
-        <section className="h-screen flex flex-col items-center justify-center px-6 pt-24 overflow-hidden">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-xl w-full text-center"
-            >
-                {/* Eyebrow */}
-                <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-3">
-                    Transmission · Open Channel
-                </p>
+        <section className="min-h-screen flex flex-col justify-center px-6 md:px-14 pt-28 pb-20">
+            <div className="w-full max-w-[1080px] mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                >
+                    {/* Eyebrow */}
+                    <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-5">
+                        {copy.eyebrow}
+                    </p>
 
-                {/* Title */}
-                <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-bold mb-4 tracking-tight py-2">
-                    {t.contact?.title || "Let's Connect"}
-                </h1>
+                    {/* Display title — filled + outlined, echoing the home marquee */}
+                    <h1 className="font-serif font-bold leading-[0.92] tracking-tight text-[clamp(56px,12vw,150px)]">
+                        <span className="block title-shimmer">Let&rsquo;s</span>
+                        <span className="block outline-word">Connect.</span>
+                    </h1>
 
-                <p className="text-white/40 text-sm md:text-base mb-10 font-sans">
-                    {t.contact?.subtitle || "Open to discussing new projects and collaborations"}
-                </p>
+                    <p className="mt-6 max-w-xl text-base md:text-lg text-white/55 font-light leading-relaxed">
+                        {copy.lede}
+                    </p>
+                </motion.div>
 
-                {/* Contact Buttons */}
-                <div className="space-y-4 mb-12">
-                    {contacts.map((contact, index) => {
-                        const Icon = contact.icon;
-                        return (
-                            <motion.a
-                                key={contact.label}
-                                href={contact.href}
-                                target={contact.label === "LinkedIn" ? "_blank" : undefined}
-                                rel={contact.label === "LinkedIn" ? "noopener noreferrer" : undefined}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                                className="group block relative overflow-hidden"
-                            >
-                                <div className="flex items-center justify-between p-6 border border-white/[0.08] hover:border-white/20 rounded-lg transition-all duration-300 hover:bg-white/[0.02]">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-all duration-300">
-                                            <Icon className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
-                                        </div>
-                                        <div className="text-left">
-                                            <div className="text-xs uppercase tracking-[0.2em] text-white/30 mb-1 font-sans">
-                                                {contact.label}
-                                            </div>
-                                            <div className="text-white/70 text-sm group-hover:text-white transition-colors">
-                                                {contact.action}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <svg
-                                        className="w-4 h-4 text-white/20 group-hover:text-white/40 group-hover:translate-x-1 transition-all duration-300"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </div>
-                            </motion.a>
-                        );
-                    })}
+                {/* Channels — same index language as Projects */}
+                <div className="proj-index mt-12">
+                    {channels.map((c, i) => (
+                        <a
+                            key={c.name}
+                            href={c.href}
+                            target={c.external ? "_blank" : undefined}
+                            rel={c.external ? "noopener noreferrer" : undefined}
+                            className="proj-item contact-ch block animate-fade-in-up"
+                            style={{ "--accent": c.accent, animationDelay: `${0.15 + i * 0.1}s` } as CSSProperties}
+                        >
+                            <div className="proj-row">
+                                <span className="proj-num">{c.num}</span>
+                                <span className="proj-name">{c.name}</span>
+                                <span className="proj-meta">
+                                    {c.addr}
+                                    <span className="proj-arrow" aria-hidden="true">↗</span>
+                                </span>
+                            </div>
+                        </a>
+                    ))}
                 </div>
 
-                {/* Footer Note */}
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.6 }}
-                    className="text-white/20 text-xs tracking-wide font-sans"
-                >
-                    {t.contact?.footer || "Typically responds within 24-48 hours"}
-                </motion.p>
-            </motion.div>
+                {/* Footer meta */}
+                <p className="mt-12 font-sans text-[11px] tracking-[0.22em] uppercase text-white/30">
+                    {copy.meta}
+                </p>
+            </div>
         </section>
     );
 }

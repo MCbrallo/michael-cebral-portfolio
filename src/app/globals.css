@@ -349,6 +349,21 @@ h6 {
 .proj-link:hover { opacity: 0.85; }
 .proj-status { color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; padding: 7px 14px; }
 
+/* Outlined display word (echoes the home marquee) */
+.outline-word {
+  color: transparent;
+  -webkit-text-stroke: 1.6px rgba(245, 245, 247, 0.5);
+}
+@media (max-width: 700px) { .outline-word { -webkit-text-stroke-width: 1px; } }
+
+/* Trailing arrow on index rows (contact channels) */
+.proj-arrow { display: inline-block; margin-left: 12px; color: var(--accent, #fff); transition: transform 0.25s; }
+.proj-item:hover .proj-arrow, .proj-item:focus-within .proj-arrow { transform: translateX(5px); }
+
+/* Contact channels reuse the index, but addresses keep their natural case */
+.contact-ch { cursor: pointer; }
+.contact-ch .proj-meta { text-transform: none; letter-spacing: 0.02em; font-size: 13px; }
+
 @media (max-width: 700px) {
   .proj-panel-inner { padding-left: 6px; }
   .proj-card { flex-direction: column; align-items: flex-start; }
