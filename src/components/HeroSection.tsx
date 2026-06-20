@@ -85,8 +85,8 @@ export function HeroSection() {
                         alt=""
                         className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[16%] top-[64%] -translate-y-1/2"
                         style={{
-                            opacity: 0.34,
-                            filter: "contrast(1.03) brightness(1.03)",
+                            opacity: 0.42,
+                            filter: "contrast(1.08) brightness(1.04)",
                             WebkitMaskImage:
                                 "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 34%, #000 82%), linear-gradient(to bottom, #000 84%, transparent 100%)",
                             maskImage:
