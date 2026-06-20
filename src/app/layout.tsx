@@ -50,12 +50,21 @@ export const metadata: Metadata = {
     title: "Michael Cebral | Science Communication",
     description:
       "Science communicator working at the intersection of biology, space science and storytelling.",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Michael Cebral — Science Communication",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Michael Cebral | Science Communication",
     description:
       "Science communicator working at the intersection of biology, space science and storytelling.",
+    images: ["/og.png"],
   },
 };
 
