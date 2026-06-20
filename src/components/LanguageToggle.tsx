@@ -4,9 +4,14 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Magnetic } from "@/components/Magnetic";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function LanguageToggle() {
     const { language, setLanguage } = useLanguage();
+    const pathname = usePathname();
+
+    // Hidden on the immersive /journey film.
+    if (pathname?.startsWith("/journey")) return null;
 
     const langs = [
         { code: "en" as const, label: "EN" },

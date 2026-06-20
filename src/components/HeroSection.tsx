@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Stardust } from "@/components/Stardust";
 import { Magnetic } from "@/components/Magnetic";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
@@ -41,9 +40,6 @@ const ChromaticText = ({ text, className }: { text: string; className?: string }
     );
 };
 
-import { Vignette } from "@/components/Vignette";
-
-// ...
 import { useState, useCallback, useEffect } from "react";
 import { SpaceInvaders } from "@/components/SpaceInvaders";
 import { WanderingAlien } from "@/components/WanderingAlien";
@@ -82,8 +78,6 @@ export function HeroSection() {
         <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
             {/* Background Layer (moved to global layout, just keeping placeholder space) */}
             <div className="absolute inset-0 z-0 pointer-events-none" />
-
-            {/* <Vignette /> - Optional, overlay does the job now but kept Vignette logic if needed, removed from DOM for now */}
 
 
             {/* Content Layer - hidden during game */}
