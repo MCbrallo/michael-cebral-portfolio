@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { DisplayTitle } from '@/components/DisplayTitle';
 
@@ -408,14 +407,6 @@ export default function AboutPage() {
 
                 {/* ═══════ TEXT CONTENT ═══════ */}
                 <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10">
-
-                    {/* Back */}
-                    <div className="pt-8 md:pt-10">
-                        <Link href="/" className="inline-flex items-center text-white/30 hover:text-white/80 transition-all group uppercase tracking-[0.15em] text-[12px] md:text-[13px] py-2 hover:tracking-[0.2em]">
-                            <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-1.5 transition-transform" />
-                            Home
-                        </Link>
-                    </div>
 
                     {/* Hero */}
                     <header className="pt-16 md:pt-24 pb-10 max-w-[720px]">

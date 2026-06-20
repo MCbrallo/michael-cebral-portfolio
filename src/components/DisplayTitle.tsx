@@ -18,17 +18,20 @@ export function DisplayTitle({
     const last = words.pop() || "";
     const head = words.join(" ");
     const base = `font-serif font-bold leading-[1.02] tracking-tight text-[clamp(38px,6.4vw,82px)] pb-1 ${className}`;
+    // Force Playfair explicitly: some pages inject CSS that resets the font on
+    // headings, so the `font-serif` utility alone is not reliable here.
+    const serif = { fontFamily: '"Playfair Display", var(--font-playfair), Georgia, serif' };
 
     if (!split || !head) {
         return (
-            <h1 className={base}>
+            <h1 className={base} style={serif}>
                 <span className="title-shimmer">{text}</span>
             </h1>
         );
     }
 
     return (
-        <h1 className={base}>
+        <h1 className={base} style={serif}>
             <span className="title-shimmer">{head} </span>
             <span className="outline-word">{last}</span>
         </h1>
