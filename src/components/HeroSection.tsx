@@ -83,14 +83,14 @@ export function HeroSection() {
                     <img
                         src="/michael-portrait.png"
                         alt=""
-                        className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[12%] top-[57%] -translate-y-1/2"
+                        className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[12%] top-[64%] -translate-y-1/2"
                         style={{
                             opacity: 0.3,
                             filter: "grayscale(1) contrast(1.05)",
                             WebkitMaskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 58%, transparent 96%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 82%, transparent 100%)",
                             maskImage:
-                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 58%, transparent 96%)",
+                                "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, #000 78%), linear-gradient(to bottom, #000 82%, transparent 100%)",
                             WebkitMaskComposite: "source-in",
                             maskComposite: "intersect",
                         }}
