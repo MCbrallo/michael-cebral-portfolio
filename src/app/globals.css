@@ -36,8 +36,13 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-html {
-  zoom: 0.8;
+/* The 0.8 zoom is a desktop framing device. Real mobile browsers handle CSS
+   `zoom` inconsistently (it differs from Chrome devtools emulation), so scope it
+   to >=768px and let phones render at natural scale. */
+@media (min-width: 768px) {
+  html {
+    zoom: 0.8;
+  }
 }
 
 body {

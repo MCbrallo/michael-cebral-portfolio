@@ -87,7 +87,7 @@ export function HeroSection() {
         <>
         {!showGame && alienOn && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
-        <section className="relative w-full min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden">
+        <section className="relative w-full min-h-screen md:min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden">
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
                 <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
