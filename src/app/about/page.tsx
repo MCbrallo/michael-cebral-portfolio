@@ -422,7 +422,7 @@ export default function AboutPage() {
                         <p className="font-sans text-[11px] md:text-[12px] tracking-[0.34em] text-gold/70 mb-5 uppercase">
                             {content.signalOrigin}
                         </p>
-                        <DisplayTitle text={content.title} />
+                        <DisplayTitle text={content.title} split={false} />
                     </header>
 
                     {/* ── Narrative (single column, text on left, monitor floats right) ── */}

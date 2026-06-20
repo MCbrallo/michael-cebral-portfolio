@@ -296,5 +296,35 @@
         ]
       }
     }
+  ],
+  "NL": [
+    {
+      "type": "career",
+      "title": {
+        "en": "Science Communication Intern (incoming)",
+        "es": "Becario de Comunicación Científica (entrante)"
+      },
+      "organization": "European Space Agency (ESA) | ESTEC",
+      "dates": "Jul 26 - Sep 26",
+      "logo": "/logos/esa.png",
+      "description": {
+        "en": [
+          "Joining ESA's human spaceflight programme to help communicate exploration science and support research evaluation, for readers ranging from review panels to the wider public."
+        ],
+        "es": [
+          "Me incorporo al programa de vuelos espaciales tripulados de la ESA para comunicar la ciencia de la exploración y apoyar la evaluación de la investigación, para públicos que van desde paneles de revisión hasta el público general."
+        ]
+      },
+      "tags": {
+        "en": [
+          "ESA",
+          "Science Communication"
+        ],
+        "es": [
+          "ESA",
+          "Comunicación Científica"
+        ]
+      }
+    }
   ]
 }
