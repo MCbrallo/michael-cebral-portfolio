@@ -73,6 +73,9 @@ export default function CVPage() {
 
                         <div className="flex-1 flex flex-col md:flex-row gap-8 items-center md:items-start w-full">
                             <div className="max-w-2xl relative z-10">
+                                <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-gold/70 mb-3">
+                                    Curriculum · Dossier
+                                </p>
                                 <h1 className="title-shimmer font-serif text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 leading-tight py-2">
                                     {t.about?.title}
                                 </h1>
@@ -124,7 +127,7 @@ export default function CVPage() {
                                 className={`
                   uppercase tracking-widest md:tracking-[0.2em] transition-all duration-500 relative pb-2 group
                   ${selectedFilter === filter.value
-                                        ? 'text-white font-medium'
+                                        ? 'text-gold font-medium'
                                         : 'text-white/40 hover:text-white/70'
                                     }
                 `}
@@ -161,14 +164,11 @@ export default function CVPage() {
                                 </div>
                             </div>
 
-                            {/* Right Column: Content */}
-                            <div className="relative">
-                                {/* Premium border accent */}
-                                <div className="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                {/* Logo with premium container */}
+                            {/* Right Column: Content as a glass card */}
+                            <div className="relative rounded-2xl border border-white/[0.08] bg-[#0b0e1a]/55 backdrop-blur-md p-6 md:p-7 transition-colors duration-500 group-hover:border-gold/30">
+                                {/* Logo chip */}
                                 {exp.logo && (
-                                    <div className="absolute -top-2 right-0 w-16 h-16 bg-white rounded-sm p-2 opacity-90 group-hover:opacity-100 transition-all duration-500 shadow-lg group-hover:shadow-xl group-hover:shadow-white/10">
+                                    <div className="absolute top-5 right-5 w-14 h-14 bg-white rounded-xl p-2 ring-1 ring-white/15 opacity-90 group-hover:opacity-100 transition-all duration-500 shadow-lg">
                                         <Image
                                             src={exp.logo}
                                             alt={exp.organization}
@@ -193,7 +193,7 @@ export default function CVPage() {
                                 <ul className="space-y-3 mb-6">
                                     {(exp.description[cvLang] || exp.description.en).map((item, i) => (
                                         <li key={i} className="text-white/60 leading-relaxed flex gap-3 group/item">
-                                            <span className="text-white/30 mt-1.5 transition-colors duration-300 group-hover/item:text-white/50">—</span>
+                                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold/50 transition-colors duration-300 group-hover/item:bg-gold" />
                                             <span
                                                 className="flex-1 transition-colors duration-300 group-hover/item:text-white/70"
                                                 dangerouslySetInnerHTML={{ __html: item }}
@@ -230,39 +230,39 @@ export default function CVPage() {
                     <div className="grid md:grid-cols-3 gap-6">
                         {[
                             {
-                                title: t.about?.biotech || 'Biotechnology',
+                                title: cvLang === 'es' ? 'Comunicación y Divulgación' : 'Communication & Outreach',
                                 skills: cvLang === 'es'
-                                    ? ['Transcriptómica Espacial', 'Ingeniería de Biomateriales', 'Ingeniería de Proteínas', 'Sistemas de Cultivo Celular']
-                                    : ['Spatial Transcriptomics', 'Biomaterials Engineering', 'Protein Engineering', 'Cell Culture Systems']
+                                    ? ['Comunicación científica', 'Redacción y edición', 'Oratoria y charlas', 'Monitorización y curación de noticias']
+                                    : ['Science Communication', 'Copywriting & Editing', 'Public Speaking', 'News Monitoring & Curation']
                             },
                             {
-                                title: t.about?.space || 'Space Science',
+                                title: cvLang === 'es' ? 'Diseño y Visuales' : 'Design & Visuals',
                                 skills: cvLang === 'es'
-                                    ? ['Biología en Microgravedad', 'Investigación en Astrobiología', 'Ingeniería de Sistemas Espaciales', 'Vuelo Espacial Comercial']
-                                    : ['Microgravity Biology', 'Astrobiology Research', 'Space Systems Engineering', 'Commercial Spaceflight']
+                                    ? ['Identidad visual', 'Infografía y visualización de datos', 'Diseño de presentaciones', 'Edición de vídeo']
+                                    : ['Visual Identity', 'Infographics & Data Viz', 'Presentation Design', 'Video Editing']
                             },
                             {
-                                title: t.about?.technical || 'Technical',
+                                title: cvLang === 'es' ? 'Observación de la Tierra y Datos' : 'Earth Observation & Data',
                                 skills: cvLang === 'es'
-                                    ? ['Programación en R y Python', 'Pipelines de Bioinformática', 'Análisis Estadístico', 'Desarrollo Full-Stack']
-                                    : ['R & Python Programming', 'Bioinformatics Pipelines', 'Statistical Analysis', 'Full-Stack Development']
+                                    ? ['Datos Copernicus y Sentinel', 'NDVI e índices de vegetación', 'Visualización geoespacial', 'Análisis en Python y R']
+                                    : ['Copernicus & Sentinel Data', 'NDVI & Vegetation Indices', 'Geospatial Visualisation', 'Python & R Analysis']
                             }
                         ].map((category, index) => (
                             <div
                                 key={index}
-                                className="group/skill relative p-6 rounded-sm border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/[0.02]"
+                                className="group/skill relative p-6 rounded-2xl border border-white/[0.08] bg-[#0b0e1a]/45 backdrop-blur-md transition-all duration-500 hover:border-gold/30 hover:bg-white/[0.03]"
                             >
                                 {/* Subtle corner accent */}
-                                <div className="absolute top-0 left-0 w-3 h-3 border-l border-t border-white/20 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
-                                <div className="absolute bottom-0 right-0 w-3 h-3 border-r border-b border-white/20 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute top-2 left-2 w-3 h-3 border-l border-t border-gold/40 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute bottom-2 right-2 w-3 h-3 border-r border-b border-gold/40 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
 
-                                <h4 className="text-lg uppercase tracking-[0.2em] mb-6 text-white/80 group-hover/skill:text-white transition-colors duration-300">
+                                <h4 className="font-sans text-sm uppercase tracking-[0.2em] mb-6 text-gold/80 group-hover/skill:text-gold transition-colors duration-300">
                                     {category.title}
                                 </h4>
                                 <ul className="space-y-3">
                                     {category.skills.map((skill, i) => (
-                                        <li key={i} className="text-white/50 font-light leading-relaxed transition-colors duration-300 group-hover/skill:text-white/60 flex items-start gap-2">
-                                            <span className="text-white/30 mt-1.5">·</span>
+                                        <li key={i} className="text-white/55 font-light leading-relaxed transition-colors duration-300 group-hover/skill:text-white/75 flex items-start gap-3">
+                                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold/50" />
                                             <span className="flex-1">{skill}</span>
                                         </li>
                                     ))}

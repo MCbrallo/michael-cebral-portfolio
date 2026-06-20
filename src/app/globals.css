@@ -285,10 +285,10 @@ h6 {
 }
 .proj-item:hover .proj-name,
 .proj-item:focus-within .proj-name {
-  color: #fff; -webkit-text-stroke: 0; transform: translateX(10px);
+  color: var(--accent, #fff); -webkit-text-stroke: 0; transform: translateX(10px);
 }
 .proj-item:hover .proj-num,
-.proj-item:focus-within .proj-num { color: var(--color-gold); }
+.proj-item:focus-within .proj-num { color: var(--accent, var(--color-gold)); }
 .proj-item:hover .proj-meta,
 .proj-item:focus-within .proj-meta { color: rgba(255, 255, 255, 0.6); }
 
@@ -304,25 +304,40 @@ h6 {
 .proj-item:hover .proj-panel-inner,
 .proj-item:focus-within .proj-panel-inner { opacity: 1; transform: none; }
 
-/* Expanded card — glass surface holding the logo and the description */
+/* Expanded card — glass surface tinted by the project's accent colour */
 .proj-card {
+  position: relative; overflow: hidden;
   display: flex; align-items: center; gap: clamp(20px, 3vw, 44px);
   padding: clamp(20px, 2.2vw, 30px);
-  border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(165deg, rgba(20, 24, 44, 0.55), rgba(8, 10, 22, 0.42));
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 18%, rgba(255, 255, 255, 0.08));
+  background:
+    radial-gradient(140% 120% at 0% 0%, color-mix(in srgb, var(--accent, #fff) 12%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(20, 24, 44, 0.6), rgba(8, 10, 22, 0.46));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   box-shadow: 0 14px 50px rgba(0, 0, 0, 0.28);
-  transition: border-color 0.3s;
+  transition: border-color 0.35s, box-shadow 0.35s;
 }
 .proj-item:hover .proj-card,
-.proj-item:focus-within .proj-card { border-color: rgba(255, 255, 255, 0.16); }
+.proj-item:focus-within .proj-card {
+  border-color: color-mix(in srgb, var(--accent, #fff) 42%, transparent);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.32),
+              0 0 60px -12px color-mix(in srgb, var(--accent, #fff) 45%, transparent);
+}
 
-/* Logos sit free — no frame, no plate */
+/* Logos sit free — no frame, no plate — over a soft accent halo */
 .proj-logo {
+  position: relative;
   width: clamp(150px, 18vw, 214px); height: clamp(108px, 13vw, 150px);
   flex: none; display: flex; align-items: center; justify-content: center;
 }
-.proj-logo img, .proj-logo svg { max-width: 90%; max-height: 90%; object-fit: contain; }
+.proj-logo::before {
+  content: ""; position: absolute; inset: 8% 14%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 32%, transparent), transparent 68%);
+  filter: blur(14px);
+}
+.proj-logo img, .proj-logo svg { position: relative; max-width: 90%; max-height: 90%; object-fit: contain; }
 
 .proj-desc { max-width: 56ch; }
 .proj-desc p { margin: 0; color: rgba(255, 255, 255, 0.78); font-size: 15px; line-height: 1.62; }

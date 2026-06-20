@@ -47,7 +47,15 @@ export function Header() {
                 isGameActive ? "pointer-events-none" : ""
             )}
         >
-            <div className="flex items-center justify-end w-full max-w-[1400px]">
+            <div className="flex items-center justify-between w-full max-w-[1400px]">
+                {/* Symbol only — links home, no bar */}
+                <Link href="/" className="group relative shrink-0" aria-label="Home">
+                    <span className="font-serif text-2xl font-bold tracking-tighter text-stark-white">
+                        MC
+                    </span>
+                    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
+                </Link>
+
                 {/* Navigation - Ultra Minimal (tabs only) */}
                 <nav className="flex items-center gap-3 md:gap-12 overflow-x-auto no-scrollbar">
                     {navItems.map((item) => {

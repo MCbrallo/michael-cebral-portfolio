@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export const metadata = {
     title: "Projects",
     description:
@@ -12,6 +14,8 @@ type Project = {
     type: string;
     year: string;
     blurb: string;
+    /** Primary brand colour, used for the title, halo and card accent. */
+    accent: string;
     /** Logo image in /public/projects, or "hoxe" for the inline editorial mark. */
     logo: string;
     links?: ProjectLink[];
@@ -23,40 +27,44 @@ const projects: Project[] = [
     {
         id: "all-in-space",
         name: "ALL-IN SPACE",
-        type: "Space Intelligence",
+        type: "Space Market Intelligence",
         year: "2025",
         blurb:
-            "A space intelligence workspace that brings launches, satellite operations and industry data into one place you can explore. It includes a live launch tracker and a documented source registry, made for anyone who needs quick, organised access to space data.",
+            "A global space market intelligence platform. It profiles more than 200 countries and maps 1,088 companies across five sectors, with 3D orbital tracking and a daily news and launch feed written in plain language.",
+        accent: "#b48bff",
         logo: "/projects/all-in-space.svg",
         links: [{ label: "Live ↗", href: "https://allinspace.xyz/explore" }],
     },
     {
         id: "ariadne",
         name: "ARIADNE",
-        type: "Research to Orbit",
+        type: "Access to Space",
         year: "2025",
         blurb:
-            "Ariadne is the thread that guides a research project to orbit. It finds the right commercial launch provider, orbital host and funding agency for your experiment, then helps you handle the regulatory steps from first idea to flight. It compares more than 22 providers and programmes, and you get a first reply within 48 hours.",
+            "An independent advisory on access to space. Ariadne helps a research project find the right launch provider, orbital host and funding, and guides it through every step from first idea to flight.",
+        accent: "#f15a5a",
         logo: "/projects/ariadne.svg",
         links: [{ label: "Live ↗", href: "https://ariadne-gamma.vercel.app" }],
     },
     {
         id: "abil",
         name: "ABIL",
-        type: "Environmental Intelligence",
+        type: "Environmental Scoring",
         year: "2025",
         blurb:
-            "ABIL turns satellite and geospatial data into clear environmental insight for any site. It maps your locations, scores them across several factors, sends alerts, writes executive reports and answers questions through a conversational AI analyst grounded in real data.",
+            "ABIL condenses satellite readings into a single environmental score for any site, made for risk, insurance, investment and ESG. Every score links back to the measurement behind it and the regulation it answers to, so people without a remote sensing background can still use it.",
+        accent: "#8ed973",
         logo: "/projects/abil.svg",
         links: [{ label: "Live ↗", href: "https://clearesg.vercel.app" }],
     },
     {
         id: "nexum",
         name: "NEXUM",
-        type: "Marketplace · Advisory",
+        type: "Accounting Software",
         year: "2025",
         blurb:
-            "Nexum Xestión connects companies with the advisory and consulting firms that fit them best. It was a finalist in Santander X Emprende and joined the startup incubator at the University of Santiago de Compostela. It is currently in beta.",
+            "Nexum Xestión is accounting software for small firms. It reached the Santander X Emprende finals and joined the startup incubator at the University of Santiago de Compostela. It is currently in beta.",
+        accent: "#e0ae3e",
         logo: "/projects/nexum.png",
         links: [{ label: "Live ↗", href: "https://nexumxestion.com" }],
         status: "Santander X · USC Incubator",
@@ -64,13 +72,14 @@ const projects: Project[] = [
     {
         id: "roadmap",
         name: "ROADMAP",
-        type: "Strategy · Creative Concept",
+        type: "Space Communication",
         year: "2026",
         blurb:
-            "ROADMAP is a strategic creative concept and an interdisciplinary mission plan, developed within the International Space University as part of the Master of Space Studies 2026.",
+            "A communication plan for future Moon and Mars missions, with separate messaging for technical, institutional and public audiences. The web platform turns country level space capability data into long range communication plans. Accepted for presentation at IAC 2026.",
+        accent: "#6ea8ff",
         logo: "/projects/roadmap.svg",
         links: [{ label: "Live ↗", href: "https://roadmap-project-five.vercel.app" }],
-        status: "ISU · MSS 2026",
+        status: "ISU · IAC 2026",
     },
     {
         id: "hoxe",
@@ -79,6 +88,7 @@ const projects: Project[] = [
         year: "2025",
         blurb:
             "HOXE is a polished, editorial historical timeline. It lets you relive the exact events that shaped today, across history and across space.",
+        accent: "#d8b878",
         logo: "hoxe",
         links: [{ label: "Live ↗", href: "https://hoxe.org" }],
     },
@@ -128,7 +138,12 @@ export default function Projects() {
                 {/* Index */}
                 <div className="proj-index">
                     {projects.map((p, i) => (
-                        <div key={p.id} className="proj-item" tabIndex={0}>
+                        <div
+                            key={p.id}
+                            className="proj-item"
+                            tabIndex={0}
+                            style={{ "--accent": p.accent } as CSSProperties}
+                        >
                             <div className="proj-row">
                                 <span className="proj-num">{pad(i + 1)}</span>
                                 <span className="proj-name">{p.name}</span>
