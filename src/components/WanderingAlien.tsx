@@ -176,6 +176,15 @@ export function WanderingAlien({ onCatch }: WanderingAlienProps) {
         }, 150);
     };
 
+    // Close the transmission on Escape.
+    useEffect(() => {
+        if (!dialogOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeDialog(); };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dialogOpen]);
+
     return (
         <>
             <style>{`
@@ -228,21 +237,12 @@ export function WanderingAlien({ onCatch }: WanderingAlienProps) {
                 <div
                     className="fixed inset-0 z-[200] flex items-center justify-center p-8 overflow-hidden font-mono"
                     style={{ background: "rgba(4,9,16,.95)", animation: "gz-fade .35s ease-out" }}
+                    onClick={(e) => { if (e.target === e.currentTarget) closeDialog(); }}
                 >
                     <div
                         className="absolute inset-0 pointer-events-none"
                         style={{ background: "radial-gradient(circle at 50% 40%, rgba(34,92,160,.42), transparent 58%), radial-gradient(circle at 50% 50%, transparent 46%, rgba(0,0,0,.62))" }}
                     />
-
-                    <button
-                        type="button"
-                        onClick={closeDialog}
-                        className="absolute top-7 right-9 z-[2] cursor-pointer bg-transparent border-0 text-[15px] transition-colors"
-                        style={{ color: "#7f93a6" }}
-                        aria-label="Close"
-                    >
-                        ✕
-                    </button>
 
                     <div className="relative z-[1] text-center" style={{ width: "min(520px,92vw)", animation: "gz-pop .5s cubic-bezier(.2,1.04,.35,1)" }}>
                         {/* sender — glyphs that never decode */}

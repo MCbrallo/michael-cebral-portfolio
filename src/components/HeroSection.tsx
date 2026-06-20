@@ -166,18 +166,21 @@ export function HeroSection() {
                     className="fixed bottom-3 left-4 md:bottom-5 md:left-6 z-[100] flex flex-col gap-2.5"
                 >
                     {alienOn && (
-                        <div className="relative group pointer-events-none max-w-[230px]">
-                            <div className="absolute inset-0 bg-red-600/10 blur-xl rounded-full animate-pulse-slow" />
-                            <p className="relative text-red-500/60 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase leading-relaxed drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">
-                                <span className="animate-pulse inline-block mr-1">⚠</span>
-                                {language === 'en' && 'Warning: If you see an alien, click on it.'}
-                                {language === 'es' && 'Aviso: Si ves un alien, haz clic en él.'}
-                                {language === 'gl' && 'Aviso: Se ves un alien, fai clic nel.'}
-                            </p>
+                        <div className="relative pointer-events-none w-fit max-w-[280px] overflow-hidden rounded-md border border-red-500/25 bg-red-950/35 backdrop-blur-md py-2 pl-3.5 pr-4 shadow-[0_0_28px_-10px_rgba(239,68,68,0.6)]">
+                            {/* pulsing left accent bar */}
+                            <span className="absolute left-0 top-[5px] bottom-[5px] w-[3px] rounded-full bg-red-500/80 animate-pulse" />
+                            <div className="flex items-center gap-2">
+                                <span className="shrink-0 text-red-400 text-sm leading-none animate-pulse drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]">⚠</span>
+                                <p className="text-red-300/90 text-[9px] md:text-[10px] font-mono tracking-[0.18em] uppercase leading-snug">
+                                    {language === 'en' && 'Warning: If you see an alien, click on it.'}
+                                    {language === 'es' && 'Aviso: Si ves un alien, haz clic en él.'}
+                                    {language === 'gl' && 'Aviso: Se ves un alien, fai clic nel.'}
+                                </p>
+                            </div>
                         </div>
                     )}
 
-                    {/* Alien on/off switch */}
+                    {/* Alien on/off switch — dark red */}
                     <button
                         type="button"
                         role="switch"
@@ -187,14 +190,14 @@ export function HeroSection() {
                         aria-label="Toggle alien"
                         className="pointer-events-auto group/sw inline-flex items-center gap-2.5 w-fit"
                     >
-                        <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/40 transition-colors group-hover/sw:text-white/75">
+                        <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/45 transition-colors group-hover/sw:text-white/80">
                             Alien
                         </span>
                         <span
                             className={cn(
                                 "relative w-9 h-[18px] rounded-full border transition-colors duration-300",
                                 alienOn
-                                    ? "bg-gold/80 border-gold/60 shadow-[0_0_10px_-2px_var(--color-gold)]"
+                                    ? "bg-red-900/85 border-red-600/70 shadow-[0_0_12px_-2px_rgba(220,38,38,0.65)]"
                                     : "bg-white/10 border-white/20"
                             )}
                         >
