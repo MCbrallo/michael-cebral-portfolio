@@ -52,10 +52,22 @@ export function HeroSection() {
     const { language, t } = useLanguage(); // Get current language (en/es)
     const [quoteIndex, setQuoteIndex] = useState<number | null>(null);
     const [showGame, setShowGame] = useState(false);
+    const [alienOn, setAlienOn] = useState(true);
 
     // Initialize with a random quote on client-side mount
     useEffect(() => {
         setQuoteIndex(Math.floor(Math.random() * quotes.length));
+        try {
+            if (localStorage.getItem("alienOn") === "false") setAlienOn(false);
+        } catch { }
+    }, []);
+
+    const toggleAlien = useCallback(() => {
+        setAlienOn((v) => {
+            const nv = !v;
+            try { localStorage.setItem("alienOn", String(nv)); } catch { }
+            return nv;
+        });
     }, []);
 
     const handleNextQuote = useCallback(() => {
@@ -73,7 +85,7 @@ export function HeroSection() {
 
     return (
         <>
-        {!showGame && <WanderingAlien onCatch={() => setShowGame(true)} />}
+        {!showGame && alienOn && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
         <section className="relative w-full min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden">
             {/* Faint cut-out portrait on the right, fading toward the centre */}
@@ -81,11 +93,10 @@ export function HeroSection() {
                 <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                        src="/michael-portrait.png"
+                        src="/michael-portrait.webp"
                         alt=""
-                        className="absolute select-none h-[82%] md:h-[104%] w-auto max-w-none right-[4%] md:right-[16%] top-[64%] -translate-y-1/2"
+                        className="absolute select-none h-[58%] md:h-[104%] w-auto max-w-none right-[-8%] md:right-[16%] top-[72%] md:top-[64%] -translate-y-1/2 opacity-[0.16] md:opacity-[0.44]"
                         style={{
-                            opacity: 0.44,
                             filter: "contrast(1.13) brightness(1.03)",
                             WebkitMaskImage:
                                 "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 34%, #000 82%), linear-gradient(to bottom, #000 84%, transparent 100%)",
@@ -146,25 +157,55 @@ export function HeroSection() {
             </div>
             )}
 
-            {/* Alien Warning - absolute bottom left, hidden during game */}
+            {/* Alien warning + toggle — bottom left, hidden during game */}
             {!showGame && (
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 2 }}
-                    className="fixed bottom-2 left-4 md:bottom-4 md:left-6 z-[100] pointer-events-none"
+                    className="fixed bottom-3 left-4 md:bottom-5 md:left-6 z-[100] flex flex-col gap-2.5"
                 >
-                    <div className="relative group">
-                        {/* Subtle red glow */}
-                        <div className="absolute inset-0 bg-red-600/10 blur-xl rounded-full animate-pulse-slow" />
-                        
-                        <p className="relative text-red-500/60 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase max-w-[220px] leading-relaxed drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">
-                            <span className="animate-pulse inline-block mr-1">⚠</span>
-                            {language === 'en' && 'Warning: If you see an alien, click on it.'}
-                            {language === 'es' && 'Aviso: Si ves un alien, haz clic en él.'}
-                            {language === 'gl' && 'Aviso: Se ves un alien, fai clic nel.'}
-                        </p>
-                    </div>
+                    {alienOn && (
+                        <div className="relative group pointer-events-none max-w-[230px]">
+                            <div className="absolute inset-0 bg-red-600/10 blur-xl rounded-full animate-pulse-slow" />
+                            <p className="relative text-red-500/60 text-[9px] md:text-[10px] font-mono tracking-[0.2em] uppercase leading-relaxed drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]">
+                                <span className="animate-pulse inline-block mr-1">⚠</span>
+                                {language === 'en' && 'Warning: If you see an alien, click on it.'}
+                                {language === 'es' && 'Aviso: Si ves un alien, haz clic en él.'}
+                                {language === 'gl' && 'Aviso: Se ves un alien, fai clic nel.'}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Alien on/off switch */}
+                    <button
+                        type="button"
+                        role="switch"
+                        aria-checked={alienOn ? "true" : "false"}
+                        onClick={toggleAlien}
+                        title={alienOn ? "Disable alien" : "Enable alien"}
+                        aria-label="Toggle alien"
+                        className="pointer-events-auto group/sw inline-flex items-center gap-2.5 w-fit"
+                    >
+                        <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/40 transition-colors group-hover/sw:text-white/75">
+                            Alien
+                        </span>
+                        <span
+                            className={cn(
+                                "relative w-9 h-[18px] rounded-full border transition-colors duration-300",
+                                alienOn
+                                    ? "bg-gold/80 border-gold/60 shadow-[0_0_10px_-2px_var(--color-gold)]"
+                                    : "bg-white/10 border-white/20"
+                            )}
+                        >
+                            <span
+                                className={cn(
+                                    "absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-md transition-transform duration-300",
+                                    alienOn ? "translate-x-[18px]" : "translate-x-0"
+                                )}
+                            />
+                        </span>
+                    </button>
                 </motion.div>
             )}
         </section>

@@ -34,19 +34,19 @@ export default function ContactPage() {
         en: {
             eyebrow: "Transmission · Open Channel",
             title: "Let's Connect",
-            lede: "Open to new projects, collaborations and conversations. Pick a channel.",
+            lede: "Open to new projects and collaborations. Pick a channel.",
             meta: "Noordwijk, NL · Available from October 2026 · Replies in 24–48h",
         },
         es: {
             eyebrow: "Transmisión · Canal Abierto",
             title: "Hablemos",
-            lede: "Abierto a nuevos proyectos, colaboraciones y conversaciones. Elige un canal.",
+            lede: "Abierto a nuevos proyectos y colaboraciones. Elige un canal.",
             meta: "Noordwijk, NL · Disponible desde octubre 2026 · Responde en 24–48h",
         },
         gl: {
             eyebrow: "Transmisión · Canle Aberta",
             title: "Falemos",
-            lede: "Aberto a novos proxectos, colaboracións e conversas. Escolle unha canle.",
+            lede: "Aberto a novos proxectos e colaboracións. Escolle unha canle.",
             meta: "Noordwijk, NL · Dispoñible desde outubro 2026 · Responde en 24–48h",
         },
     }[language];
@@ -67,7 +67,7 @@ export default function ContactPage() {
                     {/* Display title — same size/format as the other pages */}
                     <DisplayTitle text={copy.title} />
 
-                    <p className="mt-6 max-w-xl text-base md:text-lg text-white/55 font-light leading-relaxed">
+                    <p className="mt-6 max-w-2xl text-base md:text-lg text-white/55 font-light leading-relaxed text-pretty">
                         {copy.lede}
                     </p>
                 </motion.div>

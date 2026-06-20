@@ -183,7 +183,8 @@ export default function Projects() {
                 </div>
 
                 <p className="mt-10 text-center font-sans text-[10.5px] tracking-[0.18em] uppercase text-white/30">
-                    Hover a project to expand
+                    <span className="hint-hover">Hover</span>
+                    <span className="hint-tap">Tap</span> a project to expand
                 </p>
             </main>
         </div>

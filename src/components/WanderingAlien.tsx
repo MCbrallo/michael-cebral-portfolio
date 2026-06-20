@@ -62,7 +62,16 @@ export function WanderingAlien({ onCatch }: WanderingAlienProps) {
 
         const startCycle = () => {
             if (dialogOpenRef.current) return;
-            const W = window.innerWidth, H = window.innerHeight, AW = 84, AH = 62;
+            // The page renders under html{zoom:0.8}, which scales translate() px.
+            // getComputedStyle(...).zoom is unreliable, so measure it from a probe:
+            // a 1000px element's device rect / 1000 == the effective zoom. The layout
+            // edge then sits at innerWidth/zoom, so "off-screen" (esp. right) is real.
+            const probe = document.createElement("div");
+            probe.style.cssText = "position:absolute;left:0;top:0;width:1000px;height:0;visibility:hidden;pointer-events:none";
+            document.body.appendChild(probe);
+            const zoom = probe.getBoundingClientRect().width / 1000 || 1;
+            probe.remove();
+            const W = window.innerWidth / zoom, H = window.innerHeight / zoom, AW = 84, AH = 62;
             const minX = 24, maxX = Math.max(minX + 40, W - AW - 24);
             const minY = 84, maxY = Math.max(minY + 40, H - AH - 100);
             const edge = (["left", "right", "top"] as const)[ri(0, 2)];

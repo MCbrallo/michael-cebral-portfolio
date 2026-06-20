@@ -265,7 +265,7 @@ export function NebulaBackground() {
         let warpTimer = 0;
 
         function resize() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2) * qScale;
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.75) * qScale;
             const vw = canvas!.clientWidth || window.innerWidth || 1;
             const vh = canvas!.clientHeight || window.innerHeight || 1;
             const w = Math.floor(vw * dpr), h = Math.floor(vh * dpr);
