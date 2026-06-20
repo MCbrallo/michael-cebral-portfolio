@@ -76,8 +76,26 @@ export function HeroSection() {
         {!showGame && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
         <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
-            {/* Background Layer (moved to global layout, just keeping placeholder space) */}
-            <div className="absolute inset-0 z-0 pointer-events-none" />
+            {/* Faint portrait, blended into the nebula (abdomen-up, feathered) */}
+            {!showGame && (
+                <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/michael-portrait.png"
+                        alt=""
+                        className="h-[132%] w-auto max-w-none select-none"
+                        style={{
+                            opacity: 0.17,
+                            filter: "grayscale(1) contrast(1.05)",
+                            mixBlendMode: "luminosity",
+                            WebkitMaskImage:
+                                "radial-gradient(60% 58% at 50% 36%, #000 36%, transparent 80%)",
+                            maskImage:
+                                "radial-gradient(60% 58% at 50% 36%, #000 36%, transparent 80%)",
+                        }}
+                    />
+                </div>
+            )}
 
 
             {/* Content Layer - hidden during game */}
