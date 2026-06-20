@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { StarField } from '@/components/StarField';
 
 /* ══════════════════════════════════════════════════════════════
    HOOKS
@@ -389,9 +388,7 @@ export default function AboutPage() {
     return (
         <>
             <style dangerouslySetInnerHTML={{ __html: designCSS }} />
-            <div className="bg-[#050505] text-white relative min-h-screen">
-
-                <StarField />
+            <div className="text-white relative min-h-screen">
 
                 {/* Progress bar */}
                 <div className="fixed top-0 left-0 right-0 h-[1px] z-[60] pointer-events-none">

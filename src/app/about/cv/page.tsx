@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Magnetic } from '@/components/Magnetic';
-import { StarField } from '@/components/StarField';
 import experiencesData from '@/data/experiences.json';
 
 type ExperienceType = 'education' | 'career' | 'travel';
@@ -61,10 +60,7 @@ export default function CVPage() {
         : allExperiences.filter(exp => exp.type === selectedFilter);
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden">
-            {/* StarField Background — same as About Me */}
-            <StarField />
-
+        <div className="min-h-screen text-white relative overflow-hidden">
             <div className="max-w-[1200px] mx-auto px-6 md:px-12 pt-32 pb-20 relative z-10">
 
 

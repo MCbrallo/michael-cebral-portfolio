@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
-import { BackgroundVideo } from "@/components/BackgroundVideo";
+import { NebulaBackground } from "@/components/NebulaBackground";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -43,11 +43,18 @@ export default function RootLayout({
         className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-screen font-sans overflow-x-hidden`}
       >
         <LanguageProvider>
-          {/* Global Video Background */}
-          <div className="fixed inset-0 z-[-1] pointer-events-none bg-black">
-              <BackgroundVideo />
-              {/* Dark Overlay for Text Readability */}
-              <div className="absolute inset-0 bg-black/60" />
+          {/* Global Interactive Nebula Background (WebGL) */}
+          <div className="fixed inset-0 z-[-1] pointer-events-none bg-[#04050c]">
+              <NebulaBackground />
+              {/* Readability scrim over the shader — keeps headlines legible
+                  while letting the dust breathe at the edges. */}
+              <div
+                  className="absolute inset-0"
+                  style={{
+                      background:
+                          "radial-gradient(120% 90% at 50% 42%, rgba(4,5,12,0.10) 0%, rgba(4,5,12,0.50) 55%, rgba(4,5,12,0.78) 100%), linear-gradient(180deg, rgba(4,5,12,0.55) 0%, rgba(4,5,12,0) 22%, rgba(4,5,12,0) 78%, rgba(4,5,12,0.6) 100%)",
+                  }}
+              />
           </div>
 
           <LanguageToggle />
