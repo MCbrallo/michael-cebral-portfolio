@@ -95,7 +95,7 @@ export function HeroSection() {
                     <img
                         src="/michael-portrait.webp"
                         alt=""
-                        className="absolute select-none h-[74%] md:h-[104%] w-auto max-w-none right-[-8%] md:right-[16%] top-[42%] md:top-[64%] -translate-y-1/2 opacity-[0.22] md:opacity-[0.44]"
+                        className="absolute select-none h-[74%] md:h-[104%] w-auto max-w-none right-[-8%] md:right-[16%] top-[47%] md:top-[64%] -translate-y-1/2 opacity-[0.22] md:opacity-[0.44]"
                         style={{
                             filter: "contrast(1.13) brightness(1.03)",
                             WebkitMaskImage:
