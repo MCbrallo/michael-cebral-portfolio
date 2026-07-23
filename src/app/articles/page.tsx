@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { ProjectVideo, type ProjectVideoData } from "@/components/ProjectVideo";
 
 export const metadata = {
     title: "Projects",
@@ -20,6 +21,8 @@ type Project = {
     logo: string;
     links?: ProjectLink[];
     status?: string;
+    /** Optional talk/presentation embedded as a lazy YouTube facade. */
+    video?: ProjectVideoData;
 };
 
 // ── EDIT PROJECTS HERE ────────────────────────────────────────────────────
@@ -34,6 +37,7 @@ const projects: Project[] = [
         accent: "#b48bff",
         logo: "/projects/all-in-space.svg",
         links: [{ label: "Live ↗", href: "https://allinspace.xyz/explore" }],
+        video: { id: "3HKsfA4ykD8", start: 321, label: "Watch the pitch" },
     },
     {
         id: "ariadne",
@@ -79,6 +83,29 @@ const projects: Project[] = [
         logo: "/projects/roadmap.svg",
         links: [{ label: "Live ↗", href: "https://roadmap-project-five.vercel.app" }],
         status: "ISU · IAC 2026",
+        video: { id: "Q7CzyzCGLO0", start: 9547, label: "Watch the presentation" },
+    },
+    {
+        id: "eoguessr",
+        name: "EOGUESSR",
+        type: "Educational Game · Earth Observation",
+        year: "2026",
+        blurb:
+            "A free daily game that teaches you to read the planet from space. It drops you on a real, hidden place on Earth and lets you unlock Copernicus and NASA signal layers, vegetation, water, terrain, heat and night lights, to reason your way to the spot and drop a pin. Built solo with open data, and playable in English, Spanish and Galician.",
+        accent: "#4ec1ce",
+        logo: "/projects/eoguessr.svg",
+        links: [{ label: "Live ↗", href: "https://eoguessr.app" }],
+    },
+    {
+        id: "rakugaki",
+        name: "RAKUGAKI",
+        type: "Fighting Game · Ink Calligraphy",
+        year: "2026",
+        blurb:
+            "A one on one fighting game where every attack is a brushstroke. You cast spells by drawing sumi-e calligraphy shapes in real time, duel across hand painted ink arenas that you can knock rivals out of, and sign your victory on the scroll. Built solo in a single file of vanilla canvas, with an interactive dojo tutorial, online play and four elemental masters.",
+        accent: "#cf5240",
+        logo: "/projects/rakugaki.svg",
+        links: [{ label: "Play ↗", href: "https://rakugaki-deploy.vercel.app" }],
     },
     {
         id: "hoxe",
@@ -158,21 +185,26 @@ export default function Projects() {
                                                 <ProjectLogo project={p} />
                                             </div>
                                             <div className="proj-desc">
-                                                <p>{p.blurb}</p>
-                                                <div className="proj-tags">
-                                                    {p.links?.map((l) => (
-                                                        <a
-                                                            key={l.label}
-                                                            href={l.href}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="proj-link"
-                                                        >
-                                                            {l.label}
-                                                        </a>
-                                                    ))}
-                                                    {p.status && <span className="proj-status">{p.status}</span>}
+                                                <div className="proj-desc-body">
+                                                    <p>{p.blurb}</p>
+                                                    <div className="proj-tags">
+                                                        {p.links?.map((l) => (
+                                                            <a
+                                                                key={l.label}
+                                                                href={l.href}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="proj-link"
+                                                            >
+                                                                {l.label}
+                                                            </a>
+                                                        ))}
+                                                        {p.status && <span className="proj-status">{p.status}</span>}
+                                                    </div>
                                                 </div>
+                                                {p.video && (
+                                                    <ProjectVideo {...p.video} accent={p.accent} />
+                                                )}
                                             </div>
                                         </div>
                                     </div>

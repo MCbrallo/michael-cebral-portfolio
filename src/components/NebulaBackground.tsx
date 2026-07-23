@@ -64,7 +64,7 @@ export function NebulaBackground() {
           float a=hash21(i), b=hash21(i+vec2(1,0)), c=hash21(i+vec2(0,1)), d=hash21(i+vec2(1,1));
           return mix(mix(a,b,f.x), mix(c,d,f.x), f.y);
         }
-        float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<5;i++){ v+=a*vnoise(p); p=p*2.02+vec2(1.7,9.2); a*=0.5; } return v; }
+        float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){ v+=a*vnoise(p); p=p*2.02+vec2(1.7,9.2); a*=0.5; } return v; }
         mat2 rot(float a){ float s=sin(a),c=cos(a); return mat2(c,-s,s,c); }
 
         vec3 starLayer(vec2 uv, vec2 par, float scale, float thresh, float pxSize, float Ry){
@@ -265,7 +265,10 @@ export function NebulaBackground() {
         let warpTimer = 0;
 
         function resize() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.75) * qScale;
+            // Cap DPR at 1.35: this is an expensive per-pixel shader, and on 2x/3x
+            // retina screens rendering it at 1.75x quadruples the fragment work for
+            // no visible gain on a soft nebula. 1.35 keeps it crisp and much faster.
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.35) * qScale;
             const vw = canvas!.clientWidth || window.innerWidth || 1;
             const vh = canvas!.clientHeight || window.innerHeight || 1;
             const w = Math.floor(vw * dpr), h = Math.floor(vh * dpr);

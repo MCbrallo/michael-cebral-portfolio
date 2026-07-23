@@ -350,7 +350,8 @@ h6 {
 }
 .proj-logo img, .proj-logo svg { position: relative; max-width: 90%; max-height: 90%; object-fit: contain; }
 
-.proj-desc { max-width: 56ch; }
+.proj-desc { display: flex; align-items: flex-start; gap: clamp(18px, 2.2vw, 34px); width: 100%; }
+.proj-desc-body { flex: 1 1 auto; min-width: 0; max-width: 52ch; }
 .proj-desc p { margin: 0; color: rgba(255, 255, 255, 0.78); font-size: 15px; line-height: 1.62; }
 .proj-tags { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .proj-link, .proj-status {
@@ -359,6 +360,54 @@ h6 {
 .proj-link { color: #06070e; background: #F5F5F7; border-radius: 999px; padding: 8px 15px; transition: opacity 0.2s; }
 .proj-link:hover { opacity: 0.85; }
 .proj-status { color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; padding: 7px 14px; }
+
+/* Presentation video — lazy YouTube facade inside the expanded project card */
+.proj-video {
+  position: relative; margin-top: 4px; flex: none;
+  width: clamp(216px, 25vw, 300px);
+  aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12); background: #06070e;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.42);
+}
+.proj-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.proj-video-poster {
+  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0;
+  cursor: pointer; display: block; background-size: cover; background-position: center;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.proj-video:hover .proj-video-poster { transform: scale(1.04); }
+.proj-video-scrim {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(58% 58% at 50% 44%, rgba(0,0,0,0) 0%, rgba(4,5,10,0.34) 100%),
+    linear-gradient(180deg, rgba(4,5,10,0.10) 0%, rgba(4,5,10,0) 30%, rgba(4,5,10,0.72) 100%);
+}
+.proj-video-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 48px; height: 48px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  color: #06070e; background: var(--accent, #F5F5F7);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  transition: transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1), box-shadow 0.35s;
+}
+.proj-video-play svg { margin-left: 2px; width: 20px; height: 20px; }
+.proj-video:hover .proj-video-play {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 10px 34px rgba(0,0,0,0.45),
+    0 0 0 10px color-mix(in srgb, var(--accent, #fff) 18%, transparent);
+}
+.proj-video-label {
+  position: absolute; left: 16px; bottom: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+}
+.proj-video-dot {
+  width: 7px; height: 7px; border-radius: 999px;
+  background: var(--accent, #fff); box-shadow: 0 0 10px var(--accent, #fff);
+}
+.proj-video-poster:focus-visible { outline: 2px solid var(--accent, #fff); outline-offset: 3px; }
 
 /* Outlined display word (echoes the home marquee) */
 .outline-word {
@@ -387,6 +436,9 @@ h6 {
   .proj-card { flex-direction: column; align-items: flex-start; }
   .proj-logo { width: 100%; height: 120px; }
   .proj-logo img, .proj-logo svg { max-height: 100%; }
+  /* On phones the video drops below the text and goes full width */
+  .proj-desc { flex-direction: column; }
+  .proj-video { width: 100%; max-width: 440px; margin-top: 16px; }
   /* index rows: stack the meta under the name so nothing crams */
   .proj-row { gap: 14px; row-gap: 4px; flex-wrap: wrap; align-items: baseline; }
   .proj-name { flex: 1 1 auto; }
