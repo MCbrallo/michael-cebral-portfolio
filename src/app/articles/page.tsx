@@ -102,9 +102,9 @@ const projects: Project[] = [
         type: "Fighting Game · Ink Calligraphy",
         year: "2026",
         blurb:
-            "A one on one fighting game where every attack is a brushstroke. You cast spells by drawing sumi-e calligraphy shapes in real time, duel across hand painted ink arenas that you can knock rivals out of, and sign your victory on the scroll. Built solo in a single file of vanilla canvas, with an interactive dojo tutorial, online play and four elemental masters.",
+            "A one on one fighting game where every attack is a brushstroke: you cast spells by drawing sumi-e calligraphy in real time and duel across hand painted ink arenas. Built solo in a single canvas file, with a live tutorial, online play and four elemental masters.",
         accent: "#cf5240",
-        logo: "/projects/rakugaki.svg",
+        logo: "/projects/rakugaki.png",
         links: [{ label: "Play ↗", href: "https://rakugaki-deploy.vercel.app" }],
     },
     {
