@@ -9,9 +9,12 @@ import { projects } from "@/data/projects";
 const flagships = projects.filter((p) => p.flagship);
 
 type Props = {
-    /** Small line above the heading. */
-    eyebrow: string;
-    heading: string;
+    /**
+     * Both optional. The projects page already carries its own title right
+     * above, and a second heading there only repeated it.
+     */
+    eyebrow?: string;
+    heading?: string;
     /** Shown under the last band, when there is somewhere else to go. */
     masHref?: string;
     masLabel?: string;
@@ -65,10 +68,12 @@ export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props)
 
     return (
         <section className="flag-wrap">
-            <header className="flag-intro">
-                <p className="flag-eyebrow">{eyebrow}</p>
-                <h2 className="flag-heading font-serif">{heading}</h2>
-            </header>
+            {(eyebrow || heading) && (
+                <header className="flag-intro">
+                    {eyebrow && <p className="flag-eyebrow">{eyebrow}</p>}
+                    {heading && <h2 className="flag-heading font-serif">{heading}</h2>}
+                </header>
+            )}
 
             {flagships.map((p, i) => {
                 const sitio = p.previewUrl ?? p.links?.[0]?.href;

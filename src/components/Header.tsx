@@ -17,7 +17,7 @@ export function Header() {
     const onJourney = pathname?.startsWith("/journey");
 
     const navItems = [
-        { name: t.nav.articles, href: "/articles" },
+        { name: t.nav.articles, href: "/projects" },
         { name: t.nav.about, href: "/about" },
         { name: t.nav.cv, href: "/about/cv" },
         { name: t.nav.contact, href: "/contact" },

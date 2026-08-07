@@ -270,10 +270,46 @@ h6 {
 }
 
 /* ══════════════════════════════════════════════════════════════
+   KEYBOARD FOCUS
+   The whole stylesheet used to carry one focus-visible rule, on a video
+   poster. Everything else was invisible to somebody moving by keyboard.
+   :focus-visible is the right selector: it fires for the keyboard and stays
+   quiet for the mouse, so nothing changes for a pointer user.
+   ══════════════════════════════════════════════════════════════ */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent, #F5F5F7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Straight to the content, for anybody who does not want to tab through the
+   whole header on every page. Off screen until it is focused. */
+.saltar {
+  position: absolute; top: -100px; left: 16px; z-index: 100;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #06070e; background: #F5F5F7;
+  border-radius: 999px; padding: 12px 20px;
+  transition: top 0.2s ease;
+}
+.saltar:focus { top: 16px; }
+
+/* ══════════════════════════════════════════════════════════════
    PROJECTS — index of "mission files" (hover / focus to expand)
    ══════════════════════════════════════════════════════════════ */
 .proj-index { width: 100%; }
+/* `outline: none` on its own left somebody moving by keyboard with no idea
+   where they were: the row is focusable, so the ring comes back below on
+   :focus-visible, which fires for the keyboard and not for the mouse. */
 .proj-item { border-bottom: 1px solid rgba(255, 255, 255, 0.10); outline: none; }
+.proj-item:focus-visible {
+  outline: 2px solid var(--accent, #F5F5F7); outline-offset: -2px; border-radius: 6px;
+}
 .proj-item:first-child { border-top: 1px solid rgba(255, 255, 255, 0.10); }
 .proj-row {
   display: flex; align-items: center; gap: 24px;

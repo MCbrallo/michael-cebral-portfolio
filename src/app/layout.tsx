@@ -52,7 +52,7 @@ export const metadata: Metadata = {
       "Science communicator working at the intersection of biology, space science and storytelling.",
     images: [
       {
-        url: "/og.png",
+        url: "/og.jpg",
         width: 1200,
         height: 630,
         alt: "Michael Cebral — Science Communication",
@@ -64,8 +64,35 @@ export const metadata: Metadata = {
     title: "Michael Cebral | Science Communication",
     description:
       "Science communicator working at the intersection of biology, space science and storytelling.",
-    images: ["/og.png"],
+    images: ["/og.jpg"],
   },
+};
+
+/**
+ * Structured data. Titles and descriptions tell a search engine what a page
+ * says; this tells it who the site is about, which is what feeds a knowledge
+ * panel and what makes a search for the name resolve to the right person.
+ * Only profiles already public on the contact page are listed.
+ */
+const personaJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Michael Cebral",
+  url: "https://mcebral.com",
+  image: "https://mcebral.com/og.jpg",
+  jobTitle: "Science Communicator",
+  description:
+    "Science communicator working between Earth observation, space and biotechnology.",
+  email: "mailto:michaelcebralclase@gmail.com",
+  sameAs: ["https://www.linkedin.com/in/michaelceb/"],
+  knowsLanguage: ["es", "gl", "en", "pt", "fr"],
+  knowsAbout: [
+    "Science communication",
+    "Earth observation",
+    "Space science",
+    "Biotechnology",
+    "Public outreach",
+  ],
 };
 
 export default function RootLayout({
@@ -75,6 +102,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          // The object is a literal in this file, so there is nothing here a
+          // visitor could have written.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personaJsonLd) }}
+        />
+      </head>
       <body
         className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-screen font-sans overflow-x-hidden`}
       >
@@ -93,9 +128,15 @@ export default function RootLayout({
               />
           </div>
 
+          <a href="#contenido" className="saltar">
+            Skip to content
+          </a>
           <LanguageToggle />
           <Header />
-          <main className="flex-grow text-sm md:text-base leading-relaxed relative z-10">
+          <main
+            id="contenido"
+            className="flex-grow text-sm md:text-base leading-relaxed relative z-10"
+          >
             {children}
           </main>
 

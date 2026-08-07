@@ -5,7 +5,8 @@ import { projects } from "@/data/projects";
 export const metadata = {
     title: "Projects",
     description:
-        "Projects at the intersection of biotechnology, space science, communication and engineering.",
+        "Nine projects at the intersection of Earth observation, space science, communication and engineering. Space market intelligence, an Earth observation game, a territorial archive of Galicia and more, all live and built solo.",
+    alternates: { canonical: "/projects" },
 };
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -28,11 +29,9 @@ export default function Projects() {
                     </p>
                 </div>
 
-                {/* The three that carry the page, at full size and running */}
-                <FlagshipProjects
-                    eyebrow="Leading the work"
-                    heading="The three worth your time first"
-                />
+                {/* The three that carry the page, at full size and running.
+                    No heading of their own: the title above already said it. */}
+                <FlagshipProjects />
 
                 {/* Everything else, in the quieter index */}
                 <div className="mt-28 md:mt-36">
