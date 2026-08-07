@@ -49,7 +49,7 @@ export const entradas: Entrada[] = [
         lugar: "Noordwijk, Netherlands",
         fechas: { en: "Jul to Oct 2026", es: "Jul a Oct 2026", gl: "Xul a Out 2026" },
         orden: 202607,
-        logo: "/logos/esa.svg",
+        logo: "/logos/oficial/esa.svg",
         acento: "#5b9bd5",
         prueba: {
             en: "Incoming · human spaceflight programme",
@@ -85,7 +85,7 @@ export const entradas: Entrada[] = [
         lugar: "Strasbourg, France",
         fechas: { en: "2025 to 2027", es: "2025 a 2027", gl: "2025 a 2027" },
         orden: 202508,
-        logo: "/logos/isu.svg",
+        logo: "/logos/oficial/isu.png",
         acento: "#8b83dd",
         prueba: {
             en: "Full scholarship · Fundación Barrié",
@@ -115,7 +115,7 @@ export const entradas: Entrada[] = [
         lugar: "Stockholm, Sweden",
         fechas: { en: "Nov 2024 to Aug 2025", es: "Nov 2024 a Ago 2025", gl: "Nov 2024 a Ago 2025" },
         orden: 202411,
-        logo: "/logos/scilifelab.svg",
+        logo: "/logos/oficial/scilifelab.svg",
         acento: "#4fb3a3",
         prueba: {
             en: "NASA Rodent Research 9 · pipelines kept on as the lab standard",
@@ -157,7 +157,7 @@ export const entradas: Entrada[] = [
         lugar: "Stockholm, Sweden",
         fechas: { en: "Nov 2023 to Jun 2024", es: "Nov 2023 a Jun 2024", gl: "Nov 2023 a Xuñ 2024" },
         orden: 202311,
-        logo: "/logos/ki.svg",
+        logo: "/logos/oficial/ki.svg",
         acento: "#d9635a",
         prueba: {
             en: "A TEDx event of 2,500 people · one visual identity across everything",
@@ -234,7 +234,7 @@ export const entradas: Entrada[] = [
         lugar: "Transinne, Belgium",
         fechas: { en: "2024", es: "2024", gl: "2024" },
         orden: 202406,
-        logo: "/logos/esa.svg",
+        logo: "/logos/oficial/esa.svg",
         acento: "#5b9bd5",
         prueba: { en: "Grade A", es: "Calificación A", gl: "Cualificación A" },
         cuerpo: {
@@ -260,7 +260,7 @@ export const entradas: Entrada[] = [
         lugar: "Stockholm, Sweden",
         fechas: { en: "Mar to Jun 2024", es: "Mar a Jun 2024", gl: "Mar a Xuñ 2024" },
         orden: 202403,
-        logo: "/logos/ki.svg",
+        logo: "/logos/oficial/ki.svg",
         acento: "#c07aa0",
         cuerpo: {
             en: [
@@ -294,7 +294,7 @@ export const entradas: Entrada[] = [
         lugar: "Stockholm, Sweden",
         fechas: { en: "2023 to 2025", es: "2023 a 2025", gl: "2023 a 2025" },
         orden: 202308,
-        logo: "/logos/ki.svg",
+        logo: "/logos/oficial/ki.svg",
         acento: "#c07aa0",
         prueba: {
             en: "Grade VG, highest distinction · full scholarship, Fundación la Caixa",
@@ -324,7 +324,7 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Nov 2022 to Jul 2023", es: "Nov 2022 a Jul 2023", gl: "Nov 2022 a Xul 2023" },
         orden: 202211,
-        logo: "/logos/cimus_logo.png",
+        logo: "/logos/oficial/usc.svg",
         acento: "#9db35c",
         cuerpo: {
             en: [
@@ -358,7 +358,7 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "2019 to 2023", es: "2019 a 2023", gl: "2019 a 2023" },
         orden: 201909,
-        logo: "/logos/usc.svg",
+        logo: "/logos/oficial/usc.svg",
         acento: "#9db35c",
         prueba: {
             en: "9.2 out of 10 · Premio Extraordinario Fin de Carrera, top of the class · Academic Excellence Awards, Xunta de Galicia",
@@ -388,7 +388,7 @@ export const entradas: Entrada[] = [
         lugar: "London, United Kingdom",
         fechas: { en: "Jul to Sep 2022", es: "Jul a Sep 2022", gl: "Xul a Set 2022" },
         orden: 202207,
-        logo: "/logos/ucl.svg",
+        logo: "/logos/oficial/ucl.svg",
         acento: "#a77fd4",
         cuerpo: {
             en: ["Generated 3D tumour spheroids to test novel photosensitive therapeutic compounds."],
@@ -413,7 +413,7 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Sep to Nov 2022", es: "Sep a Nov 2022", gl: "Set a Nov 2022" },
         orden: 202209,
-        logo: "/logos/cimus_logo.png",
+        logo: "/logos/oficial/usc.svg",
         acento: "#9db35c",
         cuerpo: {
             en: [
@@ -447,7 +447,7 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Feb to Jun 2022", es: "Feb a Jun 2022", gl: "Feb a Xuñ 2022" },
         orden: 202202,
-        logo: "/logos/cimus_logo.png",
+        logo: "/logos/oficial/usc.svg",
         acento: "#9db35c",
         cuerpo: {
             en: [

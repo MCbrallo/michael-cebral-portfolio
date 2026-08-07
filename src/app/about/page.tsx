@@ -308,48 +308,55 @@ function MonitorWithPlayer({
                     </button>
                 </div>
 
-                {/* divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                {/* The music, at the rank of a caption. A saturated circle was
+                    the first thing the eye found, ahead of the photograph, so
+                    the button is gone: the equaliser is the state, the title
+                    carries the weight, and the controls only come up under the
+                    cursor. The progress is a hairline on the very bottom edge. */}
+                <div className="rep" onClick={onTogglePlay} role="group" aria-label="Music">
+                    <span className={`rep-eq${playing ? ' is-on' : ''}`} aria-hidden="true">
+                        <i /><i /><i />
+                    </span>
 
-                {/* Integrated music player */}
-                <div className="relative w-full bg-[#0a0d18]/70 px-4 py-3.5 md:px-6 md:py-4">
-                    {/* progress */}
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05] overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-white/60 to-white transition-[width] duration-200" style={{ width: `${musicProgress * 100}%` }} />
-                    </div>
+                    <span className="rep-texto">
+                        <span className="rep-pista font-serif">{songs[current].title}</span>
+                        <span className="rep-artista">
+                            {songs[current].artist} · Songs that have stayed with me
+                        </span>
+                    </span>
 
-                    <div className="flex items-center gap-3 md:gap-4">
-                        <button onClick={onPrevSong} className="text-white/35 hover:text-white transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Previous song">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+                    <span className="rep-mandos">
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onPrevSong(); }}
+                            aria-label="Previous song"
+                        >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
                         </button>
-                        <button onClick={onTogglePlay} className="w-9 h-9 rounded-full bg-white hover:bg-white/90 flex items-center justify-center transition-all shrink-0 shadow-[0_0_22px_-6px_rgba(245,245,247,0.55)]" aria-label={playing ? 'Pause' : 'Play'}>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onTogglePlay(); }}
+                            aria-label={playing ? 'Pause' : 'Play'}
+                        >
                             {playing ? (
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                                     <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
                                 </svg>
                             ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18" className="ml-0.5">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                                     <polygon points="5 3 19 12 5 21 5 3" />
                                 </svg>
                             )}
                         </button>
-                        <button onClick={onNextSong} className="text-white/35 hover:text-white transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Next song">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onNextSong(); }}
+                            aria-label="Next song"
+                        >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
                         </button>
-                        <div className="min-w-0 ml-1 flex-1">
-                            <div className="flex items-center gap-2">
-                                <p className="text-white/85 text-[12px] md:text-[14px] font-medium truncate">{songs[current].title}</p>
-                                <span className="text-white/30 text-[10px] shrink-0">·</span>
-                                <p className="text-white/35 text-[10px] md:text-[12px] shrink-0 truncate">{songs[current].artist}</p>
-                                {playing && (
-                                    <span className="inline-flex items-end gap-[2px] h-3 shrink-0 ml-1">
-                                        <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
-                                    </span>
-                                )}
-                            </div>
-                            <p className="text-white/30 text-[9px] font-mono tracking-[0.15em] mt-0.5 uppercase">Songs that have stayed with me</p>
-                        </div>
-                    </div>
+                    </span>
+
+                    <span className="rep-hilo" aria-hidden="true">
+                        <i style={{ width: `${musicProgress * 100}%` }} />
+                    </span>
                 </div>
             </div>
         </div>
