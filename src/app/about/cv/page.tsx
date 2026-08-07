@@ -1,309 +1,135 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { Magnetic } from '@/components/Magnetic';
-import { DisplayTitle } from '@/components/DisplayTitle';
-import experiencesData from '@/data/experiences.json';
+import { entradas, competencias, type Tipo } from '@/data/cv';
 
-type ExperienceType = 'education' | 'career' | 'travel';
-
-interface Experience {
-    type: ExperienceType;
-    title: {
-        en: string;
-        es: string;
-    };
-    organization: string;
-    dates: string;
-    logo?: string;
-    description: {
-        en: string[];
-        es: string[];
-    };
-    tags: {
-        en: string[];
-        es: string[];
-    };
-}
-
-type ExperiencesData = {
-    [country: string]: Experience[];
-};
-
-const experiences = experiencesData as ExperiencesData;
+type Filtro = Tipo | 'all';
 
 export default function CVPage() {
     const { t, language } = useLanguage();
-    // Galician falls back to Spanish for CV data (very similar languages)
-    const cvLang = language === 'gl' ? 'es' : language;
-    const [selectedFilter, setSelectedFilter] = useState<ExperienceType | 'all'>('all');
+    const [filtro, setFiltro] = useState<Filtro>('all');
 
-    // Flatten and sort all experiences by date (most recent first)
-    const allExperiences = Object.entries(experiences)
-        .flatMap(([country, exps]) =>
-            exps.map(exp => ({ ...exp, country }))
-        )
-        .filter(exp => exp.type === 'education' || exp.type === 'career')
-        .sort((a, b) => {
-            const getYear = (dateStr: string) => {
-                const match = dateStr.match(/(\d{2})/g);
-                return match ? parseInt(match[match.length - 1]) : 0;
-            };
-            return getYear(b.dates) - getYear(a.dates);
-        });
+    const lista = useMemo(
+        () =>
+            [...entradas]
+                .sort((a, b) => b.orden - a.orden)
+                .filter((e) => filtro === 'all' || e.tipo === filtro),
+        [filtro]
+    );
 
-    const filteredExperiences = selectedFilter === 'all'
-        ? allExperiences
-        : allExperiences.filter(exp => exp.type === selectedFilter);
+    const filtros: { valor: Filtro; texto: string }[] = [
+        { valor: 'all', texto: t.cv.filterAll },
+        { valor: 'career', texto: t.cv.filterCareer },
+        { valor: 'education', texto: t.cv.filterEducation },
+    ];
 
     return (
-        <div className="min-h-screen text-white relative overflow-hidden">
-            <div className="max-w-[1200px] mx-auto px-6 md:px-12 pt-32 pb-20 relative z-10">
+        <div className="min-h-screen text-white relative">
+            <div className="w-full max-w-[1180px] mx-auto px-6 md:px-14 pt-28 pb-20 relative z-[2]">
 
-
-
-                {/* Header Section — same display format as Projects / Contact */}
-                <div className="mb-12 animate-fade-in">
-                    <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-gold/70 mb-4">
-                        Curriculum · Dossier
+                {/* Header, in the same register as Projects */}
+                <header className="mb-14">
+                    <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-3">
+                        {t.cv.eyebrow}
                     </p>
-                    <DisplayTitle text={t.about?.title || ''} />
-                    <p className="mt-6 text-white/45 text-base md:text-lg font-light leading-relaxed max-w-xl">
-                        {t.about?.subtitle}
+                    <h1 className="cv-titulo font-serif">{t.cv.title}</h1>
+                    <p className="mt-5 max-w-[54ch] text-white/60 text-[15px] md:text-base font-light leading-relaxed">
+                        {t.cv.summary}
                     </p>
 
-                    {/* Filters + Download */}
-                    <div className="mt-9 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-6">
-                        <div className="flex gap-3 md:gap-6 text-[10px] md:text-sm flex-wrap">
-                            {[
-                                { value: 'all', label: t.about?.filterAll || 'All' },
-                                { value: 'education', label: t.about?.filterEducation || 'Education' },
-                                { value: 'career', label: t.about?.filterExperience || 'Professional Experience' }
-                            ].map((filter) => (
+                    <div className="cv-barra">
+                        <div className="cv-filtros">
+                            {filtros.map((f) => (
                                 <button
-                                    key={filter.value}
+                                    key={f.valor}
                                     type="button"
-                                    onClick={() => setSelectedFilter(filter.value as ExperienceType | 'all')}
-                                    className={`
-                    uppercase tracking-widest md:tracking-[0.2em] transition-all duration-500 relative pb-2 group
-                    ${selectedFilter === filter.value
-                                            ? 'text-gold font-medium'
-                                            : 'text-white/40 hover:text-white/70'
-                                        }
-                  `}
+                                    onClick={() => setFiltro(f.valor)}
+                                    className={`cv-filtro${filtro === f.valor ? ' is-on' : ''}`}
+                                    aria-pressed={filtro === f.valor}
                                 >
-                                    {filter.label}
-                                    {selectedFilter === filter.value && (
-                                        <span className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent animate-shimmer" />
-                                    )}
-                                    {selectedFilter !== filter.value && (
-                                        <span className="absolute bottom-0 left-0 right-0 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                                    )}
+                                    {f.texto}
                                 </button>
                             ))}
                         </div>
 
-                        <Magnetic>
-                            <a
-                                href="/Michael_Cebral_CV.pdf"
-                                download="Michael_Cebral_CV.pdf"
-                                className="group relative inline-flex items-center gap-3 px-6 py-3 bg-gold/10 hover:bg-gold/20 border border-gold/30 hover:border-gold/60 rounded-full transition-all duration-300 backdrop-blur-sm"
-                            >
-                                <span className="text-sm uppercase tracking-widest text-gold/90 group-hover:text-gold transition-colors">
-                                    {language === 'en' ? 'Download CV' : 'Descargar CV'}
-                                </span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="text-gold/70 group-hover:text-gold group-hover:translate-y-0.5 transition-all duration-300"
-                                >
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="7 10 12 15 17 10" />
-                                    <line x1="12" x2="12" y1="15" y2="3" />
-                                </svg>
-                            </a>
-                        </Magnetic>
-                    </div>
-                </div>
-
-                {/* Experience Timeline */}
-                <div className="space-y-10">
-                    {filteredExperiences.map((exp, index) => (
-                        <article
-                            key={`${exp.country}-${index}`}
-                            className="grid md:grid-cols-[200px_1fr] gap-8 md:gap-12 group animate-fade-in-up"
-                            style={{ animationDelay: `${index * 0.1}s` }}
+                        <a
+                            href="/Michael_Cebral_CV.pdf"
+                            download
+                            className="proj-link"
                         >
-                            {/* Left Column: Date & Type */}
-                            <div className="space-y-3">
-                                <time className="block text-xs uppercase tracking-[0.2em] text-white/30 font-light transition-colors duration-300 group-hover:text-white/50">
-                                    {exp.dates}
-                                </time>
-                                <div className="inline-block">
-                                    <span className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-white/10 text-white/50 transition-all duration-500 group-hover:border-white/30 group-hover:text-white/70 rounded-sm">
-                                        {exp.type === 'education' ? t.about?.education : t.about?.experience}
-                                    </span>
-                                </div>
+                            {t.cv.download} ↓
+                        </a>
+                    </div>
+                </header>
+
+                {/* The record */}
+                <div className="cv-lista">
+                    {lista.map((e) => (
+                        <article
+                            key={e.id}
+                            className="cv-fila"
+                            style={{ '--accent': e.acento } as CSSProperties}
+                        >
+                            <div className="cv-cuando">
+                                <time className="cv-fechas">{e.fechas[language]}</time>
+                                <span className="cv-tipo">
+                                    {e.tipo === 'education' ? t.cv.labelEducation : t.cv.labelCareer}
+                                </span>
                             </div>
 
-                            {/* Right Column: Content as a glass card */}
-                            <div className="relative rounded-2xl border border-white/[0.08] bg-[#0b0e1a]/55 backdrop-blur-md p-6 md:p-7 transition-colors duration-500 group-hover:border-gold/30">
-                                {/* Logo chip */}
-                                {exp.logo && (
-                                    <div className="absolute top-5 right-5 w-14 h-14 bg-white rounded-xl p-2 ring-1 ring-white/15 opacity-90 group-hover:opacity-100 transition-all duration-500 shadow-lg">
-                                        <Image
-                                            src={exp.logo}
-                                            alt={exp.organization}
-                                            width={64}
-                                            height={64}
-                                            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                                        />
-                                    </div>
+                            <div className="cv-tarjeta">
+                                {e.logo && (
+                                    <span className="cv-logo">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={e.logo} alt={e.organizacion} loading="lazy" />
+                                    </span>
                                 )}
 
-                                {/* Title & Organization */}
-                                <div className="mb-4 pr-10">
-                                    <h2 className="font-serif text-xl md:text-2xl font-medium tracking-tight mb-2 text-white transition-colors duration-300 group-hover:text-white/90">
-                                        {exp.title[cvLang] || exp.title.en}
-                                    </h2>
-                                    <p className="text-white/60 text-base font-light transition-colors duration-300 group-hover:text-white/80">
-                                        {exp.organization}
+                                <div className="cv-cuerpo">
+                                    <h2 className="cv-papel font-serif">{e.titulo[language]}</h2>
+                                    <p className="cv-org">
+                                        {e.organizacion} · {e.lugar}
                                     </p>
-                                </div>
 
-                                {/* Description with premium styling and HTML support */}
-                                <ul className="space-y-3 mb-6">
-                                    {(exp.description[cvLang] || exp.description.en).map((item, i) => (
-                                        <li key={i} className="text-white/60 leading-relaxed flex gap-3 group/item">
-                                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold/50 transition-colors duration-300 group-hover/item:bg-gold" />
-                                            <span
-                                                className="flex-1 transition-colors duration-300 group-hover/item:text-white/70"
-                                                dangerouslySetInnerHTML={{ __html: item }}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
+                                    {e.prueba && <p className="cv-prueba">{e.prueba[language]}</p>}
 
-                                {/* Tags with refined styling */}
-                                <div className="flex flex-wrap gap-3">
-                                    {(exp.tags[cvLang] || exp.tags.en).map((tag, i) => (
-                                        <span
-                                            key={i}
-                                            className="text-xs uppercase tracking-wider text-white/40 font-light px-2 py-1 border border-white/10 rounded-sm transition-all duration-300 hover:border-white/30 hover:text-white/60"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
+                                    <ul className="cv-puntos">
+                                        {e.cuerpo[language].map((linea, i) => (
+                                            <li key={i}>{linea}</li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="cv-etiquetas">
+                                        {e.etiquetas[language].map((tag) => (
+                                            <span key={tag} className="proj-status">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </article>
                     ))}
                 </div>
 
-                {/* Skills Section with Premium Grid */}
-                <div className="mt-32 pt-16 border-t border-white/10 relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                    {/* Premium accent */}
-                    <div className="absolute top-0 left-0 h-px w-24 bg-gradient-to-r from-white/50 to-transparent" />
-
-                    <h3 className="font-serif text-2xl md:text-3xl font-normal tracking-tight mb-8 text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/60">
-                        {t.about?.skillsTitle}
-                    </h3>
-
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[
-                            {
-                                title: cvLang === 'es' ? 'Comunicación y Divulgación' : 'Communication & Outreach',
-                                skills: cvLang === 'es'
-                                    ? ['Comunicación científica', 'Redacción y edición', 'Oratoria y charlas', 'Monitorización y curación de noticias']
-                                    : ['Science Communication', 'Copywriting & Editing', 'Public Speaking', 'News Monitoring & Curation']
-                            },
-                            {
-                                title: cvLang === 'es' ? 'Diseño y Visuales' : 'Design & Visuals',
-                                skills: cvLang === 'es'
-                                    ? ['Identidad visual', 'Infografía y visualización de datos', 'Diseño de presentaciones', 'Edición de vídeo']
-                                    : ['Visual Identity', 'Infographics & Data Viz', 'Presentation Design', 'Video Editing']
-                            },
-                            {
-                                title: cvLang === 'es' ? 'Observación de la Tierra y Datos' : 'Earth Observation & Data',
-                                skills: cvLang === 'es'
-                                    ? ['Datos Copernicus y Sentinel', 'NDVI e índices de vegetación', 'Visualización geoespacial', 'Análisis en Python y R']
-                                    : ['Copernicus & Sentinel Data', 'NDVI & Vegetation Indices', 'Geospatial Visualisation', 'Python & R Analysis']
-                            }
-                        ].map((category, index) => (
-                            <div
-                                key={index}
-                                className="group/skill relative p-6 rounded-2xl border border-white/[0.08] bg-[#0b0e1a]/45 backdrop-blur-md transition-all duration-500 hover:border-gold/30 hover:bg-white/[0.03]"
-                            >
-                                {/* Subtle corner accent */}
-                                <div className="absolute top-2 left-2 w-3 h-3 border-l border-t border-gold/40 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
-                                <div className="absolute bottom-2 right-2 w-3 h-3 border-r border-b border-gold/40 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-500" />
-
-                                <h4 className="font-sans text-sm uppercase tracking-[0.2em] mb-6 text-gold/80 group-hover/skill:text-gold transition-colors duration-300">
-                                    {category.title}
-                                </h4>
-                                <ul className="space-y-3">
-                                    {category.skills.map((skill, i) => (
-                                        <li key={i} className="text-white/55 font-light leading-relaxed transition-colors duration-300 group-hover/skill:text-white/75 flex items-start gap-3">
-                                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold/50" />
-                                            <span className="flex-1">{skill}</span>
-                                        </li>
+                {/* Competencies */}
+                <section className="mt-28 md:mt-36">
+                    <h2 className="cv-seccion font-serif">{t.cv.skillsTitle}</h2>
+                    <div className="cv-competencias">
+                        {competencias.map((c) => (
+                            <div key={c.titulo.en} className="cv-competencia">
+                                <h3 className="cv-competencia-titulo">{c.titulo[language]}</h3>
+                                <ul>
+                                    {c.puntos.map((p) => (
+                                        <li key={p.en}>{p[language]}</li>
                                     ))}
                                 </ul>
                             </div>
                         ))}
                     </div>
-                </div>
+                </section>
             </div>
-
-            <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.1); }
-        }
-        @keyframes shimmer {
-          0% { background-position: -100% 0; }
-          100% { background-position: 100% 0; }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out both;
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-        .animate-shimmer {
-          background: linear-gradient(90deg, transparent, white, transparent);
-          background-size: 200% 100%;
-          animation: shimmer 2s linear infinite;
-        }
-      `}</style>
         </div>
     );
 }

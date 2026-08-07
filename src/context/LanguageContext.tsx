@@ -55,6 +55,20 @@ interface Translations {
         flagLive: string;
         flagPreview: string;
     };
+    /** The CV page. Its own section: it used to borrow the About copy, which
+     *  described an earlier version of the work. */
+    cv: {
+        eyebrow: string;
+        title: string;
+        summary: string;
+        filterAll: string;
+        filterCareer: string;
+        filterEducation: string;
+        labelCareer: string;
+        labelEducation: string;
+        download: string;
+        skillsTitle: string;
+    };
     /** Chrome that belongs to no page in particular. */
     common: {
         skip: string;
@@ -109,6 +123,19 @@ const translations: Record<Language, Translations> = {
             flagLive: "Live",
             flagPreview: "Preview",
         },
+        cv: {
+            eyebrow: "Curriculum · Record",
+            title: "Strategic Communications and Outreach",
+            summary:
+                "Science communicator with a research background, focused on space science, Earth observation and public engagement. I explain technical and sensitive subjects, from environmental and emergency monitoring to security and defence, in clear language for expert, institutional and public audiences. I handle the full process, from tracking the news each morning to planning the message, writing the copy and building the visuals.",
+            filterAll: "Everything",
+            filterCareer: "Work",
+            filterEducation: "Education",
+            labelCareer: "Work",
+            labelEducation: "Education",
+            download: "Download the CV",
+            skillsTitle: "What I work with",
+        },
         common: {
             skip: "Skip to content",
         }
@@ -160,6 +187,19 @@ const translations: Record<Language, Translations> = {
             flagLive: "En vivo",
             flagPreview: "Vista previa",
         },
+        cv: {
+            eyebrow: "Currículum · Registro",
+            title: "Comunicación estratégica y divulgación",
+            summary:
+                "Comunicador de ciencia con formación investigadora, centrado en ciencia espacial, observación de la Tierra y participación pública. Explico asuntos técnicos y delicados, desde la vigilancia ambiental y de emergencias hasta la seguridad y la defensa, en lenguaje claro para públicos expertos, institucionales y generales. Me ocupo del proceso entero, desde seguir las noticias cada mañana hasta planificar el mensaje, escribir el texto y construir los visuales.",
+            filterAll: "Todo",
+            filterCareer: "Trabajo",
+            filterEducation: "Formación",
+            labelCareer: "Trabajo",
+            labelEducation: "Formación",
+            download: "Descargar el CV",
+            skillsTitle: "Con lo que trabajo",
+        },
         common: {
             skip: "Ir al contenido",
         }
@@ -210,6 +250,19 @@ const translations: Record<Language, Translations> = {
             videoTalk: "Ver a presentación",
             flagLive: "En vivo",
             flagPreview: "Vista previa",
+        },
+        cv: {
+            eyebrow: "Currículo · Rexistro",
+            title: "Comunicación estratéxica e divulgación",
+            summary:
+                "Comunicador de ciencia con formación investigadora, centrado en ciencia espacial, observación da Terra e participación pública. Explico asuntos técnicos e delicados, desde a vixilancia ambiental e de emerxencias ata a seguridade e a defensa, en linguaxe clara para públicos expertos, institucionais e xerais. Ocúpome do proceso enteiro, desde seguir as novas cada mañá ata planificar a mensaxe, escribir o texto e construír os visuais.",
+            filterAll: "Todo",
+            filterCareer: "Traballo",
+            filterEducation: "Formación",
+            labelCareer: "Traballo",
+            labelEducation: "Formación",
+            download: "Descargar o CV",
+            skillsTitle: "Con que traballo",
         },
         common: {
             skip: "Ir ao contido",

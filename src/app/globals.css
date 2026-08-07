@@ -650,6 +650,168 @@ select:focus-visible {
   .flag-media::before, .flag-mas span, .flag-second { transition: none; }
 }
 
+/* ══════════════════════════════════════════════════════════════
+   CV — the same system as the projects, applied to a record
+   The colour of a project became the colour of an institution, so a place
+   that appears twice reads as the same place. The gold that used to be on
+   the eyebrow, the filters, the bullets, the button and every hover at once
+   is gone: it was on so many things that it marked none of them.
+   ══════════════════════════════════════════════════════════════ */
+.cv-titulo {
+  font-size: clamp(30px, 4.4vw, 54px); font-weight: 700; letter-spacing: -0.025em;
+  line-height: 1.05; color: #F5F5F7; padding: 2px 0;
+}
+.cv-seccion {
+  font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em;
+  line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(22px, 2.6vw, 34px);
+}
+
+.cv-barra {
+  margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
+}
+.cv-filtros { display: flex; flex-wrap: wrap; gap: 22px; }
+.cv-filtro {
+  position: relative; padding-bottom: 7px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s;
+}
+.cv-filtro::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: #F5F5F7; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cv-filtro:hover { color: rgba(255, 255, 255, 0.72); }
+.cv-filtro:hover::after { transform: scaleX(1); background: rgba(255, 255, 255, 0.3); }
+.cv-filtro.is-on { color: #F5F5F7; }
+.cv-filtro.is-on::after { transform: scaleX(1); }
+
+.cv-lista { display: flex; flex-direction: column; gap: clamp(22px, 2.6vw, 34px); }
+.cv-fila {
+  display: grid; grid-template-columns: 168px minmax(0, 1fr);
+  gap: clamp(20px, 2.6vw, 40px); align-items: start;
+}
+.cv-cuando { padding-top: 4px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.cv-fechas {
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.42);
+}
+.cv-tipo {
+  font-family: var(--font-sans); font-size: 9.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: color-mix(in srgb, var(--accent, #fff) 78%, #F5F5F7);
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 32%, transparent);
+  border-radius: 999px; padding: 5px 11px;
+}
+
+/* The same glass surface the project cards use, tinted by the institution */
+.cv-tarjeta {
+  position: relative; display: flex; align-items: flex-start;
+  gap: clamp(18px, 2.4vw, 32px);
+  padding: clamp(20px, 2.2vw, 30px);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 16%, rgba(255, 255, 255, 0.08));
+  background:
+    radial-gradient(140% 120% at 0% 0%, color-mix(in srgb, var(--accent, #fff) 10%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(20, 24, 44, 0.5), rgba(8, 10, 22, 0.4));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.cv-fila:hover .cv-tarjeta {
+  border-color: color-mix(in srgb, var(--accent, #fff) 38%, transparent);
+  box-shadow: 0 14px 46px rgba(0, 0, 0, 0.3),
+    0 0 52px -14px color-mix(in srgb, var(--accent, #fff) 42%, transparent);
+}
+
+/* Logos sit free over a soft halo, the same way they do on the projects.
+   The white plate they used to sit on was the one thing on this page that
+   contradicted a rule the site states about itself. The marks themselves are
+   normalised to white on transparent by scripts/logos-mono.mjs, so nothing
+   has to be corrected with a filter here. */
+.cv-logo {
+  position: relative; flex: none;
+  width: clamp(48px, 5vw, 66px); height: clamp(48px, 5vw, 66px);
+  display: flex; align-items: center; justify-content: center;
+}
+.cv-logo::before {
+  content: ""; position: absolute; inset: -22%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 38%, transparent), transparent 68%);
+  filter: blur(12px);
+}
+.cv-logo img {
+  position: relative; max-width: 100%; max-height: 100%; object-fit: contain;
+  opacity: 0.82; transition: opacity 0.35s;
+}
+.cv-fila:hover .cv-logo img { opacity: 1; }
+
+.cv-cuerpo { min-width: 0; flex: 1 1 auto; }
+.cv-papel {
+  font-size: clamp(20px, 2.2vw, 29px); font-weight: 600; letter-spacing: -0.018em;
+  line-height: 1.16; color: #F5F5F7;
+}
+.cv-org {
+  margin-top: 9px;
+  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.42); line-height: 1.7;
+}
+.cv-prueba {
+  margin-top: 18px; padding-left: 13px;
+  border-left: 2px solid color-mix(in srgb, var(--accent, #fff) 62%, transparent);
+  font-family: var(--font-sans); font-size: 10.5px; line-height: 1.65;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, #fff) 72%, #F5F5F7);
+}
+.cv-puntos { margin-top: 18px; display: flex; flex-direction: column; gap: 9px; }
+.cv-puntos li {
+  position: relative; padding-left: 18px;
+  color: rgba(255, 255, 255, 0.72); font-size: 15px; line-height: 1.66; font-weight: 300;
+}
+.cv-puntos li::before {
+  content: ""; position: absolute; left: 0; top: 11px;
+  width: 5px; height: 1px; background: color-mix(in srgb, var(--accent, #fff) 70%, transparent);
+}
+.cv-etiquetas { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 9px; }
+
+.cv-competencias {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+}
+.cv-competencia {
+  padding: clamp(20px, 2.2vw, 28px); border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(165deg, rgba(20, 24, 44, 0.44), rgba(8, 10, 22, 0.34));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.35s;
+}
+.cv-competencia:hover { border-color: rgba(255, 255, 255, 0.2); }
+.cv-competencia-titulo {
+  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin-bottom: 18px;
+}
+.cv-competencia ul { display: flex; flex-direction: column; gap: 9px; }
+.cv-competencia li {
+  position: relative; padding-left: 18px;
+  color: rgba(255, 255, 255, 0.7); font-size: 14.5px; line-height: 1.6; font-weight: 300;
+}
+.cv-competencia li::before {
+  content: ""; position: absolute; left: 0; top: 10px;
+  width: 5px; height: 1px; background: rgba(255, 255, 255, 0.34);
+}
+
+@media (max-width: 860px) {
+  .cv-fila { grid-template-columns: 1fr; gap: 12px; }
+  .cv-cuando { flex-direction: row; align-items: center; gap: 12px; padding-top: 0; }
+  .cv-competencias { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .cv-tarjeta { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-filtro::after, .cv-tarjeta, .cv-logo img, .cv-competencia { transition: none; }
+}
+
 /* Outlined display word (echoes the home marquee) */
 .outline-word {
   color: transparent;
