@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type CSSProperties } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { DisplayTitle } from '@/components/DisplayTitle';
 import { entradas, competencias, type Tipo } from '@/data/cv';
 
 type Filtro = Tipo | 'all';
@@ -33,8 +34,10 @@ export default function CVPage() {
                     <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-3">
                         {t.cv.eyebrow}
                     </p>
-                    <h1 className="cv-titulo font-serif">{t.cv.title}</h1>
-                    <p className="mt-5 max-w-[54ch] text-white/60 text-[15px] md:text-base font-light leading-relaxed">
+                    {/* Same component every other page title uses, so the CV
+                        reads as one more tab and not as its own thing. */}
+                    <DisplayTitle text={t.cv.title} />
+                    <p className="cv-resumen mt-5 text-white/60 text-[15px] md:text-base font-light leading-relaxed">
                         {t.cv.summary}
                     </p>
 

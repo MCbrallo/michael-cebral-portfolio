@@ -657,10 +657,11 @@ select:focus-visible {
    the eyebrow, the filters, the bullets, the button and every hover at once
    is gone: it was on so many things that it marked none of them.
    ══════════════════════════════════════════════════════════════ */
-.cv-titulo {
-  font-size: clamp(30px, 4.4vw, 54px); font-weight: 700; letter-spacing: -0.025em;
-  line-height: 1.05; color: #F5F5F7; padding: 2px 0;
-}
+/* The opening paragraph was capped at 54 characters a line, which is a good
+   measure for body text buried in a page but wrong for a lead: it broke after
+   a third of the column and stacked seven short lines under the title. Wider
+   lines, fewer of them, and the block stops pushing the record down. */
+.cv-resumen { max-width: 92ch; }
 .cv-seccion {
   font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em;
   line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(22px, 2.6vw, 34px);
@@ -724,26 +725,34 @@ select:focus-visible {
     0 0 52px -14px color-mix(in srgb, var(--accent, #fff) 42%, transparent);
 }
 
-/* Logos sit free over a soft halo, the same way they do on the projects.
-   The white plate they used to sit on was the one thing on this page that
-   contradicted a rule the site states about itself. The marks themselves are
-   normalised to white on transparent by scripts/logos-mono.mjs, so nothing
-   has to be corrected with a filter here. */
+/* The official marks, kept as they are. They are institutional logos in dark
+   inks, navy and near black, and on a dark card they simply vanish, so they
+   need something light to sit on. Not the hard white sticker this page used
+   to have: a translucent chip, which the accent halo behind tints through, so
+   the colour of the institution still reaches the logo. */
 .cv-logo {
   position: relative; flex: none;
-  width: clamp(48px, 5vw, 66px); height: clamp(48px, 5vw, 66px);
+  width: clamp(52px, 5.2vw, 70px); height: clamp(52px, 5.2vw, 70px);
   display: flex; align-items: center; justify-content: center;
+  border-radius: 16px;
 }
 .cv-logo::before {
-  content: ""; position: absolute; inset: -22%;
-  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 38%, transparent), transparent 68%);
-  filter: blur(12px);
+  content: ""; position: absolute; inset: -24%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 46%, transparent), transparent 68%);
+  filter: blur(13px);
 }
+.cv-logo::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  transition: background 0.35s;
+}
+.cv-fila:hover .cv-logo::after { background: rgba(255, 255, 255, 0.97); }
 .cv-logo img {
-  position: relative; max-width: 100%; max-height: 100%; object-fit: contain;
-  opacity: 0.82; transition: opacity 0.35s;
+  position: relative; z-index: 1;
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  padding: 20%; box-sizing: border-box;
 }
-.cv-fila:hover .cv-logo img { opacity: 1; }
 
 .cv-cuerpo { min-width: 0; flex: 1 1 auto; }
 .cv-papel {
