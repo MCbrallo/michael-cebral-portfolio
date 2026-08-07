@@ -11,6 +11,8 @@ type Props = {
     open: boolean;
     /** Sites answering X-Frame-Options DENY can only ever show the poster. */
     embeddable: boolean;
+    /** Fills its column instead of sitting beside the text, for the flagships. */
+    grande?: boolean;
 };
 
 /** The site loads at desktop width and is scaled down to fit the card. */
@@ -25,7 +27,7 @@ const dominio = (url: string) => {
     }
 };
 
-export function SitePreview({ url, poster, name, open, embeddable }: Props) {
+export function SitePreview({ url, poster, name, open, embeddable, grande }: Props) {
     const marco = useRef<HTMLDivElement>(null);
     const [escala, setEscala] = useState(0);
     const [cargada, setCargada] = useState(false);
@@ -35,7 +37,13 @@ export function SitePreview({ url, poster, name, open, embeddable }: Props) {
     useEffect(() => {
         const el = marco.current;
         if (!el) return;
-        const medir = () => setEscala(el.clientWidth / ANCHO);
+        // Only react to a real change. Writing the same scale back would make
+        // the observer fire again on its own notification, and a
+        // ResizeObserver loop pegs the main thread of the whole page.
+        const medir = () => {
+            const k = el.clientWidth / ANCHO;
+            setEscala((previo) => (Math.abs(previo - k) < 0.0005 ? previo : k));
+        };
         medir();
         const observador = new ResizeObserver(medir);
         observador.observe(el);
@@ -50,7 +58,7 @@ export function SitePreview({ url, poster, name, open, embeddable }: Props) {
     const vivo = open && embeddable && escala > 0;
 
     return (
-        <div className="proj-preview">
+        <div className={`proj-preview${grande ? " is-grande" : ""}`}>
             <div className="proj-preview-bar">
                 <span className="proj-preview-dots" aria-hidden="true">
                     <i />

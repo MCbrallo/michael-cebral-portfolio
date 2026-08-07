@@ -29,6 +29,19 @@ export type Project = {
      * card, so it would only hide the thing worth showing.
      */
     previewUrl?: string;
+    /**
+     * The three that carry the page. They lead the projects index and they
+     * are the ones the home page shows, at full size and running live.
+     */
+    flagship?: boolean;
+    /**
+     * One line of evidence, not description. What somebody else has said
+     * about this, or the size of what it holds. It sits in the same slot on
+     * every project, so the page can be read as a record and not as a list
+     * of intentions. Left out where there is nothing verifiable to claim:
+     * an empty slot is honest, an invented figure is not.
+     */
+    proof?: string;
 };
 
 // ── EDIT PROJECTS HERE ────────────────────────────────────────────────────
@@ -46,6 +59,9 @@ export const projects: Project[] = [
         logo: "/projects/all-in-space.svg",
         links: [{ label: "Live ↗", href: "https://allinspace.xyz/explore" }],
         video: { id: "3HKsfA4ykD8", start: 321, label: "Watch the pitch" },
+        previewUrl: "https://allinspace.xyz/explore?embed=1",
+        flagship: true,
+        proof: "200 countries profiled · 1,088 companies mapped · every figure carries its source",
     },
     {
         id: "ariadne",
@@ -83,6 +99,7 @@ export const projects: Project[] = [
         // app has real users and was deliberately left undeployed, so the
         // card holds the poster. Remove this line after it ships.
         embeddable: false,
+        proof: "Santander X Emprende finalist · startup incubator at the University of Santiago de Compostela",
     },
     {
         id: "roadmap",
@@ -96,6 +113,7 @@ export const projects: Project[] = [
         links: [{ label: "Live ↗", href: "https://roadmap-project-five.vercel.app" }],
         status: "ISU · IAC 2026",
         video: { id: "Q7CzyzCGLO0", start: 9547, label: "Watch the presentation" },
+        proof: "Accepted for presentation at IAC 2026 · International Space University",
     },
     {
         id: "eoguessr",
@@ -108,6 +126,8 @@ export const projects: Project[] = [
         logo: "/projects/eoguessr.svg",
         links: [{ label: "Live ↗", href: "https://eoguessr.app" }],
         previewUrl: "https://eoguessr.app/?embed=1",
+        flagship: true,
+        proof: "Copernicus and NASA open data · built solo · playable in English, Spanish and Galician",
     },
     {
         id: "rakugaki",
@@ -119,6 +139,7 @@ export const projects: Project[] = [
         accent: "#cf5240",
         logo: "/projects/rakugaki.png",
         links: [{ label: "Play ↗", href: "https://rakugaki-deploy.vercel.app" }],
+        proof: "Built solo in a single canvas file · online play · four elemental masters",
     },
     {
         id: "arquivonos",
@@ -131,6 +152,8 @@ export const projects: Project[] = [
         logo: "/projects/arquivonos.svg",
         links: [{ label: "Live ↗", href: "https://arquivonos.com" }],
         previewUrl: "https://arquivonos.com/?embed=1",
+        flagship: true,
+        proof: "313 councils · 3,785 parishes · every fact traceable to an open source",
     },
     {
         id: "hoxe",

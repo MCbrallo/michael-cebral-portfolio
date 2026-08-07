@@ -31,7 +31,7 @@ const DESTINO = join(RAIZ, 'public', 'projects', 'previews');
  * enseñe el producto y no la bienvenida.
  */
 const WEBS = [
-    { id: 'all-in-space', url: 'https://allinspace.xyz/explore', espera: 9000 },
+    { id: 'all-in-space', url: 'https://allinspace.xyz/explore?embed=1', espera: 11000 },
     { id: 'ariadne', url: 'https://ariadne-gamma.vercel.app', espera: 5000 },
     { id: 'abil', url: 'https://clearesg.vercel.app', espera: 5000 },
     // NEXUM no lleva ?embed=1 porque su política de incrustación no está
