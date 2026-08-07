@@ -62,7 +62,7 @@ export function ProjectsIndex() {
     return (
         <div className="proj-index" onPointerLeave={() => programar(null)}>
             {projects.map((p, i) => {
-                const sitio = p.links?.[0]?.href;
+                const sitio = p.previewUrl ?? p.links?.[0]?.href;
                 // The two projects with a talk keep the talk: it is stronger
                 // proof than a screenshot, and both would crowd the card.
                 const preview = !p.video && sitio;

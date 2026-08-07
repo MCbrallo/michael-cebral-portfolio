@@ -22,6 +22,13 @@ export type Project = {
      * Turn it back to true once the site names mcebral.com as a frame ancestor.
      */
     embeddable?: boolean;
+    /**
+     * What the preview loads, when that is not simply the first link. Sites
+     * that greet a first time visitor with a tour or a language gate take
+     * ?embed=1, which skips it: nobody can read or dismiss a tour inside a
+     * card, so it would only hide the thing worth showing.
+     */
+    previewUrl?: string;
 };
 
 // ── EDIT PROJECTS HERE ────────────────────────────────────────────────────
@@ -100,6 +107,7 @@ export const projects: Project[] = [
         accent: "#4ec1ce",
         logo: "/projects/eoguessr.svg",
         links: [{ label: "Live ↗", href: "https://eoguessr.app" }],
+        previewUrl: "https://eoguessr.app/?embed=1",
     },
     {
         id: "rakugaki",
@@ -122,6 +130,7 @@ export const projects: Project[] = [
         accent: "#8fa76b",
         logo: "/projects/arquivonos.svg",
         links: [{ label: "Live ↗", href: "https://arquivonos.com" }],
+        previewUrl: "https://arquivonos.com/?embed=1",
     },
     {
         id: "hoxe",
@@ -133,5 +142,6 @@ export const projects: Project[] = [
         accent: "#d8b878",
         logo: "hoxe",
         links: [{ label: "Live ↗", href: "https://hoxe.org" }],
+        previewUrl: "https://hoxe.org/?embed=1",
     },
 ];

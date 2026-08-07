@@ -21,17 +21,29 @@ import { dirname, join } from 'node:path';
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DESTINO = join(RAIZ, 'public', 'projects', 'previews');
 
-/** El id tiene que coincidir con el del proyecto en src/data/projects.ts. */
+/**
+ * El id tiene que coincidir con el del proyecto en src/data/projects.ts, y la
+ * url con su `previewUrl` cuando lo tenga: el póster y la web viva se ven en
+ * el mismo hueco, uno encima del otro, asi que tienen que enseñar lo mismo.
+ *
+ * `despedir` es para las webs que reciben con un tutorial y no entienden
+ * ?embed=1. Se pulsa ese boton hasta que desaparece, para que la captura
+ * enseñe el producto y no la bienvenida.
+ */
 const WEBS = [
     { id: 'all-in-space', url: 'https://allinspace.xyz/explore', espera: 9000 },
     { id: 'ariadne', url: 'https://ariadne-gamma.vercel.app', espera: 5000 },
     { id: 'abil', url: 'https://clearesg.vercel.app', espera: 5000 },
-    { id: 'nexum', url: 'https://nexumxestion.com', espera: 5000 },
+    // NEXUM no lleva ?embed=1 porque su política de incrustación no está
+    // desplegada, así que nunca sale en vivo. Y no se le pasa el tutorial a
+    // base de pulsar: detrás no hay producto que enseñar sino un alta de
+    // cuenta, así que la diapositiva de bienvenida es el mejor póster honesto.
+    { id: 'nexum', url: 'https://nexumxestion.com', espera: 6000 },
     { id: 'roadmap', url: 'https://roadmap-project-five.vercel.app', espera: 9000 },
-    { id: 'eoguessr', url: 'https://eoguessr.app', espera: 8000 },
+    { id: 'eoguessr', url: 'https://eoguessr.app/?embed=1', espera: 8000 },
     { id: 'rakugaki', url: 'https://rakugaki-deploy.vercel.app', espera: 7000 },
-    { id: 'arquivonos', url: 'https://arquivonos.com', espera: 10000 },
-    { id: 'hoxe', url: 'https://hoxe.org', espera: 6000 },
+    { id: 'arquivonos', url: 'https://arquivonos.com/?embed=1', espera: 10000 },
+    { id: 'hoxe', url: 'https://hoxe.org/?embed=1', espera: 6000 },
 ];
 
 const soloEste = process.argv[2];
@@ -56,6 +68,17 @@ for (const web of cola) {
     try {
         await page.goto(web.url, { waitUntil: 'load', timeout: 60000 });
         await page.waitForTimeout(web.espera);
+
+        // Pasar el tutorial a base de pulsar, para las que no llevan ?embed=1.
+        if (web.despedir) {
+            for (let intento = 0; intento < 10; intento++) {
+                const boton = page.getByRole('button', { name: web.despedir }).first();
+                if (!(await boton.isVisible().catch(() => false))) break;
+                await boton.click({ timeout: 5000 }).catch(() => {});
+                await page.waitForTimeout(1200);
+            }
+        }
+
         const salida = join(DESTINO, `${web.id}.jpg`);
         // Sin `animations` una web que nunca se queda quieta agota el plazo.
         await page.screenshot({
