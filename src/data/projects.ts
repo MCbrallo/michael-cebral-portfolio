@@ -39,7 +39,6 @@ export const projects: Project[] = [
         logo: "/projects/all-in-space.svg",
         links: [{ label: "Live ↗", href: "https://allinspace.xyz/explore" }],
         video: { id: "3HKsfA4ykD8", start: 321, label: "Watch the pitch" },
-        embeddable: false,
     },
     {
         id: "ariadne",
@@ -73,6 +72,9 @@ export const projects: Project[] = [
         accent: "#e0ae3e",
         logo: "/projects/nexum.png",
         links: [{ label: "Live ↗", href: "https://nexumxestion.com" }],
+        // The policy that would open this is written and committed, but the
+        // app has real users and was deliberately left undeployed, so the
+        // card holds the poster. Remove this line after it ships.
         embeddable: false,
     },
     {
@@ -98,7 +100,6 @@ export const projects: Project[] = [
         accent: "#4ec1ce",
         logo: "/projects/eoguessr.svg",
         links: [{ label: "Live ↗", href: "https://eoguessr.app" }],
-        embeddable: false,
     },
     {
         id: "rakugaki",
