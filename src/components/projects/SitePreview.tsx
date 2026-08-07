@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Props = {
     url: string;
@@ -28,6 +29,7 @@ const dominio = (url: string) => {
 };
 
 export function SitePreview({ url, poster, name, open, embeddable, grande }: Props) {
+    const { t } = useLanguage();
     const marco = useRef<HTMLDivElement>(null);
     const [escala, setEscala] = useState(0);
     const [cargada, setCargada] = useState(false);
@@ -95,7 +97,7 @@ export function SitePreview({ url, poster, name, open, embeddable, grande }: Pro
                 )}
                 <span className="proj-preview-flag">
                     <i className="proj-preview-pulse" aria-hidden="true" />
-                    {embeddable ? "Live" : "Preview"}
+                    {embeddable ? t.projects.flagLive : t.projects.flagPreview}
                 </span>
             </div>
         </div>

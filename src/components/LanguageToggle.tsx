@@ -10,8 +10,6 @@ export function LanguageToggle() {
     const { language, setLanguage } = useLanguage();
     const pathname = usePathname();
 
-    // Hidden on the immersive /journey film.
-    if (pathname?.startsWith("/journey")) return null;
 
     const langs = [
         { code: "en" as const, label: "EN" },

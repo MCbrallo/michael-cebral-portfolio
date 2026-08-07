@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { SkipLink } from "@/components/SkipLink";
 import { NebulaBackground } from "@/components/NebulaBackground";
 
 const playfair = Playfair_Display({
@@ -128,9 +129,7 @@ export default function RootLayout({
               />
           </div>
 
-          <a href="#contenido" className="saltar">
-            Skip to content
-          </a>
+          <SkipLink />
           <LanguageToggle />
           <Header />
           <main

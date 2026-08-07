@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/HeroSection";
 import { FlagshipProjects } from "@/components/projects/FlagshipProjects";
-import { projects } from "@/data/projects";
 
 /* No title of its own: the site default is already the right one for the
    front page, and setting one here would append the suffix twice. */
@@ -19,12 +18,7 @@ export default function Home() {
           one page should leave having seen three things that exist and run,
           not only a description of the person who made them. */}
       <section className="w-full max-w-[1180px] mx-auto px-6 md:px-14 py-24 md:py-32 relative z-[2]">
-        <FlagshipProjects
-          eyebrow="Selected Work"
-          heading="Three that are live right now"
-          masHref="/projects"
-          masLabel={`All ${projects.length} projects`}
-        />
+        <FlagshipProjects conCabecera conEnlace />
       </section>
     </div>
   );

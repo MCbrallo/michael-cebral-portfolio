@@ -4,26 +4,27 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { SitePreview } from "@/components/projects/SitePreview";
 import { ProjectLogo } from "@/components/projects/ProjectLogo";
+import { useLanguage } from "@/context/LanguageContext";
 import { projects } from "@/data/projects";
 
 const flagships = projects.filter((p) => p.flagship);
 
 type Props = {
     /**
-     * Both optional. The projects page already carries its own title right
-     * above, and a second heading there only repeated it.
+     * The projects page already carries its own title right above, so it asks
+     * for no heading here. The home page has none, so it does.
      */
-    eyebrow?: string;
-    heading?: string;
-    /** Shown under the last band, when there is somewhere else to go. */
-    masHref?: string;
-    masLabel?: string;
+    conCabecera?: boolean;
+    /** Adds the way through to the full list. Only the home page needs it. */
+    conEnlace?: boolean;
 };
 
 const youtube = (id: string, start?: number) =>
     `https://www.youtube.com/watch?v=${id}${start ? `&t=${start}s` : ""}`;
 
-export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props) {
+export function FlagshipProjects({ conCabecera, conEnlace }: Props) {
+    const { language, t } = useLanguage();
+
     // The band the reader has arrived at is the one that runs its site. One
     // at a time, so scrolling the page never leaves three apps loaded behind.
     const [vivo, setVivo] = useState<string | null>(null);
@@ -68,10 +69,10 @@ export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props)
 
     return (
         <section className="flag-wrap">
-            {(eyebrow || heading) && (
+            {conCabecera && (
                 <header className="flag-intro">
-                    {eyebrow && <p className="flag-eyebrow">{eyebrow}</p>}
-                    {heading && <h2 className="flag-heading font-serif">{heading}</h2>}
+                    <p className="flag-eyebrow">{t.projects.homeEyebrow}</p>
+                    <h2 className="flag-heading font-serif">{t.projects.homeHeading}</h2>
                 </header>
             )}
 
@@ -109,24 +110,24 @@ export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props)
                                 <span className="flag-titles">
                                     <h3 className="flag-name">{p.name}</h3>
                                     <span className="flag-meta">
-                                        {p.type} · {p.year}
+                                        {p.type[language]} · {p.year}
                                     </span>
                                 </span>
                             </div>
 
-                            {p.proof && <p className="flag-proof">{p.proof}</p>}
-                            <p className="flag-blurb">{p.blurb}</p>
+                            {p.proof && <p className="flag-proof">{p.proof[language]}</p>}
+                            <p className="flag-blurb">{p.blurb[language]}</p>
 
                             <div className="flag-actions">
                                 {p.links?.map((l) => (
                                     <a
-                                        key={l.label}
+                                        key={l.kind}
                                         href={l.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="proj-link"
                                     >
-                                        {l.label}
+                                        {l.kind === "play" ? t.projects.linkPlay : t.projects.linkLive}
                                     </a>
                                 ))}
                                 {p.video && (
@@ -136,7 +137,10 @@ export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props)
                                         rel="noopener noreferrer"
                                         className="flag-second"
                                     >
-                                        {p.video.label} ↗
+                                        {p.video.kind === "pitch"
+                                            ? t.projects.videoPitch
+                                            : t.projects.videoTalk}{" "}
+                                        ↗
                                     </a>
                                 )}
                                 {p.status && <span className="proj-status">{p.status}</span>}
@@ -146,9 +150,9 @@ export function FlagshipProjects({ eyebrow, heading, masHref, masLabel }: Props)
                 );
             })}
 
-            {masHref && (
-                <Link href={masHref} className="flag-mas">
-                    {masLabel}
+            {conEnlace && (
+                <Link href="/projects" className="flag-mas">
+                    {t.projects.homeMore.replace("{n}", String(projects.length))}
                     <span aria-hidden="true">→</span>
                 </Link>
             )}

@@ -34,6 +34,31 @@ interface Translations {
         space: string;
         technical: string;
     };
+    /** Everything written on the projects index and on the home selection. */
+    projects: {
+        /** Followed by the project count, so the number stays out of the string. */
+        sector: string;
+        title: string;
+        subtitle: string;
+        rest: string;
+        hintHover: string;
+        hintTap: string;
+        homeEyebrow: string;
+        homeHeading: string;
+        /** {n} is replaced with how many projects there are. */
+        homeMore: string;
+        linkLive: string;
+        linkPlay: string;
+        videoPitch: string;
+        videoTalk: string;
+        /** Badge on the preview: the site is running, or it is a still. */
+        flagLive: string;
+        flagPreview: string;
+    };
+    /** Chrome that belongs to no page in particular. */
+    common: {
+        skip: string;
+    };
 }
 
 const translations: Record<Language, Translations> = {
@@ -66,6 +91,26 @@ const translations: Record<Language, Translations> = {
             biotech: "Biotechnology",
             space: "Space Science",
             technical: "Technical"
+        },
+        projects: {
+            sector: "Selected Work · Sector",
+            title: "Projects",
+            subtitle: "Explorations at the intersection of biology, space science, communication and engineering.",
+            rest: "The rest of the record",
+            hintHover: "Hover a project to expand",
+            hintTap: "Tap a project to expand",
+            homeEyebrow: "Selected Work",
+            homeHeading: "Three that are live right now",
+            homeMore: "All {n} projects",
+            linkLive: "Live ↗",
+            linkPlay: "Play ↗",
+            videoPitch: "Watch the pitch",
+            videoTalk: "Watch the presentation",
+            flagLive: "Live",
+            flagPreview: "Preview",
+        },
+        common: {
+            skip: "Skip to content",
         }
     },
     es: {
@@ -97,6 +142,26 @@ const translations: Record<Language, Translations> = {
             biotech: "Biotecnología",
             space: "Ciencia Espacial",
             technical: "Técnico"
+        },
+        projects: {
+            sector: "Trabajo seleccionado · Sector",
+            title: "Proyectos",
+            subtitle: "Exploraciones en el cruce entre la biología, la ciencia espacial, la comunicación y la ingeniería.",
+            rest: "El resto del registro",
+            hintHover: "Pasa el ratón por un proyecto para abrirlo",
+            hintTap: "Toca un proyecto para abrirlo",
+            homeEyebrow: "Trabajo seleccionado",
+            homeHeading: "Tres que están en marcha ahora mismo",
+            homeMore: "Los {n} proyectos",
+            linkLive: "Ver ↗",
+            linkPlay: "Jugar ↗",
+            videoPitch: "Ver el pitch",
+            videoTalk: "Ver la presentación",
+            flagLive: "En vivo",
+            flagPreview: "Vista previa",
+        },
+        common: {
+            skip: "Ir al contenido",
         }
     },
     gl: {
@@ -128,6 +193,26 @@ const translations: Record<Language, Translations> = {
             biotech: "Biotecnoloxía",
             space: "Ciencia Espacial",
             technical: "Técnico"
+        },
+        projects: {
+            sector: "Traballo escollido · Sector",
+            title: "Proxectos",
+            subtitle: "Exploracións no cruce entre a bioloxía, a ciencia espacial, a comunicación e a enxeñaría.",
+            rest: "O resto do rexistro",
+            hintHover: "Pasa o rato por un proxecto para abrilo",
+            hintTap: "Toca un proxecto para abrilo",
+            homeEyebrow: "Traballo escollido",
+            homeHeading: "Tres que están en marcha agora mesmo",
+            homeMore: "Os {n} proxectos",
+            linkLive: "Ver ↗",
+            linkPlay: "Xogar ↗",
+            videoPitch: "Ver o pitch",
+            videoTalk: "Ver a presentación",
+            flagLive: "En vivo",
+            flagPreview: "Vista previa",
+        },
+        common: {
+            skip: "Ir ao contido",
         }
     }
 };
@@ -143,8 +228,42 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const CLAVE = "mc-lang";
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<Language>("en");
+
+    /* The choice used to last only until the next full page load, which put
+       a Galician reader back into English every time they arrived from a
+       link. Read after mount, never during render, so the server and the
+       first client pass still agree. */
+    const [restaurado, setRestaurado] = React.useState(false);
+
+    React.useEffect(() => {
+        try {
+            const guardado = window.localStorage.getItem(CLAVE) as Language | null;
+            if (guardado && languageOrder.includes(guardado)) setLanguage(guardado);
+        } catch { /* private mode, and the default is fine */ }
+        setRestaurado(true);
+    }, []);
+
+    /* Nothing is written until the saved choice has been read. Writing on the
+       first pass stored the default over whatever the reader had picked, and
+       a tab closed in that instant forgot it. */
+    React.useEffect(() => {
+        if (!restaurado) return;
+        try {
+            window.localStorage.setItem(CLAVE, language);
+        } catch { /* nothing to remember it with, and nothing breaks */ }
+    }, [language, restaurado]);
+
+    /* The attribute the page is served with says English, because the server
+       cannot know the choice. Keeping it truthful matters: it is what a
+       screen reader uses to pick a voice. Set in a layout effect so it lands
+       in the same commit as the text it describes. */
+    React.useLayoutEffect(() => {
+        document.documentElement.lang = language;
+    }, [language]);
 
     const toggleLanguage = () => {
         setLanguage((prev) => {

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ProjectVideo } from "@/components/ProjectVideo";
 import { SitePreview } from "@/components/projects/SitePreview";
 import { ProjectLogo } from "@/components/projects/ProjectLogo";
+import { useLanguage } from "@/context/LanguageContext";
 import { projects as todos, type Project } from "@/data/projects";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -12,6 +13,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const ESPERA = 320;
 
 export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
+    const { language, t } = useLanguage();
+
     // Only one project keeps a live site loaded at a time. Moving to another
     // row drops the previous one, so the page never runs nine apps at once.
     const [vivo, setVivo] = useState<string | null>(null);
@@ -59,7 +62,7 @@ export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
                             <span className="proj-num">{pad(i + 1)}</span>
                             <span className="proj-name">{p.name}</span>
                             <span className="proj-meta">
-                                {p.type} · {p.year}
+                                {p.type[language]} · {p.year}
                             </span>
                         </div>
                         <div className="proj-panel">
@@ -71,18 +74,22 @@ export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
                                         </div>
                                         <div className="proj-desc">
                                             <div className="proj-desc-body">
-                                                {p.proof && <p className="proj-proof">{p.proof}</p>}
-                                                <p>{p.blurb}</p>
+                                                {p.proof && (
+                                                    <p className="proj-proof">{p.proof[language]}</p>
+                                                )}
+                                                <p>{p.blurb[language]}</p>
                                                 <div className="proj-tags">
                                                     {p.links?.map((l) => (
                                                         <a
-                                                            key={l.label}
+                                                            key={l.kind}
                                                             href={l.href}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="proj-link"
                                                         >
-                                                            {l.label}
+                                                            {l.kind === "play"
+                                                                ? t.projects.linkPlay
+                                                                : t.projects.linkLive}
                                                         </a>
                                                     ))}
                                                     {p.status && (
@@ -90,7 +97,18 @@ export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
                                                     )}
                                                 </div>
                                             </div>
-                                            {p.video && <ProjectVideo {...p.video} accent={p.accent} />}
+                                            {p.video && (
+                                                <ProjectVideo
+                                                    id={p.video.id}
+                                                    start={p.video.start}
+                                                    label={
+                                                        p.video.kind === "pitch"
+                                                            ? t.projects.videoPitch
+                                                            : t.projects.videoTalk
+                                                    }
+                                                    accent={p.accent}
+                                                />
+                                            )}
                                             {preview && (
                                                 <SitePreview
                                                     url={sitio}

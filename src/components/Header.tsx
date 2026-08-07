@@ -13,9 +13,6 @@ export function Header() {
     const pathname = usePathname();
     const { t } = useLanguage();
 
-    // The /journey film carries its own immersive chrome.
-    const onJourney = pathname?.startsWith("/journey");
-
     const navItems = [
         { name: t.nav.articles, href: "/projects" },
         { name: t.nav.about, href: "/about" },
@@ -35,7 +32,6 @@ export function Header() {
         };
     }, []);
 
-    if (onJourney) return null;
 
     return (
         <motion.header
@@ -43,11 +39,11 @@ export function Header() {
             animate={{ y: isGameActive ? -100 : 0, opacity: isGameActive ? 0 : 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-6 md:px-12",
+                "barra fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-6 md:px-12",
                 isGameActive ? "pointer-events-none" : ""
             )}
         >
-            <div className="flex items-center justify-between w-full max-w-[1400px]">
+            <div className="flex items-center justify-between w-full max-w-[1400px] relative z-[1]">
                 {/* Symbol only — links home, no bar */}
                 <Link href="/" className="group relative shrink-0" aria-label="Home">
                     <span className="font-serif text-2xl font-bold tracking-tighter text-stark-white">
