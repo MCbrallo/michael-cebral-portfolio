@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mcebral.com
 
-## Getting Started
+My personal site. It holds the CV, the story of how a biotechnologist from Galicia ended up working in space, and a gallery of the things I build.
 
-First, run the development server:
+Live at [mcebral.com](https://mcebral.com).
+
+## What is in it
+
+The site reads in three languages, English, Spanish and Galician, and the switch is real: the CV entries, the project copy and the long form About narrative are each written three times rather than run through a translator. Institution names, grades and award titles stay in their own language, because a "Premio Extraordinario Fin de Carrera" is the name of a thing and not a sentence.
+
+Where a project has a number attached to it, the number carries the source it came from. An empty slot is honest, an invented figure is not.
+
+There is also a Space Invaders game hidden in here. Finding it is the point.
+
+## Running it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Layout
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Path | What lives there |
+|---|---|
+| `src/app/` | The routes. Home, About, CV, journey, articles and contact |
+| `src/components/` | The site itself. Hero, header, project cards, the game, the backgrounds |
+| `src/data/` | The content. CV entries, projects and the rotating quotes, all in three languages |
+| `src/context/` | The language switch |
+| `scripts/` | Small tools, such as the one that regenerates the project card posters |
+| `public/` | Logos, portraits, project previews and the CV |
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js with the App Router, TypeScript and Tailwind. Deployed on Vercel.
