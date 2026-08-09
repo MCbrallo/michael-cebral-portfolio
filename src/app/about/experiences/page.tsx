@@ -4,6 +4,7 @@ import { DisplayTitle } from "@/components/DisplayTitle";
 export const metadata = {
     title: "Field Notes",
     description: "Places where Michael Cebral has studied, researched and worked.",
+    alternates: { canonical: "/about/experiences" },
 };
 
 type Place = {

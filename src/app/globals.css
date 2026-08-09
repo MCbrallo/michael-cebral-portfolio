@@ -270,10 +270,71 @@ h6 {
 }
 
 /* ══════════════════════════════════════════════════════════════
+   TOP BAR
+   Transparent, but with the page blurred behind it, so the bar reads as a
+   surface of its own instead of floating over whatever happens to be under
+   it. The blur is on a pseudo element rather than the header itself: a
+   backdrop-filter on the header would create a stacking context and drag
+   the menu into it. Fading the mask out at the bottom keeps the edge from
+   drawing a hard line across the page.
+   ══════════════════════════════════════════════════════════════ */
+.barra::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(4, 5, 12, 0.62) 0%, rgba(4, 5, 12, 0.34) 62%, rgba(4, 5, 12, 0) 100%);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 100%);
+}
+/* A hairline of light along the bottom edge, so the bar has a boundary
+   without a border drawn across the whole width. */
+.barra::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12) 22%, rgba(255, 255, 255, 0.12) 78%, transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   KEYBOARD FOCUS
+   The whole stylesheet used to carry one focus-visible rule, on a video
+   poster. Everything else was invisible to somebody moving by keyboard.
+   :focus-visible is the right selector: it fires for the keyboard and stays
+   quiet for the mouse, so nothing changes for a pointer user.
+   ══════════════════════════════════════════════════════════════ */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent, #F5F5F7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Straight to the content, for anybody who does not want to tab through the
+   whole header on every page. Off screen until it is focused. */
+.saltar {
+  position: absolute; top: -100px; left: 16px; z-index: 100;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #06070e; background: #F5F5F7;
+  border-radius: 999px; padding: 12px 20px;
+  transition: top 0.2s ease;
+}
+.saltar:focus { top: 16px; }
+
+/* ══════════════════════════════════════════════════════════════
    PROJECTS — index of "mission files" (hover / focus to expand)
    ══════════════════════════════════════════════════════════════ */
 .proj-index { width: 100%; }
+/* `outline: none` on its own left somebody moving by keyboard with no idea
+   where they were: the row is focusable, so the ring comes back below on
+   :focus-visible, which fires for the keyboard and not for the mouse. */
 .proj-item { border-bottom: 1px solid rgba(255, 255, 255, 0.10); outline: none; }
+.proj-item:focus-visible {
+  outline: 2px solid var(--accent, #F5F5F7); outline-offset: -2px; border-radius: 6px;
+}
 .proj-item:first-child { border-top: 1px solid rgba(255, 255, 255, 0.10); }
 .proj-row {
   display: flex; align-items: center; gap: 24px;
@@ -353,6 +414,14 @@ h6 {
 .proj-desc { display: flex; align-items: flex-start; gap: clamp(18px, 2.2vw, 34px); width: 100%; }
 .proj-desc-body { flex: 1 1 auto; min-width: 0; max-width: 52ch; }
 .proj-desc p { margin: 0; color: rgba(255, 255, 255, 0.78); font-size: 15px; line-height: 1.62; }
+/* Same evidence line as the flagships, in the register of the index row */
+.proj-desc .proj-proof {
+  margin-bottom: 13px; padding-left: 12px;
+  border-left: 2px solid color-mix(in srgb, var(--accent, #fff) 62%, transparent);
+  font-family: var(--font-sans); font-size: 10.5px; line-height: 1.65;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, #fff) 72%, #F5F5F7);
+}
 .proj-tags { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .proj-link, .proj-status {
   font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -409,6 +478,405 @@ h6 {
 }
 .proj-video-poster:focus-visible { outline: 2px solid var(--accent, #fff); outline-offset: 3px; }
 
+/* Live site preview — a poster paints at once, the real site fades in on top */
+.proj-preview {
+  position: relative; margin-top: 4px; flex: none;
+  width: clamp(216px, 25vw, 300px);
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12); background: #06070e;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.42);
+}
+/* In a flagship band the site is the point, so it takes the whole column. */
+.proj-preview.is-grande { width: 100%; }
+.proj-preview-bar {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.proj-preview-dots { display: flex; gap: 4px; flex: none; }
+.proj-preview-dots i {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.proj-preview-dots i:first-child { background: color-mix(in srgb, var(--accent, #fff) 65%, transparent); }
+.proj-preview-host {
+  font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.proj-preview-stage {
+  position: relative; aspect-ratio: 8 / 5; overflow: hidden; background: #06070e;
+}
+.proj-preview-poster {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+}
+/* The site renders at its own desktop width and is scaled down from the
+   top left corner, so the preview shows a real page and not a squeezed one. */
+.proj-preview-frame {
+  position: absolute; top: 0; left: 0; border: 0;
+  transform-origin: 0 0; pointer-events: none;
+  opacity: 0; transition: opacity 0.55s ease;
+}
+.proj-preview-frame.is-live { opacity: 1; }
+.proj-preview-flag {
+  position: absolute; right: 8px; bottom: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 9px; border-radius: 999px;
+  font-family: var(--font-sans); font-size: 9px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.82);
+  background: rgba(6, 7, 14, 0.62);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.proj-preview-pulse {
+  width: 5px; height: 5px; border-radius: 999px;
+  background: var(--accent, #fff); box-shadow: 0 0 8px var(--accent, #fff);
+  animation: preview-pulse 2.4s ease-in-out infinite;
+}
+@keyframes preview-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLAGSHIPS — the three that carry the page, at full size and running
+   ══════════════════════════════════════════════════════════════ */
+.flag-wrap { width: 100%; display: flex; flex-direction: column; gap: clamp(56px, 7vw, 104px); }
+.flag-intro { max-width: 640px; }
+.flag-eyebrow {
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.34em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4); margin-bottom: 12px;
+}
+.flag-heading {
+  font-size: clamp(30px, 4vw, 46px); font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.08; color: #F5F5F7;
+}
+
+.flag {
+  position: relative;
+  display: grid; align-items: center;
+  /* The site is the wider column, always. The mirrored rows flip the ratio
+     too, or the running site would shrink on every other band. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.32fr);
+  gap: clamp(26px, 3.6vw, 58px);
+}
+.flag.is-mirrored { grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); }
+.flag-media { position: relative; order: 2; min-width: 0; }
+.flag-body { order: 1; min-width: 0; }
+/* Alternating sides give the column a rhythm instead of a stack of the
+   same slide. The order swaps, the source order does not: a screen reader
+   still meets each project as name first, then its site. */
+.flag.is-mirrored .flag-media { order: 1; }
+.flag.is-mirrored .flag-body { order: 2; }
+
+/* The accent halo behind the running site, so colour arrives with the
+   project rather than sitting on the page. */
+.flag-media::before {
+  content: ""; position: absolute; inset: -6% -4%;
+  background: radial-gradient(52% 62% at 50% 50%, color-mix(in srgb, var(--accent, #fff) 20%, transparent), transparent 70%);
+  filter: blur(46px); opacity: 0; transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+.flag.is-live .flag-media::before { opacity: 1; }
+
+.flag-head { display: flex; align-items: center; gap: clamp(14px, 1.6vw, 22px); }
+.flag-logo {
+  position: relative; flex: none;
+  width: clamp(58px, 6vw, 82px); height: clamp(58px, 6vw, 82px);
+  display: flex; align-items: center; justify-content: center;
+}
+.flag-logo::before {
+  content: ""; position: absolute; inset: -14%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 34%, transparent), transparent 68%);
+  filter: blur(13px);
+}
+.flag-logo img, .flag-logo svg { position: relative; max-width: 100%; max-height: 100%; object-fit: contain; }
+.flag-titles { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.flag-name {
+  font-family: "Playfair Display", var(--font-playfair), Georgia, serif; font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 44px); line-height: 1; letter-spacing: -0.02em;
+  color: var(--accent, #F5F5F7);
+}
+.flag-meta {
+  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+}
+
+/* The evidence line. Sits in the same place on every project and reads as
+   a record, so it is set apart from the description above it. */
+.flag-proof {
+  margin-top: clamp(20px, 2.4vw, 30px);
+  padding-left: 15px; border-left: 2px solid color-mix(in srgb, var(--accent, #fff) 62%, transparent);
+  font-family: var(--font-sans); font-size: 11.5px; line-height: 1.7;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, #fff) 72%, #F5F5F7);
+}
+.flag-blurb {
+  margin-top: 18px; max-width: 46ch;
+  color: rgba(255, 255, 255, 0.72); font-size: 15px; line-height: 1.68; font-weight: 300;
+}
+.flag-actions { margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.flag-second {
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62); border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 2px; transition: color 0.25s, border-color 0.25s;
+}
+.flag-second:hover { color: #F5F5F7; border-color: var(--accent, #fff); }
+
+.flag-mas {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; padding: 13px 24px;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.flag-mas:hover {
+  color: #F5F5F7; border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.04);
+}
+.flag-mas span { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.flag-mas:hover span { transform: translateX(5px); }
+
+@media (max-width: 860px) {
+  /* One column, and the site drops out entirely: see .proj-preview below. */
+  .flag { grid-template-columns: 1fr; gap: 0; }
+  .flag-media, .flag.is-mirrored .flag-media { order: 2; }
+  .flag-body, .flag.is-mirrored .flag-body { order: 1; }
+  .flag-blurb { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flag-media::before, .flag-mas span, .flag-second { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CV — the same system as the projects, applied to a record
+   The colour of a project became the colour of an institution, so a place
+   that appears twice reads as the same place. The gold that used to be on
+   the eyebrow, the filters, the bullets, the button and every hover at once
+   is gone: it was on so many things that it marked none of them.
+   ══════════════════════════════════════════════════════════════ */
+/* The opening paragraph was capped at 54 characters a line, which is a good
+   measure for body text buried in a page but wrong for a lead: it broke after
+   a third of the column and stacked seven short lines under the title. Wider
+   lines, fewer of them, and the block stops pushing the record down. */
+.cv-resumen { max-width: 92ch; }
+.cv-seccion {
+  font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em;
+  line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(22px, 2.6vw, 34px);
+}
+
+.cv-barra {
+  margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
+}
+.cv-filtros { display: flex; flex-wrap: wrap; gap: 22px; }
+.cv-filtro {
+  position: relative; padding-bottom: 7px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s;
+}
+.cv-filtro::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: #F5F5F7; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cv-filtro:hover { color: rgba(255, 255, 255, 0.72); }
+.cv-filtro:hover::after { transform: scaleX(1); background: rgba(255, 255, 255, 0.3); }
+.cv-filtro.is-on { color: #F5F5F7; }
+.cv-filtro.is-on::after { transform: scaleX(1); }
+
+.cv-lista { display: flex; flex-direction: column; gap: clamp(22px, 2.6vw, 34px); }
+.cv-fila {
+  display: grid; grid-template-columns: 168px minmax(0, 1fr);
+  gap: clamp(20px, 2.6vw, 40px); align-items: start;
+}
+.cv-cuando { padding-top: 4px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.cv-fechas {
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.42);
+}
+.cv-tipo {
+  font-family: var(--font-sans); font-size: 9.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: color-mix(in srgb, var(--accent, #fff) 78%, #F5F5F7);
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 32%, transparent);
+  border-radius: 999px; padding: 5px 11px;
+}
+
+/* The same glass surface the project cards use, tinted by the institution */
+.cv-tarjeta {
+  position: relative; display: flex; align-items: flex-start;
+  gap: clamp(18px, 2.4vw, 32px);
+  padding: clamp(20px, 2.2vw, 30px);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 16%, rgba(255, 255, 255, 0.08));
+  background:
+    radial-gradient(140% 120% at 0% 0%, color-mix(in srgb, var(--accent, #fff) 10%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(20, 24, 44, 0.5), rgba(8, 10, 22, 0.4));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.cv-fila:hover .cv-tarjeta {
+  border-color: color-mix(in srgb, var(--accent, #fff) 38%, transparent);
+  box-shadow: 0 14px 46px rgba(0, 0, 0, 0.3),
+    0 0 52px -14px color-mix(in srgb, var(--accent, #fff) 42%, transparent);
+}
+
+/* Logos sit free over the accent halo, the way they do on the projects, and
+   with no plate at all. That became possible once they were taken from each
+   institution's own site: six of the seven publish a negative version, made
+   by them for exactly this ground. Nothing here recolours anything, so what
+   shows is the official mark. */
+.cv-logo {
+  position: relative; flex: none;
+  width: clamp(66px, 6.6vw, 92px); height: clamp(46px, 4.6vw, 62px);
+  display: flex; align-items: center; justify-content: center;
+}
+.cv-logo::before {
+  content: ""; position: absolute; inset: -30% -18%;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 40%, transparent), transparent 68%);
+  filter: blur(14px);
+}
+.cv-logo img {
+  position: relative;
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  opacity: 0.88; transition: opacity 0.35s;
+}
+.cv-fila:hover .cv-logo img { opacity: 1; }
+
+.cv-cuerpo { min-width: 0; flex: 1 1 auto; }
+.cv-papel {
+  font-size: clamp(20px, 2.2vw, 29px); font-weight: 600; letter-spacing: -0.018em;
+  line-height: 1.16; color: #F5F5F7;
+}
+.cv-org {
+  margin-top: 9px;
+  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.42); line-height: 1.7;
+}
+.cv-prueba {
+  margin-top: 18px; padding-left: 13px;
+  border-left: 2px solid color-mix(in srgb, var(--accent, #fff) 62%, transparent);
+  font-family: var(--font-sans); font-size: 10.5px; line-height: 1.65;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, #fff) 72%, #F5F5F7);
+}
+.cv-puntos { margin-top: 18px; display: flex; flex-direction: column; gap: 9px; }
+.cv-puntos li {
+  position: relative; padding-left: 18px;
+  color: rgba(255, 255, 255, 0.72); font-size: 15px; line-height: 1.66; font-weight: 300;
+}
+.cv-puntos li::before {
+  content: ""; position: absolute; left: 0; top: 11px;
+  width: 5px; height: 1px; background: color-mix(in srgb, var(--accent, #fff) 70%, transparent);
+}
+.cv-etiquetas { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 9px; }
+
+.cv-competencias {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+}
+.cv-competencia {
+  padding: clamp(20px, 2.2vw, 28px); border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(165deg, rgba(20, 24, 44, 0.44), rgba(8, 10, 22, 0.34));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.35s;
+}
+.cv-competencia:hover { border-color: rgba(255, 255, 255, 0.2); }
+.cv-competencia-titulo {
+  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin-bottom: 18px;
+}
+.cv-competencia ul { display: flex; flex-direction: column; gap: 9px; }
+.cv-competencia li {
+  position: relative; padding-left: 18px;
+  color: rgba(255, 255, 255, 0.7); font-size: 14.5px; line-height: 1.6; font-weight: 300;
+}
+.cv-competencia li::before {
+  content: ""; position: absolute; left: 0; top: 10px;
+  width: 5px; height: 1px; background: rgba(255, 255, 255, 0.34);
+}
+
+@media (max-width: 860px) {
+  .cv-fila { grid-template-columns: 1fr; gap: 12px; }
+  .cv-cuando { flex-direction: row; align-items: center; gap: 12px; padding-top: 0; }
+  .cv-competencias { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .cv-tarjeta { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-filtro::after, .cv-tarjeta, .cv-logo img, .cv-competencia { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ABOUT · the music, as a caption
+   The player used to open with a saturated circle, which the eye found
+   before the photograph. Nothing here competes with the picture: the
+   equaliser is the state, the title carries the weight, the controls stay
+   at a whisper until the cursor arrives, and the progress is a hairline on
+   the bottom edge of the card rather than a bar of its own.
+   ══════════════════════════════════════════════════════════════ */
+.rep {
+  position: relative; display: flex; align-items: center;
+  gap: clamp(13px, 1.6vw, 18px);
+  padding: 16px 18px 19px;
+  background: rgba(10, 13, 24, 0.7);
+  cursor: pointer;
+}
+
+.rep-eq { display: flex; align-items: flex-end; gap: 3px; height: 15px; flex: none; }
+.rep-eq i {
+  width: 2px; border-radius: 2px; background: #F5F5F7;
+  transform-origin: bottom; opacity: 0.55; transition: opacity 0.35s;
+}
+.rep-eq i:nth-child(1) { height: 60%; }
+.rep-eq i:nth-child(2) { height: 100%; }
+.rep-eq i:nth-child(3) { height: 40%; }
+/* Only moves while something is playing, so the movement means something. */
+.rep-eq.is-on i { opacity: 1; animation: rep-latir 1.2s ease-in-out infinite; }
+.rep-eq.is-on i:nth-child(2) { animation-duration: 1.5s; animation-delay: 0.18s; }
+.rep-eq.is-on i:nth-child(3) { animation-duration: 0.95s; animation-delay: 0.08s; }
+@keyframes rep-latir { 0%, 100% { transform: scaleY(0.45); } 50% { transform: scaleY(1); } }
+
+.rep-texto { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rep-pista {
+  font-size: clamp(17px, 1.9vw, 22px); line-height: 1.05; color: #F5F5F7;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rep-artista {
+  font-family: var(--font-sans); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.38);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.rep-mandos { display: flex; align-items: center; gap: 12px; flex: none; }
+.rep-mandos button {
+  color: rgba(255, 255, 255, 0.26);
+  transition: color 0.3s, transform 0.3s;
+}
+.rep:hover .rep-mandos button { color: rgba(255, 255, 255, 0.55); }
+.rep-mandos button:hover { color: #F5F5F7; transform: scale(1.12); }
+
+.rep-hilo {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.rep-hilo i {
+  display: block; height: 100%; background: #F5F5F7;
+  transition: width 0.2s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep-eq.is-on i { animation: none; }
+  .rep-mandos button, .rep-hilo i { transition: none; }
+}
+
 /* Outlined display word (echoes the home marquee) */
 .outline-word {
   color: transparent;
@@ -439,6 +907,13 @@ h6 {
   /* On phones the video drops below the text and goes full width */
   .proj-desc { flex-direction: column; }
   .proj-video { width: 100%; max-width: 440px; margin-top: 16px; }
+  /* A whole site loaded inside a phone card costs more than it gives */
+  .proj-preview { display: none; }
+  /* A flagship keeps its poster though: on a phone the picture is most of
+     what the band has to say, and a lazy JPEG costs almost nothing. Only the
+     running site stays away, which FlagshipProjects already refuses to load
+     below 861px. */
+  .proj-preview.is-grande { display: block; margin-top: 24px; }
   /* index rows: stack the meta under the name so nothing crams */
   .proj-row { gap: 14px; row-gap: 4px; flex-wrap: wrap; align-items: baseline; }
   .proj-name { flex: 1 1 auto; }
@@ -450,6 +925,8 @@ h6 {
 }
 @media (prefers-reduced-motion: reduce) {
   .proj-name, .proj-panel, .proj-panel-inner { transition: none; }
+  .proj-preview-frame { transition: none; }
+  .proj-preview-pulse { animation: none; }
 }
 /* Hint adapts to input: "Hover" on pointer devices, "Tap" on touch */
 .hint-tap { display: none; }

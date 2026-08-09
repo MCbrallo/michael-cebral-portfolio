@@ -38,12 +38,16 @@ export default async function ArticlePage({ params }: PageProps) {
                 {/* Readability panel — keeps long-form prose legible over the live nebula */}
                 <div className="max-w-4xl mx-auto rounded-2xl border border-white/[0.08] bg-[#05060c]/70 backdrop-blur-md px-6 py-10 md:px-12 md:py-14">
                     <div className="mb-8 animate-fade-in">
+                        {/* /articles is the projects gallery now and redirects
+                            there, so an article that went back to it landed on
+                            something else entirely. Home until there is an
+                            articles index to return to. */}
                         <Link
-                            href="/articles"
+                            href="/"
                             className="inline-flex items-center text-white/50 hover:text-white transition-colors mb-8 group uppercase tracking-widest text-[10px]"
                         >
                             <ArrowLeft className="w-3 h-3 mr-2 group-hover:-translate-x-1 transition-transform" />
-                            Back to Articles
+                            Back
                         </Link>
 
                         <header className="mb-8">

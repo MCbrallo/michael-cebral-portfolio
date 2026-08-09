@@ -259,21 +259,21 @@ function MonitorWithPlayer({
 
                 {/* inner sheen */}
                 <div className="pointer-events-none absolute inset-0 z-30 rounded-2xl" style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)' }} />
-                {/* decorative gold corner brackets */}
-                <span className="pointer-events-none absolute top-2 left-2 z-30 w-4 h-4 border-l border-t border-gold/40 rounded-tl-md" />
-                <span className="pointer-events-none absolute top-2 right-2 z-30 w-4 h-4 border-r border-t border-gold/40 rounded-tr-md" />
-                <span className="pointer-events-none absolute bottom-2 left-2 z-30 w-4 h-4 border-l border-b border-gold/40 rounded-bl-md" />
-                <span className="pointer-events-none absolute bottom-2 right-2 z-30 w-4 h-4 border-r border-b border-gold/40 rounded-br-md" />
+                {/* corner brackets, in the light of the page */}
+                <span className="pointer-events-none absolute top-2 left-2 z-30 w-4 h-4 border-l border-t border-white/25 rounded-tl-md" />
+                <span className="pointer-events-none absolute top-2 right-2 z-30 w-4 h-4 border-r border-t border-white/25 rounded-tr-md" />
+                <span className="pointer-events-none absolute bottom-2 left-2 z-30 w-4 h-4 border-l border-b border-white/25 rounded-bl-md" />
+                <span className="pointer-events-none absolute bottom-2 right-2 z-30 w-4 h-4 border-r border-b border-white/25 rounded-br-md" />
 
                 {/* Photo monitor */}
                 <div className="relative w-full overflow-hidden bg-[#06070d] h-[26vh] min-h-[180px] md:h-[60vh] md:max-h-[80vh]">
                     {/* header */}
                     <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-2.5 px-4 py-3 bg-gradient-to-b from-[#06070d] via-[#06070d]/70 to-transparent">
                         <span className="relative flex h-1.5 w-1.5 shrink-0">
-                            <span className="absolute inline-flex h-full w-full rounded-full bg-gold/60 animate-ping" />
-                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+                            <span className="absolute inline-flex h-full w-full rounded-full bg-white/50 animate-ping" />
+                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
                         </span>
-                        <span className="font-mono text-[9px] tracking-[0.22em] text-gold/50 uppercase truncate">
+                        <span className="font-mono text-[9px] tracking-[0.22em] text-white/45 uppercase truncate">
                             {activeIndex >= 0 && activeIndex < photos.length ? photos[activeIndex].label : 'awaiting signal…'}
                         </span>
                         <span className="ml-auto shrink-0 font-mono text-[9px] tracking-[0.1em] text-white/40 px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03]">
@@ -300,56 +300,63 @@ function MonitorWithPlayer({
                     )}
 
                     {/* arrows */}
-                    <button onClick={onPrev} className="group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-gold hover:border-gold/40 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Previous photo">
+                    <button onClick={onPrev} className="group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Previous photo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-0.5"><path d="m15 18-6-6 6-6" /></svg>
                     </button>
-                    <button onClick={onNext} className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-gold hover:border-gold/40 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Next photo">
+                    <button onClick={onNext} className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Next photo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-0.5"><path d="m9 18 6-6-6-6" /></svg>
                     </button>
                 </div>
 
-                {/* gold divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+                {/* The music, at the rank of a caption. A saturated circle was
+                    the first thing the eye found, ahead of the photograph, so
+                    the button is gone: the equaliser is the state, the title
+                    carries the weight, and the controls only come up under the
+                    cursor. The progress is a hairline on the very bottom edge. */}
+                <div className="rep" onClick={onTogglePlay} role="group" aria-label="Music">
+                    <span className={`rep-eq${playing ? ' is-on' : ''}`} aria-hidden="true">
+                        <i /><i /><i />
+                    </span>
 
-                {/* Integrated music player */}
-                <div className="relative w-full bg-[#0a0d18]/70 px-4 py-3.5 md:px-6 md:py-4">
-                    {/* progress */}
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05] overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-gold/60 to-gold transition-[width] duration-200" style={{ width: `${musicProgress * 100}%` }} />
-                    </div>
+                    <span className="rep-texto">
+                        <span className="rep-pista font-serif">{songs[current].title}</span>
+                        <span className="rep-artista">
+                            {songs[current].artist} · Songs that have stayed with me
+                        </span>
+                    </span>
 
-                    <div className="flex items-center gap-3 md:gap-4">
-                        <button onClick={onPrevSong} className="text-white/35 hover:text-gold transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Previous song">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+                    <span className="rep-mandos">
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onPrevSong(); }}
+                            aria-label="Previous song"
+                        >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
                         </button>
-                        <button onClick={onTogglePlay} className="w-9 h-9 rounded-full bg-gold hover:bg-gold/90 flex items-center justify-center transition-all shrink-0 shadow-[0_0_20px_-4px_rgba(212,175,55,0.65)]" aria-label={playing ? 'Pause' : 'Play'}>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onTogglePlay(); }}
+                            aria-label={playing ? 'Pause' : 'Play'}
+                        >
                             {playing ? (
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                                     <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
                                 </svg>
                             ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#0a0d18" className="ml-0.5">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                                     <polygon points="5 3 19 12 5 21 5 3" />
                                 </svg>
                             )}
                         </button>
-                        <button onClick={onNextSong} className="text-white/35 hover:text-gold transition-colors p-0.5 shrink-0 hover:scale-110" aria-label="Next song">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onNextSong(); }}
+                            aria-label="Next song"
+                        >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
                         </button>
-                        <div className="min-w-0 ml-1 flex-1">
-                            <div className="flex items-center gap-2">
-                                <p className="text-white/85 text-[12px] md:text-[14px] font-medium truncate">{songs[current].title}</p>
-                                <span className="text-gold/40 text-[10px] shrink-0">·</span>
-                                <p className="text-white/35 text-[10px] md:text-[12px] shrink-0 truncate">{songs[current].artist}</p>
-                                {playing && (
-                                    <span className="inline-flex items-end gap-[2px] h-3 shrink-0 ml-1">
-                                        <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
-                                    </span>
-                                )}
-                            </div>
-                            <p className="text-gold/30 text-[9px] font-mono tracking-[0.15em] mt-0.5 uppercase">Songs that have stayed with me</p>
-                        </div>
-                    </div>
+                    </span>
+
+                    <span className="rep-hilo" aria-hidden="true">
+                        <i style={{ width: `${musicProgress * 100}%` }} />
+                    </span>
                 </div>
             </div>
         </div>
@@ -429,7 +436,7 @@ export default function AboutPage() {
 
                     {/* Hero */}
                     <header className="pt-16 md:pt-24 pb-10 max-w-[720px]">
-                        <p className="font-sans text-[11px] md:text-[12px] tracking-[0.34em] text-gold/70 mb-5 uppercase">
+                        <p className="font-sans text-[11px] md:text-[12px] tracking-[0.34em] text-white/40 mb-5 uppercase">
                             {content.signalOrigin}
                         </p>
                         <DisplayTitle text={content.title} split={false} />
