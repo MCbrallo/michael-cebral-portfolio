@@ -355,9 +355,11 @@ select:focus-visible {
   font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.18em;
   text-transform: uppercase; color: rgba(255, 255, 255, 0.35); transition: color 0.3s;
 }
-.proj-item:hover .proj-name,
-.proj-item:focus-within .proj-name {
-  color: var(--accent, #fff); -webkit-text-stroke: 0; transform: translateX(10px);
+@media (hover: hover) and (pointer: fine) {
+  .proj-item:hover .proj-name,
+  .proj-item:focus-within .proj-name {
+    color: var(--accent, #fff); -webkit-text-stroke: 0; transform: translateX(10px);
+  }
 }
 .proj-item:hover .proj-num,
 .proj-item:focus-within .proj-num { color: var(--accent, var(--color-gold)); }
@@ -365,16 +367,21 @@ select:focus-visible {
 .proj-item:focus-within .proj-meta { color: rgba(255, 255, 255, 0.6); }
 
 .proj-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.proj-item:hover .proj-panel,
-.proj-item:focus-within .proj-panel { grid-template-rows: 1fr; }
+/* Only a real pointer opens a row by pointing at it. A touch screen leaves a
+   sticky :hover on whatever it last tapped, so without this gate the second
+   tap closed the state and the hover held the panel open anyway. */
+@media (hover: hover) and (pointer: fine) {
+  .proj-item:hover .proj-panel { grid-template-rows: 1fr; }
+}
 .proj-panel-wrap { overflow: hidden; }
 .proj-panel-inner {
   padding: 2px 6px 30px 58px;
   opacity: 0; transform: translateY(8px);
   transition: opacity 0.4s 0.05s ease, transform 0.4s 0.05s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.proj-item:hover .proj-panel-inner,
-.proj-item:focus-within .proj-panel-inner { opacity: 1; transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .proj-item:hover .proj-panel-inner { opacity: 1; transform: none; }
+}
 
 /* Expanded card — glass surface tinted by the project's accent colour */
 .proj-card {
@@ -956,9 +963,10 @@ select:focus-visible {
    landed on things nobody could see. Visibility takes the whole subtree out
    of the sequence and still animates, which display would not. */
 .proj-panel-wrap { visibility: hidden; }
-.proj-item.is-open .proj-panel-wrap,
-.proj-item:hover .proj-panel-wrap,
-.proj-item:focus-within .proj-panel-wrap { visibility: visible; }
+.proj-item.is-open .proj-panel-wrap { visibility: visible; }
+@media (hover: hover) and (pointer: fine) {
+  .proj-item:hover .proj-panel-wrap { visibility: visible; }
+}
 .proj-item.is-open .proj-panel { grid-template-rows: 1fr; }
 .proj-item.is-open .proj-panel-inner { opacity: 1; transform: none; }
 .proj-item.is-open .proj-name { color: var(--accent, #fff); -webkit-text-stroke: 0; }
