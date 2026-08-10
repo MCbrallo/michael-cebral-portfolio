@@ -994,7 +994,7 @@ select:focus-visible {
   -webkit-tap-highlight-color: transparent;
 }
 .idioma-sep { display: block; width: 1px; height: 13px; background: rgba(255, 255, 255, 0.16); }
-@media (min-width: 768px) {
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
   .idioma-caja { padding: 3px 5px; }
   .idioma-btn { min-width: 34px; min-height: 32px; }
 }
@@ -1094,4 +1094,29 @@ select:focus-visible {
    bottom of the glass. */
 @supports (padding: max(0px)) {
   .barra { padding-top: max(0.75rem, env(safe-area-inset-top)); }
+}
+
+/* A phone turned sideways is 844px wide, which every width query above reads
+   as a desktop. The hand did not change, so the sizes that the hand needs are
+   tied to the input instead of the viewport: any coarse pointer, at any width,
+   gets a target it can hit. Layout and type stay on the width queries, where
+   they belong. */
+@media (pointer: coarse) {
+  .barra .nav-link,
+  .barra a[aria-label="Home"] { min-height: 44px; }
+  .idioma-btn { min-width: 44px; min-height: 44px; }
+  .saltar { min-height: 44px; display: inline-flex; align-items: center; }
+  .proj-row { min-height: 56px; }
+  .proj-link, .proj-status, .flag-second {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+  }
+  .flag-second { padding: 0; }
+  .cv-filtro {
+    min-height: 44px; padding: 0 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .rep .rep-mandos button {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px;
+  }
 }
