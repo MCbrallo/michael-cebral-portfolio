@@ -22,23 +22,32 @@ export function LanguageToggle() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="fixed bottom-8 right-6 md:right-12 lg:right-16 z-50 mix-blend-difference"
+            // mix-blend-difference put three bare letters straight on top of
+            // whatever was underneath, which on a phone is always something.
+            // The control carries its own ground now, sits clear of the home
+            // indicator, and each letter is a target a thumb can actually hit.
+            className="idioma fixed z-[60] bottom-[max(0.75rem,env(safe-area-inset-bottom))] right-4 md:bottom-8 md:right-12 lg:right-16"
         >
             <Magnetic strength={0.2}>
-                <div className="flex items-center gap-2 text-xs font-medium tracking-widest uppercase">
+                <div
+                    role="group"
+                    aria-label="Language"
+                    className="idioma-caja flex items-center gap-0.5 text-xs font-medium tracking-widest uppercase"
+                >
                     {langs.map((lang, i) => (
-                        <span key={lang.code} className="flex items-center gap-2">
+                        <span key={lang.code} className="flex items-center">
                             <button
                                 onClick={() => setLanguage(lang.code)}
+                                aria-current={language === lang.code ? "true" : undefined}
                                 className={cn(
-                                    "transition-colors duration-300 hover:text-white cursor-pointer",
-                                    language === lang.code ? "text-white" : "text-white/40"
+                                    "idioma-btn transition-colors duration-300 hover:text-white cursor-pointer",
+                                    language === lang.code ? "text-white" : "text-white/45"
                                 )}
                             >
                                 {lang.label}
                             </button>
                             {i < langs.length - 1 && (
-                                <span className="text-white/20">|</span>
+                                <span aria-hidden="true" className="idioma-sep" />
                             )}
                         </span>
                     ))}

@@ -20,6 +20,14 @@ export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
     const [vivo, setVivo] = useState<string | null>(null);
     const reloj = useRef<number | null>(null);
 
+    // The row used to open on hover alone, with a tabindex on the wrapper so a
+    // tap would land focus on it and the panel would follow. That works in
+    // Chrome and is a coin toss in Safari on iOS, which does not reliably focus
+    // a plain div. The header is a real button now: it opens on tap, closes on
+    // the second tap, announces its state, and hover stays as it was for a
+    // pointer. One open at a time, as before.
+    const [abierto, setAbierto] = useState<string | null>(null);
+
     // Phones have no hover and the preview is hidden there, so nothing loads.
     const [conRaton, setConRaton] = useState(false);
     useEffect(() => {
@@ -49,23 +57,31 @@ export function ProjectsIndex({ projects = todos }: { projects?: Project[] }) {
                 // proof than a screenshot, and both would crowd the card.
                 const preview = !p.video && sitio;
 
+                const abre = abierto === p.id;
+
                 return (
                     <div
                         key={p.id}
-                        className="proj-item"
-                        tabIndex={0}
+                        className={`proj-item${abre ? " is-open" : ""}`}
                         style={{ "--accent": p.accent } as CSSProperties}
                         onPointerEnter={() => programar(p.id)}
-                        onFocus={() => programar(p.id)}
                     >
-                        <div className="proj-row">
+                        <button
+                            type="button"
+                            className="proj-row"
+                            aria-expanded={abre}
+                            aria-controls={`proj-panel-${p.id}`}
+                            onClick={() => setAbierto(abre ? null : p.id)}
+                            onFocus={() => programar(p.id)}
+                        >
                             <span className="proj-num">{pad(i + 1)}</span>
                             <span className="proj-name">{p.name}</span>
                             <span className="proj-meta">
                                 {p.type[language]} · {p.year}
                             </span>
-                        </div>
-                        <div className="proj-panel">
+                            <span className="proj-chevron" aria-hidden="true" />
+                        </button>
+                        <div className="proj-panel" id={`proj-panel-${p.id}`}>
                             <div className="proj-panel-wrap">
                                 <div className="proj-panel-inner">
                                     <div className="proj-card">

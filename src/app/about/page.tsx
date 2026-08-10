@@ -249,8 +249,10 @@ function MonitorWithPlayer({
     onTogglePlay: () => void; onPrevSong: () => void; onNextSong: () => void;
 }) {
     return (
+        // On a phone the console sits above the language control instead of
+        // under it, so the caption of the song is never cut in half.
         <div className="fixed z-50 flex flex-col
-            bottom-4 left-4 right-4 w-[calc(100%-2rem)] max-w-none
+            bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-3 right-3 w-[calc(100%-1.5rem)] max-w-none
             md:bottom-auto md:top-[55%] md:right-[8vw] md:left-auto md:-translate-y-1/2 md:w-[44vw]">
             {/* Unified glass console */}
             <div className={`relative rounded-2xl overflow-hidden border border-white/10
@@ -273,10 +275,10 @@ function MonitorWithPlayer({
                             <span className="absolute inline-flex h-full w-full rounded-full bg-white/50 animate-ping" />
                             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
                         </span>
-                        <span className="font-mono text-[9px] tracking-[0.22em] text-white/45 uppercase truncate">
+                        <span className="font-mono text-[10.5px] md:text-[9px] tracking-[0.18em] md:tracking-[0.22em] text-white/45 uppercase truncate">
                             {activeIndex >= 0 && activeIndex < photos.length ? photos[activeIndex].label : 'awaiting signal…'}
                         </span>
-                        <span className="ml-auto shrink-0 font-mono text-[9px] tracking-[0.1em] text-white/40 px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03]">
+                        <span className="ml-auto shrink-0 font-mono text-[10.5px] md:text-[9px] tracking-[0.1em] text-white/40 px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03]">
                             {activeIndex >= 0 ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}` : '—'}
                         </span>
                     </div>
@@ -300,10 +302,10 @@ function MonitorWithPlayer({
                     )}
 
                     {/* arrows */}
-                    <button onClick={onPrev} className="group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Previous photo">
+                    <button onClick={onPrev} className="group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Previous photo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-0.5"><path d="m15 18-6-6 6-6" /></svg>
                     </button>
-                    <button onClick={onNext} className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Next photo">
+                    <button onClick={onNext} className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-black/30 border border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-black/50 transition-all backdrop-blur-md" aria-label="Next photo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-0.5"><path d="m9 18 6-6-6-6" /></svg>
                     </button>
                 </div>

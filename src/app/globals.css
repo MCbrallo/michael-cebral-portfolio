@@ -934,3 +934,164 @@ select:focus-visible {
   .hint-hover { display: none; }
   .hint-tap { display: inline; }
 }
+/* ══════════════════════════════════════════════════════════════
+   THE PHONE
+   Everything below is about the hand holding the screen. Three rules run
+   through it: nothing a finger has to press is smaller than the finger,
+   nothing sits on top of something else, and no line of text asks to be
+   squinted at. The desktop layout is untouched; every block here is behind
+   a width or an input query.
+   ══════════════════════════════════════════════════════════════ */
+
+/* The row that opens a project is a button now, so it arrives with a
+   user agent style sheet of its own to undo. */
+.proj-row {
+  width: 100%; background: none; border: 0; color: inherit; font: inherit;
+  text-align: left; -webkit-tap-highlight-color: transparent;
+}
+.proj-row:focus-visible {
+  outline: 2px solid var(--accent, #F5F5F7); outline-offset: -2px; border-radius: 6px;
+}
+/* A collapsed panel used to keep its links in the tab order, so a keyboard
+   landed on things nobody could see. Visibility takes the whole subtree out
+   of the sequence and still animates, which display would not. */
+.proj-panel-wrap { visibility: hidden; }
+.proj-item.is-open .proj-panel-wrap,
+.proj-item:hover .proj-panel-wrap,
+.proj-item:focus-within .proj-panel-wrap { visibility: visible; }
+.proj-item.is-open .proj-panel { grid-template-rows: 1fr; }
+.proj-item.is-open .proj-panel-inner { opacity: 1; transform: none; }
+.proj-item.is-open .proj-name { color: var(--accent, #fff); -webkit-text-stroke: 0; }
+.proj-item.is-open .proj-num { color: var(--accent, var(--color-gold)); }
+
+/* The affordance the row never had: a mark that says this opens, and turns
+   when it has. It stays out of the way of a pointer, which has hover. */
+.proj-chevron {
+  flex: none; width: 11px; height: 11px; margin-left: 14px; align-self: center;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.42);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.42);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+}
+.proj-item.is-open .proj-chevron {
+  border-color: var(--accent, #fff);
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+@media (hover: hover) and (min-width: 861px) { .proj-chevron { display: none; } }
+
+/* The language control, with a ground of its own. */
+.idioma-caja {
+  padding: 4px 6px; border-radius: 999px;
+  background: rgba(6, 7, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  backdrop-filter: blur(12px) saturate(1.1);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+}
+.idioma-btn {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 44px; min-height: 44px; padding: 0 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+.idioma-sep { display: block; width: 1px; height: 13px; background: rgba(255, 255, 255, 0.16); }
+@media (min-width: 768px) {
+  .idioma-caja { padding: 3px 5px; }
+  .idioma-btn { min-width: 34px; min-height: 32px; }
+}
+
+@media (max-width: 860px) {
+  /* The mirrored band kept two columns on a phone, because .flag.is-mirrored
+     outranks the .flag that the stacking rule was written on. Both names, so
+     the specificity matches and every band stacks. */
+  .flag, .flag.is-mirrored { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  /* The bar was transparent enough that headings slid through it. It reads
+     as a surface now, and only on the phone, where the content passes right
+     under it. */
+  .barra::before {
+    background: linear-gradient(180deg, rgba(4, 5, 12, 0.94) 0%, rgba(4, 5, 12, 0.86) 58%, rgba(4, 5, 12, 0) 100%);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.2);
+  }
+  .nav-link { letter-spacing: 0.06em; }
+
+  /* Reading sizes. Nothing in the body of a page drops under 13px. */
+  .proj-meta { font-size: 11px; letter-spacing: 0.1em; }
+  .proj-desc p { font-size: 15.5px; line-height: 1.65; }
+  .proj-desc .proj-proof { font-size: 11.5px; letter-spacing: 0.08em; }
+  .proj-link, .proj-status {
+    font-size: 12px;
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+  }
+  .flag-second { min-height: 44px; display: inline-flex; align-items: center; font-size: 12px; }
+  .flag-proof { font-size: 12.5px; line-height: 1.6; }
+  .flag-meta { font-size: 11.5px; }
+
+  /* The index row: the number, the name, the mark, and the meta on its own
+     line underneath. Tall enough to press without aiming. */
+  .proj-row { padding: 16px 4px; min-height: 64px; }
+  .proj-num { font-size: 12px; width: 28px; }
+  .proj-name { font-size: clamp(26px, 8vw, 34px); }
+  /* The row wraps on a phone, so the mark has to be told to stay on the
+     first line with the name. Otherwise it falls to a line of its own
+     under the meta and reads as a stray tick. */
+  .proj-chevron { order: 1; margin-left: auto; align-self: center; }
+  .proj-meta { order: 2; padding-left: 28px; }
+
+  /* The record: the filter is a row of real controls rather than three words
+     with a hairline under them. */
+  .cv-barra { margin-top: 26px; padding-top: 18px; gap: 14px; }
+  .cv-filtros { gap: 8px; width: 100%; }
+  .cv-filtro {
+    flex: 1 1 auto; padding: 0 12px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11.5px; letter-spacing: 0.12em;
+    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* The underline was the state on a wide screen. Here the pill carries it,
+     so the line would only be noise. */
+  .cv-filtro::after { display: none; }
+  .cv-filtro.is-on {
+    color: #06070e; background: #F5F5F7; border-color: #F5F5F7; font-weight: 600;
+  }
+  .cv-fechas { font-size: 11.5px; }
+  .cv-org { font-size: 12px; line-height: 1.5; }
+  .cv-tipo { font-size: 10.5px; }
+
+  /* The About gallery keeps its drama without taking two thirds of the page. */
+  .rep { padding: 13px 14px 15px; }
+  .rep-artista { font-size: 11px; letter-spacing: 0.14em; }
+  /* The transport was three 12px glyphs with no box around them. The glyph
+     stays the same size, the target around it does not. */
+  .rep .rep-mandos { gap: 2px; margin-right: -8px; }
+  .rep .rep-mandos button {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px;
+    color: rgba(255, 255, 255, 0.55);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* The chrome on a preview card, at a size a phone can read. */
+  .proj-preview-host { font-size: 11.5px; }
+  .proj-preview-flag { font-size: 10.5px; }
+
+  /* The skip link is the first thing a keyboard meets. Give it the same
+     box as everything else. */
+  .saltar { min-height: 44px; display: inline-flex; align-items: center; font-size: 13px; }
+}
+
+/* A phone in landscape is 400px tall. A console pinned to the bottom would
+   leave nothing to read, so it goes back into the page. */
+@media (max-width: 860px) and (orientation: landscape) and (max-height: 520px) {
+  .idioma { position: absolute; }
+}
+
+/* Room for the home indicator and the notch, on the pages that reach the
+   bottom of the glass. */
+@supports (padding: max(0px)) {
+  .barra { padding-top: max(0.75rem, env(safe-area-inset-top)); }
+}

@@ -39,21 +39,21 @@ export function Header() {
             animate={{ y: isGameActive ? -100 : 0, opacity: isGameActive ? 0 : 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className={cn(
-                "barra fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-6 md:px-12",
+                "barra fixed top-0 left-0 right-0 z-50 flex justify-center py-3 md:py-6 px-5 md:px-12",
                 isGameActive ? "pointer-events-none" : ""
             )}
         >
             <div className="flex items-center justify-between w-full max-w-[1400px] relative z-[1]">
                 {/* Symbol only — links home, no bar */}
-                <Link href="/" className="group relative shrink-0" aria-label="Home">
+                <Link href="/" className="group relative shrink-0 flex items-center min-h-[44px] pr-2" aria-label="Home">
                     <span className="font-serif text-2xl font-bold tracking-tighter text-stark-white">
                         MC
                     </span>
-                    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
                 </Link>
 
                 {/* Navigation - Ultra Minimal (tabs only) */}
-                <nav className="flex items-center gap-3 md:gap-12 overflow-x-auto no-scrollbar">
+                <nav className="flex items-center gap-2.5 md:gap-12 overflow-x-auto no-scrollbar">
                     {navItems.map((item) => {
                         const isActive = item.href === '/about'
                             ? pathname === '/about'
@@ -63,7 +63,10 @@ export function Header() {
                                 <Link
                                     href={item.href}
                                     className={cn(
-                                        "text-[9px] md:text-xs uppercase tracking-widest md:tracking-[0.2em] transition-all duration-300 relative block py-2 whitespace-nowrap",
+                                        // 9px with 30px of height was a target no thumb could
+                                        // find. The label is legible now and the box around it
+                                        // clears the 44px the hand needs.
+                                        "nav-link text-[11px] md:text-xs uppercase tracking-[0.08em] md:tracking-[0.2em] transition-all duration-300 relative flex items-center min-h-[44px] px-1 whitespace-nowrap",
                                         isActive ? "text-gold font-semibold" : "text-white/60 hover:text-white"
                                     )}
                                 >
