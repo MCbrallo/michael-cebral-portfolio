@@ -36,9 +36,11 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* The 0.8 zoom is a desktop framing device. Real mobile browsers handle CSS
-   `zoom` inconsistently (it differs from Chrome devtools emulation), so scope it
-   to >=768px and let phones render at natural scale. */
+/* Desktop framing. The real zoom is set by the inline script in layout.tsx,
+   proportional to the viewport so every desktop sees the same composition
+   regardless of resolution. This fixed 0.8 is only the no-JS fallback; the
+   script overwrites it with an inline style. Scoped to >=768px because real
+   mobile browsers handle CSS `zoom` inconsistently. */
 @media (min-width: 768px) {
   html {
     zoom: 0.8;

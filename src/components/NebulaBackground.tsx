@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Interactive deep-space nebula — WebGL fragment shader.
@@ -19,20 +20,46 @@ import { useEffect, useRef } from "react";
  */
 export function NebulaBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    // /about hands the whole viewport to the room, which is opaque and brings its
+    // own WebGL scene. Running this shader behind it would burn a second context
+    // and a full screen of fragment work that nobody ever sees.
+    const paused = usePathname() === "/about";
 
     useEffect(() => {
+        if (paused) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const gl = canvas.getContext("webgl", {
+        // A WebGL context is not forever. Drivers reset, phones reclaim memory on
+        // a backgrounded tab, and a browser only keeps a handful of contexts alive
+        // at once — open enough WebGL pages and it silently kills the oldest, which
+        // is this one. Without the two listeners below the canvas simply goes flat
+        // and never comes back, which is exactly the bug this used to have. So the
+        // whole scene is built inside start(), and start() can be run again.
+        let disposed = false;
+        let teardown: (() => void) | null = null;
+
+        const onLost = (e: Event) => {
+            e.preventDefault();          // required, or the context is never restored
+            if (teardown) { teardown(); teardown = null; }
+        };
+        const onRestored = () => {
+            if (disposed) return;
+            teardown = start();
+        };
+        canvas.addEventListener("webglcontextlost", onLost as EventListener);
+        canvas.addEventListener("webglcontextrestored", onRestored);
+
+        function start(): (() => void) | null {
+        const gl = canvas!.getContext("webgl", {
             antialias: false,
             preserveDrawingBuffer: false,
             powerPreference: "high-performance",
             desynchronized: true,
         });
         if (!gl) {
-            canvas.style.background = "#04050c";
-            return;
+            canvas!.style.background = "#04050c";
+            return null;
         }
 
         // Fixed scene parameters (Deep Space mood).
@@ -220,17 +247,34 @@ export function NebulaBackground() {
           gl_FragColor=vec4(col,1.0);
         }`;
 
+        let ok = true;
         function sh(type: number, src: string) {
             const o = gl!.createShader(type)!;
             gl!.shaderSource(o, src);
             gl!.compileShader(o);
-            if (!gl!.getShaderParameter(o, gl!.COMPILE_STATUS)) console.error(gl!.getShaderInfoLog(o));
+            if (!gl!.getShaderParameter(o, gl!.COMPILE_STATUS)) {
+                console.error(gl!.getShaderInfoLog(o));
+                ok = false;
+            }
             return o;
         }
         const prog = gl.createProgram()!;
         gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT));
-        gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG));
+        // Some older mobile GPUs have no highp in the fragment stage. Falling back
+        // to mediump is far better than a page with a black hole where the sky was.
+        let frag = sh(gl.FRAGMENT_SHADER, FRAG);
+        if (!ok) {
+            ok = true;
+            frag = sh(gl.FRAGMENT_SHADER, FRAG.replace("precision highp float;", "precision mediump float;"));
+        }
+        gl.attachShader(prog, frag);
         gl.linkProgram(prog);
+        if (!ok || !gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+            // The CSS background underneath is the same deep space colour, so the
+            // page still reads correctly with no shader at all.
+            canvas!.style.background = "#04050c";
+            return null;
+        }
         gl.useProgram(prog);
 
         const buf = gl.createBuffer();
@@ -268,7 +312,11 @@ export function NebulaBackground() {
             // Cap DPR at 1.35: this is an expensive per-pixel shader, and on 2x/3x
             // retina screens rendering it at 1.75x quadruples the fragment work for
             // no visible gain on a soft nebula. 1.35 keeps it crisp and much faster.
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.35) * qScale;
+            // Phones carry 3x screens and the smallest thermal budget, and a soft
+            // nebula gains nothing from the extra pixels: rendering it at 1x there
+            // is roughly two thirds less fragment work for no visible difference.
+            const cap = matchMedia("(pointer: coarse)").matches ? 1.0 : 1.35;
+            const dpr = Math.min(window.devicePixelRatio || 1, cap) * qScale;
             const vw = canvas!.clientWidth || window.innerWidth || 1;
             const vh = canvas!.clientHeight || window.innerHeight || 1;
             const w = Math.floor(vw * dpr), h = Math.floor(vh * dpr);
@@ -276,7 +324,7 @@ export function NebulaBackground() {
         }
         window.addEventListener("resize", resize);
         resize();
-        mouse.x = mouse.tx = canvas.width * 0.5; mouse.y = mouse.ty = canvas.height * 0.5;
+        mouse.x = mouse.tx = canvas!.width * 0.5; mouse.y = mouse.ty = canvas!.height * 0.5;
         pmx = mouse.x; pmy = mouse.y; lastPx = mouse.x; lastPy = mouse.y;
 
         // Map a pointer event into GL pixel space via the canvas rect (zoom-safe).
@@ -305,13 +353,18 @@ export function NebulaBackground() {
             warpTimer = window.setTimeout(() => { warpTarget = 0; }, 220);
         }
         triggerWarp();
-        const navLinks = Array.from(document.querySelectorAll("header a")) as HTMLElement[];
-        const onNav = () => triggerWarp();
-        navLinks.forEach((a) => a.addEventListener("click", onNav));
+        // Delegated, because the header links are queried once at mount and the
+        // header can render after this does, or swap its links on a client nav.
+        const onNav = (e: Event) => {
+            const el = e.target as Element | null;
+            if (el && el.closest && el.closest("header a")) triggerWarp();
+        };
+        document.addEventListener("click", onNav, true);
 
         const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
         let hidden = false;
         let raf = 0;
+        let running = false;
 
         function draw(t: number) {
             gl!.viewport(0, 0, canvas!.width, canvas!.height);
@@ -359,27 +412,48 @@ export function NebulaBackground() {
             raf = requestAnimationFrame(frame);
         }
 
+        // Coming back to the tab used to just call requestAnimationFrame again. If
+        // the browser fired visibilitychange twice, two loops ran at once: the
+        // nebula drifted at double speed and burned twice the GPU for it. One flag,
+        // one loop.
         const onVisibility = () => {
             hidden = document.hidden;
-            if (!hidden && !reduce) raf = requestAnimationFrame(frame);
+            if (hidden) { cancelAnimationFrame(raf); running = false; return; }
+            if (!reduce && !running) { running = true; raf = requestAnimationFrame(frame); }
         };
         document.addEventListener("visibilitychange", onVisibility);
 
         if (reduce) draw(12.0);
-        else raf = requestAnimationFrame(frame);
+        else { running = true; raf = requestAnimationFrame(frame); }
 
         return () => {
+            running = false;
             cancelAnimationFrame(raf);
             clearTimeout(warpTimer);
             window.removeEventListener("resize", resize);
             window.removeEventListener("pointermove", onMove);
             window.removeEventListener("pointerdown", onDown);
             document.removeEventListener("visibilitychange", onVisibility);
-            navLinks.forEach((a) => a.removeEventListener("click", onNav));
-            const ext = gl.getExtension("WEBGL_lose_context");
+            document.removeEventListener("click", onNav, true);
+        };
+        }
+
+        teardown = start();
+
+        return () => {
+            disposed = true;
+            if (teardown) teardown();
+            canvas.removeEventListener("webglcontextlost", onLost as EventListener);
+            canvas.removeEventListener("webglcontextrestored", onRestored);
+            const gl2 = canvas.getContext("webgl");
+            const ext = gl2 && gl2.getExtension("WEBGL_lose_context");
             if (ext) ext.loseContext();
         };
-    }, []);
+        // Re-runs when the route crosses in or out of /about, so the shader is
+        // released on the way in and rebuilt on the way out.
+    }, [paused]);
+
+    if (paused) return null;
 
     return (
         <canvas

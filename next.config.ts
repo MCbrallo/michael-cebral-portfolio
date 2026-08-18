@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     images: {
+        // The photo wall is the heaviest thing the site serves. AVIF lands about a
+        // third smaller than WebP on these, and Next falls back on its own for the
+        // browsers that cannot read it.
+        formats: ['image/avif', 'image/webp'],
         remotePatterns: [
             {
                 protocol: 'https',
