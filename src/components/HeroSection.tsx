@@ -88,11 +88,11 @@ export function HeroSection() {
         {!showGame && alienOn && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
         <section
-            // Exactly one viewport tall. The old 125vh made room for the
-            // projects band that used to scroll in under the hero; with the
-            // front page locked to a single screen it only served to push the
-            // quote attribution past the fold and guillotine it.
-            className="relative w-full h-screen flex flex-col justify-center items-center overflow-x-hidden"
+            // 125vh compensates the fixed desktop zoom of 0.8: viewport units
+            // are not scaled by zoom, so 125vh (1/0.8) is what paints as one
+            // full screen. Do not "simplify" it to 100vh; that guillotines the
+            // bottom fifth of the hero.
+            className="relative w-full min-h-screen md:min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden"
         >
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (

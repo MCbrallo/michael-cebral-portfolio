@@ -12,8 +12,11 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     // One viewport, no scroll: the front page is the hero and nothing else.
-    // The flagship work lives on /projects, one click away in the bar.
-    <div className="h-screen overflow-hidden">
+    // 125vh is not a typo: under the site's fixed desktop zoom of 0.8, viewport
+    // units are not compensated, so 100vh paints at 80 percent of the screen
+    // and 125vh (1/0.8) paints at exactly one screen. Phones carry no zoom and
+    // keep the plain screen height.
+    <div className="h-screen md:h-[125vh] overflow-hidden">
       <HeroSection />
     </div>
   );
