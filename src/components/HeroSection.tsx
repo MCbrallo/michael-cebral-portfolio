@@ -87,7 +87,13 @@ export function HeroSection() {
         <>
         {!showGame && alienOn && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
-        <section className="relative w-full min-h-screen md:min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden">
+        <section
+            // Exactly one viewport tall. The old 125vh made room for the
+            // projects band that used to scroll in under the hero; with the
+            // front page locked to a single screen it only served to push the
+            // quote attribution past the fold and guillotine it.
+            className="relative w-full h-screen flex flex-col justify-center items-center overflow-x-hidden"
+        >
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
                 <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
