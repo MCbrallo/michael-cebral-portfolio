@@ -36,13 +36,12 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* Desktop framing. The inline script in layout.tsx sets the real zoom,
-   proportional to the viewport so every desktop sees the same composition:
-   zoom = width / 3080, where 3080 is the layout width of the author's own
-   screen (2460 CSS px at Windows 100 percent scaling, divided by the old fixed
-   0.8). This block is only the no-JS fallback. Scoped to real mouse pointers:
-   a width gate alone also catches phones held in landscape, and there the zoom
-   shrank the room iframe to unreadable. */
+/* Desktop framing: fixed 0.8, full stop. A proportional-to-viewport zoom was
+   tried twice (2026-08-18 and 2026-08-19) and broke the author's own view both
+   times, because his machine's real metrics cannot be observed from here. Do
+   not attempt it again; browsers already give visitors Ctrl plus and minus.
+   Scoped to real mouse pointers: a width gate alone also catches phones held
+   in landscape, and there the zoom shrank the room iframe to unreadable. */
 @media (min-width: 768px) and (pointer: fine) {
   html {
     zoom: 0.8;
