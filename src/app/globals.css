@@ -42,17 +42,16 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* Desktop framing. The real zoom is proportional to the viewport (set by the
-   inline script in layout.tsx) so every desktop sees the same composition.
-   The first two attempts at this failed for a reason now understood: CSS zoom
-   does not scale viewport units, so changing the zoom away from 0.8 broke
-   every height that had been written as 125vh to compensate that exact 0.8.
-   The cure is --pantalla above, which the script keeps at 100vh divided by
-   the active zoom. This block is only the no-JS fallback, matching the old
-   fixed look. Scoped to real mouse pointers: a width gate alone also catches
-   phones held in landscape, where the zoom made the room iframe unreadable. */
+/* Desktop framing: fixed 0.8, final. Proportional zoom was attempted five
+   times in August 2026 and the owner ended it with: make it look like it
+   always did. Do not revisit. --pantalla stays 125vh here because CSS zoom
+   does not scale viewport units: 125vh times 0.8 is the one true screen.
+   Scoped to real mouse pointers: a width gate alone also catches phones held
+   in landscape, where the zoom made the room iframe unreadable. */
 @media (min-width: 768px) and (pointer: fine) {
-  html {
+  /* :root, not html: the base --pantalla is declared on :root, which outranks
+     a plain html selector, and the variable would silently stay at 100vh. */
+  :root {
     zoom: 0.8;
     --pantalla: 125vh;
   }

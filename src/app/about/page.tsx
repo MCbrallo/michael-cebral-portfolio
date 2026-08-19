@@ -69,7 +69,13 @@ export default function AboutPage() {
     useEffect(() => {
         const header = document.querySelector('header');
         if (!header) return;
-        const measure = () => setTop((header as HTMLElement).offsetHeight);
+        // the rendered bottom divided by the zoom IS the layout top, by
+        // construction: it survives entrance animations, padding transitions
+        // and every measurement race offsetHeight kept losing
+        const measure = () => {
+            const z = parseFloat(getComputedStyle(document.documentElement).zoom as string) || 1;
+            setTop(header.getBoundingClientRect().bottom / z);
+        };
         measure();
         // border-box: the bar animates its padding on mount, and padding does
         // not touch the content box, so the default observation never fires and
