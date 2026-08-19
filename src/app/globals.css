@@ -36,12 +36,12 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* Desktop framing. The real zoom is set by the inline script in layout.tsx,
-   proportional to the viewport so every desktop sees the same composition
-   regardless of resolution. This fixed 0.8 is only the no-JS fallback; the
-   script overwrites it with an inline style. Scoped to >=768px because real
-   mobile browsers handle CSS `zoom` inconsistently. */
-@media (min-width: 768px) {
+/* The 0.8 zoom is a desktop framing device. Scoped to real mouse pointers:
+   a width gate alone also catches phones held in landscape, and there the zoom
+   shrank the whole room iframe to unreadable. A proportional-to-viewport zoom
+   was tried on 2026-08-18 and reverted the next day: it resized the author's
+   own view, which is the one reference that must never move. */
+@media (min-width: 768px) and (pointer: fine) {
   html {
     zoom: 0.8;
   }
