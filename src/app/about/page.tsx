@@ -82,13 +82,13 @@ export default function AboutPage() {
             ro.observe(header);
         }
         window.addEventListener('resize', measure);
-        const t1 = setTimeout(measure, 300);
-        const t2 = setTimeout(measure, 1000);
+        // and a slow heartbeat: every observed race so far (padding animation,
+        // border-box quirks, ultra wide zoom factors) converges within one tick
+        const iv = setInterval(measure, 500);
         return () => {
             ro.disconnect();
             window.removeEventListener('resize', measure);
-            clearTimeout(t1);
-            clearTimeout(t2);
+            clearInterval(iv);
         };
     }, []);
 

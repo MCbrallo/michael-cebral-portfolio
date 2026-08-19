@@ -25,7 +25,7 @@ const places: Place[] = [
 
 export default function ExperiencesPage() {
     return (
-        <div className="min-h-screen text-white relative flex flex-col">
+        <div className="min-h-[var(--pantalla)] text-white relative flex flex-col">
             <main className="w-full max-w-[1080px] mx-auto px-6 md:px-14 pt-28 pb-16 relative z-[2]">
                 <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-gold/70 mb-4">
                     Field · Trajectory · Sector {String(places.length).padStart(2, "0")}

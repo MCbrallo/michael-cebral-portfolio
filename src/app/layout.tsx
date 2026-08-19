@@ -111,8 +111,20 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-screen font-sans overflow-x-hidden`}
+        className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-[var(--pantalla)] font-sans overflow-x-hidden`}
       >
+        {/* Proportional desktop zoom, third attempt, with the two prior
+            failures understood: (a) viewport units do not scale under zoom,
+            which --pantalla fixes, and (b) the design width is now empirical:
+            both failed constants back-solve to the author's main viewport
+            being about 1630 CSS px, which under the approved 0.8 look means a
+            2040 px composition. Touch devices are excluded on purpose. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){var D=2040;var fine=window.matchMedia&&matchMedia("(pointer: fine)").matches;function f(){var el=document.documentElement,w=window.innerWidth;if(!fine||w<768){el.style.zoom="";el.style.removeProperty("--pantalla");return;}var z=Math.min(1.9,Math.max(0.4,w/D));el.style.zoom=String(z);el.style.setProperty("--pantalla",(100/z)+"vh");}f();window.addEventListener("resize",f);})();',
+          }}
+        />
         <LanguageProvider>
           {/* Global Interactive Nebula Background (WebGL) */}
           <div className="fixed inset-0 z-[-1] pointer-events-none bg-[#04050c]">

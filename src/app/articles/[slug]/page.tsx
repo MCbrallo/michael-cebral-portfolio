@@ -33,7 +33,7 @@ export default async function ArticlePage({ params }: PageProps) {
     }
 
     return (
-        <div className="min-h-screen text-white relative overflow-hidden">
+        <div className="min-h-[var(--pantalla)] text-white relative overflow-hidden">
             <article className="max-w-[1200px] mx-auto px-6 md:px-12 pt-28 pb-20 relative z-10">
                 {/* Readability panel — keeps long-form prose legible over the live nebula */}
                 <div className="max-w-4xl mx-auto rounded-2xl border border-white/[0.08] bg-[#05060c]/70 backdrop-blur-md px-6 py-10 md:px-12 md:py-14">

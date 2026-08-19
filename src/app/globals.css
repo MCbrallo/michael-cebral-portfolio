@@ -2,6 +2,12 @@
 @plugin "@tailwindcss/typography";
 
 :root {
+  /* One real screen of height, whatever the zoom. CSS zoom does NOT scale
+     viewport units, so under zoom z a plain 100vh paints only z of the screen;
+     every full-height surface must use this variable instead. The inline
+     script in layout.tsx keeps it equal to 100vh divided by the active zoom. */
+  --pantalla: 100vh;
+
   /* Ultra-Premium Theme */
   --background: #050505;
   /* Pure, deep black */
@@ -36,15 +42,19 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* Desktop framing: fixed 0.8, full stop. A proportional-to-viewport zoom was
-   tried twice (2026-08-18 and 2026-08-19) and broke the author's own view both
-   times, because his machine's real metrics cannot be observed from here. Do
-   not attempt it again; browsers already give visitors Ctrl plus and minus.
-   Scoped to real mouse pointers: a width gate alone also catches phones held
-   in landscape, and there the zoom shrank the room iframe to unreadable. */
+/* Desktop framing. The real zoom is proportional to the viewport (set by the
+   inline script in layout.tsx) so every desktop sees the same composition.
+   The first two attempts at this failed for a reason now understood: CSS zoom
+   does not scale viewport units, so changing the zoom away from 0.8 broke
+   every height that had been written as 125vh to compensate that exact 0.8.
+   The cure is --pantalla above, which the script keeps at 100vh divided by
+   the active zoom. This block is only the no-JS fallback, matching the old
+   fixed look. Scoped to real mouse pointers: a width gate alone also catches
+   phones held in landscape, where the zoom made the room iframe unreadable. */
 @media (min-width: 768px) and (pointer: fine) {
   html {
     zoom: 0.8;
+    --pantalla: 125vh;
   }
 }
 

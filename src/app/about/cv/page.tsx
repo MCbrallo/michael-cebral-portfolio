@@ -26,7 +26,7 @@ export default function CVPage() {
     ];
 
     return (
-        <div className="min-h-screen text-white relative">
+        <div className="min-h-[var(--pantalla)] text-white relative">
             <div className="w-full max-w-[1180px] mx-auto px-6 md:px-14 pt-28 pb-20 relative z-[2]">
 
                 {/* Header, in the same register as Projects */}

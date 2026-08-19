@@ -52,7 +52,7 @@ export default function ContactPage() {
     }[language];
 
     return (
-        <section className="min-h-screen flex flex-col justify-center px-6 md:px-14 pt-28 pb-20">
+        <section className="min-h-[var(--pantalla)] flex flex-col justify-center px-6 md:px-14 pt-28 pb-20">
             <div className="w-full max-w-[1080px] mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 24 }}

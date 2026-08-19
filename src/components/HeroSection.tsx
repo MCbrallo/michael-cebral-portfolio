@@ -88,11 +88,10 @@ export function HeroSection() {
         {!showGame && alienOn && <WanderingAlien onCatch={() => setShowGame(true)} />}
         {showGame && <SpaceInvaders onClose={() => setShowGame(false)} />}
         <section
-            // 125vh compensates the fixed desktop zoom of 0.8: viewport units
-            // are not scaled by zoom, so 125vh (1/0.8) is what paints as one
-            // full screen. Do not "simplify" it to 100vh; that guillotines the
-            // bottom fifth of the hero.
-            className="relative w-full min-h-screen md:min-h-[125vh] flex flex-col justify-center items-center overflow-x-hidden"
+            // --pantalla paints as exactly one screen under the active zoom
+            // (viewport units are not scaled by zoom). Do not replace it with
+            // 100vh; that guillotines the bottom of the hero.
+            className="relative w-full min-h-screen md:min-h-[var(--pantalla)] flex flex-col justify-center items-center overflow-x-hidden"
         >
             {/* Faint cut-out portrait on the right, fading toward the centre */}
             {!showGame && (
