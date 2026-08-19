@@ -10,6 +10,11 @@ export function LanguageToggle() {
     const { language, setLanguage } = useLanguage();
     const pathname = usePathname();
 
+    // On /about the room owns every corner of the viewport: the floating pill
+    // landed exactly on Journey's country readout. There the switcher lives in
+    // the header bar instead (see Header.tsx).
+    if (pathname === "/about") return null;
+
 
     const langs = [
         { code: "en" as const, label: "EN" },

@@ -11,7 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 
 export function Header() {
     const pathname = usePathname();
-    const { t } = useLanguage();
+    const { t, language, setLanguage } = useLanguage();
 
     const navItems = [
         { name: t.nav.articles, href: "/projects" },
@@ -75,6 +75,26 @@ export function Header() {
                             </Magnetic>
                         );
                     })}
+                    {pathname === '/about' && (
+                        // The room fills the viewport below and uses all four
+                        // corners, so on this page the language switcher rides
+                        // in the bar instead of floating over the scene.
+                        <div className="flex items-center gap-1 md:gap-1.5 pl-2.5 md:pl-6 border-l border-white/15">
+                            {(['en', 'es', 'gl'] as const).map((code) => (
+                                <button
+                                    key={code}
+                                    onClick={() => setLanguage(code)}
+                                    aria-current={language === code ? 'true' : undefined}
+                                    className={cn(
+                                        "text-[10px] md:text-[11px] uppercase tracking-[0.14em] min-h-[44px] px-1 transition-colors duration-300 cursor-pointer",
+                                        language === code ? "text-gold font-semibold" : "text-white/45 hover:text-white"
+                                    )}
+                                >
+                                    {code.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </nav>
             </div>
         </motion.header>
