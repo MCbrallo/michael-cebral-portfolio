@@ -75,10 +75,10 @@ export function Header() {
                             </Magnetic>
                         );
                     })}
-                    {pathname === '/about' && (
-                        // The room fills the viewport below and uses all four
-                        // corners, so on this page the language switcher rides
-                        // in the bar instead of floating over the scene.
+                    {(
+                        // The language switcher lives in the bar on every page:
+                        // the old floating pill kept landing on content corners
+                        // (Journey's readout among them) and is gone for good.
                         <div className="flex items-center gap-1 md:gap-1.5 pl-2.5 md:pl-6 border-l border-white/15">
                             {(['en', 'es', 'gl'] as const).map((code) => (
                                 <button

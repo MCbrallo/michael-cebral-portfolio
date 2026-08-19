@@ -6,7 +6,6 @@ import { Header } from "@/components/Header";
 
 
 import { LanguageProvider } from "@/context/LanguageContext";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { SkipLink } from "@/components/SkipLink";
 import { NebulaBackground } from "@/components/NebulaBackground";
 
@@ -130,7 +129,6 @@ export default function RootLayout({
           </div>
 
           <SkipLink />
-          <LanguageToggle />
           <Header />
           <main
             id="contenido"

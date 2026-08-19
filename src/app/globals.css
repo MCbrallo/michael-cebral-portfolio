@@ -990,26 +990,6 @@ select:focus-visible {
 }
 @media (hover: hover) and (min-width: 861px) { .proj-chevron { display: none; } }
 
-/* The language control, with a ground of its own. */
-.idioma-caja {
-  padding: 4px 6px; border-radius: 999px;
-  background: rgba(6, 7, 14, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(12px) saturate(1.1);
-  backdrop-filter: blur(12px) saturate(1.1);
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
-}
-.idioma-btn {
-  display: flex; align-items: center; justify-content: center;
-  min-width: 44px; min-height: 44px; padding: 0 4px;
-  -webkit-tap-highlight-color: transparent;
-}
-.idioma-sep { display: block; width: 1px; height: 13px; background: rgba(255, 255, 255, 0.16); }
-@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
-  .idioma-caja { padding: 3px 5px; }
-  .idioma-btn { min-width: 34px; min-height: 32px; }
-}
-
 @media (max-width: 860px) {
   /* The mirrored band kept two columns on a phone, because .flag.is-mirrored
      outranks the .flag that the stacking rule was written on. Both names, so
@@ -1095,12 +1075,6 @@ select:focus-visible {
   .saltar { min-height: 44px; display: inline-flex; align-items: center; font-size: 13px; }
 }
 
-/* A phone in landscape is 400px tall. A console pinned to the bottom would
-   leave nothing to read, so it goes back into the page. */
-@media (max-width: 860px) and (orientation: landscape) and (max-height: 520px) {
-  .idioma { position: absolute; }
-}
-
 /* Room for the home indicator and the notch, on the pages that reach the
    bottom of the glass. */
 @supports (padding: max(0px)) {
@@ -1115,7 +1089,6 @@ select:focus-visible {
 @media (pointer: coarse) {
   .barra .nav-link,
   .barra a[aria-label="Home"] { min-height: 44px; }
-  .idioma-btn { min-width: 44px; min-height: 44px; }
   .saltar { min-height: 44px; display: inline-flex; align-items: center; }
   .proj-row { min-height: 56px; }
   .proj-link, .proj-status, .flag-second {
