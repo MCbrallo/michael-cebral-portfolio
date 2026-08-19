@@ -171,7 +171,7 @@ export function HeroSection() {
                     className="fixed bottom-3 left-4 md:bottom-5 md:left-6 z-[100] flex flex-col gap-2.5"
                 >
                     {alienOn && (
-                        <div className="relative pointer-events-none w-fit max-w-[280px] overflow-hidden rounded-md border border-red-500/25 bg-red-950/35 backdrop-blur-md py-2 pl-3.5 pr-4 shadow-[0_0_28px_-10px_rgba(239,68,68,0.6)]">
+                        <div className="alien-aviso relative pointer-events-none w-fit max-w-[280px] overflow-hidden rounded-md border border-red-500/25 bg-red-950/35 backdrop-blur-md py-2 pl-3.5 pr-4 shadow-[0_0_28px_-10px_rgba(239,68,68,0.6)]">
                             {/* pulsing left accent bar */}
                             <span className="absolute left-0 top-[5px] bottom-[5px] w-[3px] rounded-full bg-red-500/80 animate-pulse" />
                             <div className="flex items-center gap-2">

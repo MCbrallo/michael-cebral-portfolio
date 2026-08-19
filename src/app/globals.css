@@ -68,13 +68,22 @@
 }
 
 /* A phone held sideways carried desktop-size type crammed into 400px of
-   height. A gentle 0.7 gives it air; /about opts out at runtime so the room
-   iframe stays native (see about/page.tsx). */
+   height. 0.62 gives it air, the bar sheds its desktop paddings, and the
+   alien warning chip steps aside so the corner stops piling up; /about opts
+   out at runtime so the room iframe stays native (see about/page.tsx). */
 @media (pointer: coarse) and (orientation: landscape) and (min-width: 768px) {
   :root {
-    zoom: 0.7;
-    --pantalla: 142.86vh;
+    zoom: 0.62;
+    --pantalla: 161.3vh;
   }
+  .barra {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+  .barra .nav-link { min-height: 34px; }
+  .barra a[aria-label="Home"] { min-height: 34px; }
+  .barra a[aria-label="Home"] .font-serif { font-size: 1.2rem !important; }
+  .alien-aviso { display: none; }
 }
 
 /* The wandering alien at desktop size covered half a phone screen. */
