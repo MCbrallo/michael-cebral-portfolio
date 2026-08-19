@@ -115,16 +115,16 @@ export default function RootLayout({
       >
         {/* Proportional desktop zoom, third attempt, with the two prior
             failures understood: (a) viewport units do not scale under zoom,
-            which --pantalla fixes, and (b) D comes straight from the owner on
-            the /medida bench: the bench prints D = width over the sample
-            scale he chose, and this script applies width over D, so his
-            screen reproduces that exact choice by construction. To recalibrate,
-            send him to /medida again; never guess. Touch devices are excluded
-            on purpose. */}
+            which --pantalla fixes, and (b) calibration is self service now:
+            /medida saves the chosen D into this browser's localStorage and
+            this script obeys it, so each of the owner's machines carries its
+            own taste. Visitors without a stored value get the 2456 default,
+            which renders like the classic fixed 0.8 on a common 1920 screen.
+            Touch devices are excluded on purpose. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              '(function(){var D=1181;var fine=window.matchMedia&&matchMedia("(pointer: fine)").matches;function f(){var el=document.documentElement,w=window.innerWidth;if(!fine||w<768){el.style.zoom="";el.style.removeProperty("--pantalla");return;}var z=Math.min(3.5,Math.max(0.4,w/D));el.style.zoom=String(z);el.style.setProperty("--pantalla",(100/z)+"vh");}f();window.addEventListener("resize",f);})();',
+              '(function(){var st=0;try{st=+localStorage.getItem("mc_zoom_D")||0;}catch(e){}var D=(st>400&&st<6000)?st:2456;var fine=window.matchMedia&&matchMedia("(pointer: fine)").matches;function f(){var el=document.documentElement,w=window.innerWidth;if(!fine||w<768){el.style.zoom="";el.style.removeProperty("--pantalla");return;}var z=Math.min(3.5,Math.max(0.4,w/D));el.style.zoom=String(z);el.style.setProperty("--pantalla",(100/z)+"vh");}f();window.addEventListener("resize",f);})();',
           }}
         />
         <LanguageProvider>
