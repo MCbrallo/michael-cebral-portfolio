@@ -20,6 +20,10 @@ export function Header() {
         { name: t.nav.contact, href: "/contact" },
     ];
     const [isGameActive, setIsGameActive] = React.useState(false);
+    const [menuOpen, setMenuOpen] = React.useState(false);
+
+    // navigating closes the drawer
+    React.useEffect(() => { setMenuOpen(false); }, [pathname]);
 
     React.useEffect(() => {
         const handleStart = () => setIsGameActive(true);
@@ -53,7 +57,7 @@ export function Header() {
                 </Link>
 
                 {/* Navigation - Ultra Minimal (tabs only) */}
-                <nav className="flex items-center gap-2.5 md:gap-12 overflow-x-auto no-scrollbar">
+                <nav className="hidden md:flex items-center gap-2.5 md:gap-12 overflow-x-auto no-scrollbar">
                     {navItems.map((item) => {
                         const isActive = item.href === '/about'
                             ? pathname === '/about'
@@ -96,7 +100,57 @@ export function Header() {
                         </div>
                     )}
                 </nav>
+
+                {/* Phone bar: the languages stay visible and the sections fold
+                    behind a drawer, which is what a 390px width can afford. */}
+                <div className="flex md:hidden items-center gap-1">
+                    {(['en', 'es', 'gl'] as const).map((code) => (
+                        <button
+                            key={code}
+                            onClick={() => setLanguage(code)}
+                            aria-current={language === code ? 'true' : undefined}
+                            className={cn(
+                                "text-[10px] uppercase tracking-[0.12em] min-h-[44px] px-1.5 transition-colors duration-300",
+                                language === code ? "text-gold font-semibold" : "text-white/45"
+                            )}
+                        >
+                            {code.toUpperCase()}
+                        </button>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => setMenuOpen((v) => !v)}
+                        aria-expanded={menuOpen}
+                        aria-label="Menu"
+                        className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/80 text-xl"
+                    >
+                        {menuOpen ? '\u2715' : '\u2630'}
+                    </button>
+                </div>
             </div>
+
+            {menuOpen && (
+                <div className="absolute top-full left-0 right-0 md:hidden bg-[#060608]/95 backdrop-blur-md border-b border-white/10">
+                    {navItems.map((item) => {
+                        const isActive = item.href === '/about'
+                            ? pathname === '/about'
+                            : pathname.startsWith(item.href);
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                className={cn(
+                                    "block px-6 py-4 text-xs uppercase tracking-[0.2em] border-t border-white/5",
+                                    isActive ? "text-gold font-semibold" : "text-white/70"
+                                )}
+                            >
+                                {item.name}
+                            </Link>
+                        );
+                    })}
+                </div>
+            )}
         </motion.header>
     );
 }

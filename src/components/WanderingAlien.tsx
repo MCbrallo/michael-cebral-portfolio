@@ -212,6 +212,7 @@ export function WanderingAlien({ onCatch }: WanderingAlienProps) {
             >
                 <div
                     onClick={openDialog}
+                    className="alien-caja"
                     style={{ pointerEvents: "auto", cursor: "pointer", width: 99, height: 72, transform: "scale(0.8)", transformOrigin: "top left" }}
                     role="button"
                     aria-label="Alien"

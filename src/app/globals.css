@@ -57,6 +57,31 @@
   }
 }
 
+/* Very wide monitors got the 0.8 look shrunk into a sea of pixels. One
+   DISCRETE step, not the buried proportional experiment: 2600 sits far above
+   the owner's laptop viewport, so the laptop keeps its exact look. */
+@media (min-width: 2600px) and (pointer: fine) {
+  :root {
+    zoom: 1.2;
+    --pantalla: 83.34vh;
+  }
+}
+
+/* A phone held sideways carried desktop-size type crammed into 400px of
+   height. A gentle 0.7 gives it air; /about opts out at runtime so the room
+   iframe stays native (see about/page.tsx). */
+@media (pointer: coarse) and (orientation: landscape) and (min-width: 768px) {
+  :root {
+    zoom: 0.7;
+    --pantalla: 142.86vh;
+  }
+}
+
+/* The wandering alien at desktop size covered half a phone screen. */
+@media (pointer: coarse) {
+  .alien-caja { transform: scale(0.5) !important; }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

@@ -98,6 +98,30 @@ export default function AboutPage() {
         };
     }, []);
 
+    // A phone held sideways gets a global 0.7 zoom for the site's pages, but
+    // the room manages its own scale: here the zoom steps aside so the iframe
+    // stays native.
+    useEffect(() => {
+        const html = document.documentElement;
+        const mq = window.matchMedia('(pointer: coarse) and (orientation: landscape) and (min-width: 768px)');
+        const apply = () => {
+            if (mq.matches) {
+                html.style.zoom = '1';
+                html.style.setProperty('--pantalla', '100vh');
+            } else {
+                html.style.zoom = '';
+                html.style.removeProperty('--pantalla');
+            }
+        };
+        apply();
+        if (mq.addEventListener) mq.addEventListener('change', apply);
+        return () => {
+            html.style.zoom = '';
+            html.style.removeProperty('--pantalla');
+            if (mq.removeEventListener) mq.removeEventListener('change', apply);
+        };
+    }, []);
+
     // The room owns the viewport, so the page behind it must not scroll: on a
     // phone a stray page scroll would fight the film inside the frame.
     useEffect(() => {
