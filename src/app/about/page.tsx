@@ -49,7 +49,17 @@ export default function AboutPage() {
     const { language } = useLanguage();
     const [ready, setReady] = useState(false);
     const [top, setTop] = useState<number | null>(null);
+    // The room greets each browser once and remembers it. ?intro=1 on THIS
+    // page brings the greeter back out (for demos), by riding along into the
+    // iframe. Read after mount so the server render stays deterministic.
+    const [forceIntro, setForceIntro] = useState(false);
     const frameRef = useRef<HTMLIFrameElement>(null);
+
+    useEffect(() => {
+        try {
+            setForceIntro(new URLSearchParams(window.location.search).has('intro'));
+        } catch {}
+    }, []);
 
     // The bar is measured, never guessed. It changes height at the md breakpoint
     // and the site runs at html { zoom: 0.8 } on a desktop, so any number written
@@ -113,7 +123,7 @@ export default function AboutPage() {
             )}
             <iframe
                 ref={frameRef}
-                src={roomSrc(language)}
+                src={roomSrc(language) + (forceIntro ? '&intro=1' : '')}
                 title={TITLE[language] ?? TITLE.en}
                 onLoad={() => setReady(true)}
                 className="absolute inset-0 w-full h-full border-0"
