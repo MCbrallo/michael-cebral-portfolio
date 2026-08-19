@@ -114,6 +114,19 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-screen font-sans overflow-x-hidden`}
       >
+        {/* Proportional desktop zoom, second attempt, this time calibrated with
+            a real datum from the author: his display runs at Windows 100
+            percent scaling, so his window is ~2460 CSS px wide and the old
+            fixed 0.8 laid the site out ~3080 px wide. width / 3080 shows that
+            exact composition on every screen. Touch devices are excluded: on a
+            phone held in landscape this zoom once shrank the room iframe to
+            unreadable. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){var D=3080;var fine=window.matchMedia&&matchMedia("(pointer: fine)").matches;function f(){var w=window.innerWidth;var el=document.documentElement;if(!fine||w<768){el.style.zoom="";return;}el.style.zoom=String(Math.min(1.3,Math.max(0.4,w/D)));}f();window.addEventListener("resize",f);})();',
+          }}
+        />
         <LanguageProvider>
           {/* Global Interactive Nebula Background (WebGL) */}
           <div className="fixed inset-0 z-[-1] pointer-events-none bg-[#04050c]">

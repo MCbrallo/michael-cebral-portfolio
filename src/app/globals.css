@@ -36,11 +36,13 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.03);
 }
 
-/* The 0.8 zoom is a desktop framing device. Scoped to real mouse pointers:
+/* Desktop framing. The inline script in layout.tsx sets the real zoom,
+   proportional to the viewport so every desktop sees the same composition:
+   zoom = width / 3080, where 3080 is the layout width of the author's own
+   screen (2460 CSS px at Windows 100 percent scaling, divided by the old fixed
+   0.8). This block is only the no-JS fallback. Scoped to real mouse pointers:
    a width gate alone also catches phones held in landscape, and there the zoom
-   shrank the whole room iframe to unreadable. A proportional-to-viewport zoom
-   was tried on 2026-08-18 and reverted the next day: it resized the author's
-   own view, which is the one reference that must never move. */
+   shrank the room iframe to unreadable. */
 @media (min-width: 768px) and (pointer: fine) {
   html {
     zoom: 0.8;
