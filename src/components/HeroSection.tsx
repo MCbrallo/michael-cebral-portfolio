@@ -123,7 +123,7 @@ export function HeroSection() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} // Slow, elegant ease
-                    className="flex flex-col items-start gap-6 max-w-xl"
+                    className="hero-conjunto flex flex-col items-start gap-6 max-w-xl"
                 >
                     {/* Main Title - Playfair Display (Normal, Elegant) */}
                     <div className="pointer-events-auto" onClick={handleNextQuote}>
@@ -154,7 +154,7 @@ export function HeroSection() {
                     </div>
 
                     {/* Quotes - Bodoni (The "First Font") */}
-                    <div className="min-h-[110px] flex items-start justify-start mt-3 w-full max-w-md font-bodoni overflow-visible">
+                    <div className="hero-cita min-h-[110px] flex items-start justify-start mt-3 w-full max-w-md font-bodoni overflow-visible">
                         <QuotesDisplay quote={activeQuote} />
                     </div>
 
