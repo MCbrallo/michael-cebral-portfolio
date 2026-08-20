@@ -91,7 +91,7 @@ export function NebulaBackground() {
           float a=hash21(i), b=hash21(i+vec2(1,0)), c=hash21(i+vec2(0,1)), d=hash21(i+vec2(1,1));
           return mix(mix(a,b,f.x), mix(c,d,f.x), f.y);
         }
-        float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){ v+=a*vnoise(p); p=p*2.02+vec2(1.7,9.2); a*=0.5; } return v; }
+        float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<5;i++){ v+=a*vnoise(p); p=p*2.02+vec2(1.7,9.2); a*=0.5; } return v; }
         mat2 rot(float a){ float s=sin(a),c=cos(a); return mat2(c,-s,s,c); }
 
         vec3 starLayer(vec2 uv, vec2 par, float scale, float thresh, float pxSize, float Ry){
@@ -121,7 +121,9 @@ export function NebulaBackground() {
           float sy=exp(-abs(f.x)*240.0)*exp(-abs(f.y)*6.0);
           float tw=0.7+0.3*sin(u_time*0.8+h*40.0);
           float mag=pow((h-0.984)/0.016,2.0);
-          return vec3(0.9,0.94,1.0)*(core*1.2 + (sx+sy)*0.30*mag)*tw*(0.4+0.6*mag);
+          // real bright stars are not all white: a subtle blue/amber split
+          vec3 tint=mix(vec3(0.78,0.86,1.0), vec3(1.0,0.88,0.72), hash21(id+9.3));
+          return (tint*core*1.2 + mix(tint,vec3(1.0),0.5)*(sx+sy)*0.30*mag)*tw*(0.4+0.6*mag);
         }
 
         vec3 nebPal(float x, float mood){
@@ -244,6 +246,9 @@ export function NebulaBackground() {
           float vig=smoothstep(1.55,0.25,length(uv*vec2(R.y/R.x,1.0)));
           col*=0.55+0.55*vig;
           col*=1.0-0.30*exp(-dot(uv,uv)*0.5);
+          // 8 bits cannot hold these soft dark gradients without banding;
+          // one LSB of animated hash noise hides the steps completely
+          col += (hash21(gl_FragCoord.xy + fract(u_time)*61.7) - 0.5) * (1.5/255.0);
           gl_FragColor=vec4(col,1.0);
         }`;
 
@@ -309,13 +314,13 @@ export function NebulaBackground() {
         let warpTimer = 0;
 
         function resize() {
-            // Cap DPR at 1.35: this is an expensive per-pixel shader, and on 2x/3x
-            // retina screens rendering it at 1.75x quadruples the fragment work for
-            // no visible gain on a soft nebula. 1.35 keeps it crisp and much faster.
-            // Phones carry 3x screens and the smallest thermal budget, and a soft
-            // nebula gains nothing from the extra pixels: rendering it at 1x there
-            // is roughly two thirds less fragment work for no visible difference.
-            const cap = matchMedia("(pointer: coarse)").matches ? 1.0 : 1.35;
+            // The buffer must reach the PHYSICAL pixels or the stars smear: on
+            // desktop the site runs at CSS zoom 0.8, so clientWidth overstates
+            // the physical need and even dpr 1 has headroom, but retina screens
+            // need the real ratio. Cap at 2 (beyond that is invisible on a soft
+            // sky) and 1.5 on phones, whose 3x panels pay thermal for nothing.
+            // The FPS governor above is the safety valve when this is too much.
+            const cap = matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
             const dpr = Math.min(window.devicePixelRatio || 1, cap) * qScale;
             const vw = canvas!.clientWidth || window.innerWidth || 1;
             const vh = canvas!.clientHeight || window.innerHeight || 1;
@@ -390,10 +395,16 @@ export function NebulaBackground() {
             warpVal += (warpTarget - warpVal) * (warpTarget > warpVal ? 0.28 : 0.045);
             const now = performance.now(); const dt = now - lastT; lastT = now;
             dtAvg += (Math.min(dt, 60) - dtAvg) * 0.1; qCheck++;
+            // The recovery bar used to be <14ms, which a 60Hz screen can never
+            // produce (vsync floors the average at ~16.7ms): one janky moment
+            // degraded the sky for the whole session. Mount jank gets a grace
+            // period too, since the first seconds always stutter while the rest
+            // of the page initialises.
             if (qCheck > 45) {
                 qCheck = 0;
-                if (dtAvg > 23.0 && qScale > 0.6) { qScale = Math.max(0.6, qScale - 0.1); resize(); }
-                else if (dtAvg < 14.0 && qScale < 1.0) { qScale = Math.min(1.0, qScale + 0.1); resize(); }
+                if (now - start < 3000) { dtAvg = 16.7; }
+                else if (dtAvg > 23.0 && qScale > 0.75) { qScale = Math.max(0.75, qScale - 0.1); resize(); }
+                else if (dtAvg < 17.5 && qScale < 1.0) { qScale = Math.min(1.0, qScale + 0.1); resize(); }
             }
             if (t - lastPush > 0.045) {
                 const vx = mouse.x - lastPx, vy = mouse.y - lastPy;
