@@ -84,8 +84,9 @@
   .barra a[aria-label="Home"] { min-height: 38px; }
   .barra a[aria-label="Home"] .font-serif { font-size: 1.35rem !important; }
   .alien-aviso { display: none; }
-  /* the name rides a touch higher and the quote clears the alien switch */
-  .hero-conjunto { transform: translateY(-16px); }
+  /* the name rides a touch higher and to the right; the quote clears the
+     alien switch and inherits the 30px from its parent */
+  .hero-conjunto { transform: translate(30px, -16px); }
   .hero-cita { transform: translateY(-26px); }
 }
 
