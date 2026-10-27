@@ -167,11 +167,6 @@ export const projects: Project[] = [
         accent: "#cf5240",
         logo: "/projects/rakugaki.png",
         links: [{ kind: "play", href: "https://rakugaki-deploy.vercel.app" }],
-        proof: {
-            en: "Built solo in a single canvas file · online play · four elemental masters",
-            es: "Hecho en solitario en un único fichero de canvas · juego en línea · cuatro maestros elementales",
-            gl: "Feito en solitario nun único ficheiro de canvas · xogo en liña · catro mestres elementais",
-        },
     },
     {
         id: "copernicus-mosaic",
