@@ -19,9 +19,6 @@ export function ProjectsPage() {
         <div className="min-h-[var(--pantalla)] text-white relative flex flex-col">
             <main className="w-full max-w-[1180px] mx-auto px-6 md:px-14 pt-28 pb-16 relative z-[2]">
                 <div className="mb-9">
-                    <p className="font-sans text-[11px] tracking-[0.34em] uppercase text-white/40 mb-3">
-                        {t.projects.sector} {pad(projects.length)}
-                    </p>
                     <h1 className="title-shimmer font-serif text-5xl md:text-6xl font-bold tracking-tight py-2 leading-tight">
                         {t.projects.title}
                     </h1>

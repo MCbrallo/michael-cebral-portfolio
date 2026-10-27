@@ -37,7 +37,6 @@ interface Translations {
     /** Everything written on the projects index and on the home selection. */
     projects: {
         /** Followed by the project count, so the number stays out of the string. */
-        sector: string;
         title: string;
         subtitle: string;
         rest: string;
@@ -106,7 +105,6 @@ const translations: Record<Language, Translations> = {
             technical: "Technical"
         },
         projects: {
-            sector: "Selected Work · Sector",
             title: "Projects",
             subtitle: "Explorations at the intersection of biology, space science, communication and engineering.",
             rest: "The rest of the record",
@@ -168,7 +166,6 @@ const translations: Record<Language, Translations> = {
             technical: "Técnico"
         },
         projects: {
-            sector: "Trabajo seleccionado · Sector",
             title: "Proyectos",
             subtitle: "Exploraciones en el cruce entre la biología, la ciencia espacial, la comunicación y la ingeniería.",
             rest: "El resto del registro",
@@ -230,7 +227,6 @@ const translations: Record<Language, Translations> = {
             technical: "Técnico"
         },
         projects: {
-            sector: "Traballo escollido · Sector",
             title: "Proxectos",
             subtitle: "Exploracións no cruce entre a bioloxía, a ciencia espacial, a comunicación e a enxeñaría.",
             rest: "O resto do rexistro",
