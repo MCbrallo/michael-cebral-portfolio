@@ -42,6 +42,7 @@ const WEBS = [
     { id: 'roadmap', url: 'https://roadmap-project-five.vercel.app', espera: 9000 },
     { id: 'eoguessr', url: 'https://eoguessr.app/?embed=1', espera: 8000 },
     { id: 'rakugaki', url: 'https://rakugaki-deploy.vercel.app', espera: 7000 },
+    { id: 'copernicus-mosaic', url: 'https://copernicus-mosaic.netlify.app/?embed=1', espera: 12000 },
     { id: 'arquivonos', url: 'https://arquivonos.com/?embed=1', espera: 10000 },
     { id: 'hoxe', url: 'https://hoxe.org/?embed=1', espera: 6000 },
 ];

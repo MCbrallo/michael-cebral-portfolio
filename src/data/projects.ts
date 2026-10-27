@@ -219,6 +219,30 @@ export const projects: Project[] = [
         },
     },
     {
+        id: "copernicus-mosaic",
+        name: "COPERNICUS MOSAIC",
+        type: {
+            en: "Photomosaic · Earth Observation",
+            es: "Fotomosaico · Observación de la Tierra",
+            gl: "Fotomosaico · Observación da Terra",
+        },
+        year: "2026",
+        blurb: {
+            en: "Rebuilds any photo, word or logo out of real Sentinel-2 views of Earth. Every tile is a place you can find. Tap one and it tells you where it is, when the satellite passed over and what lies nearby. The library holds 53,767 views of 7,039 places, picked for beauty and variety. Words and logos can be drawn in coastlines, and every mosaic saves as a full resolution poster.",
+            es: "Reconstruye cualquier foto, palabra o logo con vistas reales de la Tierra tomadas por Sentinel-2. Cada tesela es un lugar que se puede encontrar. Pulsas una y te dice dónde está, cuándo pasó el satélite y qué hay cerca. La biblioteca reúne 53.767 vistas de 7.039 lugares, elegidas por su belleza y su variedad. Las palabras y los logos se pueden dibujar con líneas de costa, y cada mosaico se guarda como póster a resolución completa.",
+            gl: "Reconstrúe calquera foto, palabra ou logo con vistas reais da Terra tomadas por Sentinel-2. Cada tesela é un lugar que se pode atopar. Premes unha e dicche onde está, cando pasou o satélite e que hai preto. A biblioteca reúne 53.767 vistas de 7.039 lugares, escollidas pola súa beleza e variedade. As palabras e os logos pódense debuxar con liñas de costa, e cada mosaico gárdase como póster a resolución completa.",
+        },
+        accent: "#dd9461",
+        logo: "/projects/copernicus-mosaic.svg",
+        links: [{ kind: "live", href: "https://copernicus-mosaic.netlify.app" }],
+        previewUrl: "https://copernicus-mosaic.netlify.app/?embed=1",
+        proof: {
+            en: "53,767 Sentinel-2 views · 7,039 places · Copernicus open data",
+            es: "53.767 vistas de Sentinel-2 · 7.039 lugares · datos abiertos de Copernicus",
+            gl: "53.767 vistas de Sentinel-2 · 7.039 lugares · datos abertos de Copernicus",
+        },
+    },
+    {
         id: "arquivonos",
         name: "ARQUIVO NÓS",
         type: {
