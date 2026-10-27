@@ -1,7 +1,7 @@
 /**
  * Every visible string here comes in the three languages the site speaks.
  * Brand names, years and institution names stay as they are: translating
- * "Santander X Emprende" or "IAC 2026" would make them wrong, not clearer.
+ * "Space and Society" or "IAC 2026" would make them wrong, not clearer.
  */
 export type Texto = { en: string; es: string; gl: string };
 
@@ -83,24 +83,6 @@ export const projects: Project[] = [
         },
     },
     {
-        id: "ariadne",
-        name: "ARIADNE",
-        type: {
-            en: "Access to Space",
-            es: "Acceso al espacio",
-            gl: "Acceso ao espazo",
-        },
-        year: "2025",
-        blurb: {
-            en: "An independent advisory on access to space. Ariadne helps a research project find the right launch provider, orbital host and funding, and guides it through every step from first idea to flight.",
-            es: "Una asesoría independiente sobre acceso al espacio. Ariadne ayuda a un proyecto de investigación a encontrar el proveedor de lanzamiento, el alojamiento orbital y la financiación adecuados, y lo acompaña en cada paso desde la primera idea hasta el vuelo.",
-            gl: "Unha asesoría independente sobre acceso ao espazo. Ariadne axuda a un proxecto de investigación a atopar o provedor de lanzamento, o aloxamento orbital e o financiamento axeitados, e acompáñao en cada paso desde a primeira idea ata o voo.",
-        },
-        accent: "#f15a5a",
-        logo: "/projects/ariadne.svg",
-        links: [{ kind: "live", href: "https://ariadne-gamma.vercel.app" }],
-    },
-    {
         id: "abil",
         name: "ABIL",
         type: {
@@ -119,33 +101,6 @@ export const projects: Project[] = [
         links: [{ kind: "live", href: "https://clearesg.vercel.app" }],
     },
     {
-        id: "nexum",
-        name: "NEXUM",
-        type: {
-            en: "Accounting Software",
-            es: "Software de contabilidad",
-            gl: "Software de contabilidade",
-        },
-        year: "2025",
-        blurb: {
-            en: "Nexum Xestión is accounting software for small firms. It reached the Santander X Emprende finals and joined the startup incubator at the University of Santiago de Compostela. It is currently in beta.",
-            es: "Nexum Xestión es software de contabilidad para empresas pequeñas. Llegó a la final de Santander X Emprende y entró en la incubadora de startups de la Universidad de Santiago de Compostela. Está en fase beta.",
-            gl: "Nexum Xestión é software de contabilidade para empresas pequenas. Chegou á final de Santander X Emprende e entrou na incubadora de startups da Universidade de Santiago de Compostela. Está en fase beta.",
-        },
-        accent: "#e0ae3e",
-        logo: "/projects/nexum.png",
-        links: [{ kind: "live", href: "https://nexumxestion.com" }],
-        // The policy that would open this is written and committed, but the
-        // app has real users and was deliberately left undeployed, so the
-        // card holds the poster. Remove this line after it ships.
-        embeddable: false,
-        proof: {
-            en: "Santander X Emprende finalist · startup incubator at the University of Santiago de Compostela",
-            es: "Finalista de Santander X Emprende · incubadora de startups de la Universidad de Santiago de Compostela",
-            gl: "Finalista de Santander X Emprende · incubadora de startups da Universidade de Santiago de Compostela",
-        },
-    },
-    {
         id: "roadmap",
         name: "ROADMAP",
         type: {
@@ -155,9 +110,9 @@ export const projects: Project[] = [
         },
         year: "2026",
         blurb: {
-            en: "A communication plan for future Moon and Mars missions, with separate messaging for technical, institutional and public audiences. The web platform turns country level space capability data into long range communication plans. Accepted for presentation at IAC 2026.",
-            es: "Un plan de comunicación para las futuras misiones a la Luna y a Marte, con mensajes distintos para públicos técnicos, institucionales y generales. La plataforma web convierte datos de capacidad espacial por país en planes de comunicación a largo plazo. Aceptado para presentación en el IAC 2026.",
-            gl: "Un plan de comunicación para as futuras misións á Lúa e a Marte, con mensaxes distintas para públicos técnicos, institucionais e xerais. A plataforma web converte datos de capacidade espacial por país en plans de comunicación a longo prazo. Aceptado para presentación no IAC 2026.",
+            en: "A communication plan for future Moon and Mars missions, with separate messaging for technical, institutional and public audiences. The web platform turns country level space capability data into long range communication plans. It won the Space and Society category at IAC 2026.",
+            es: "Un plan de comunicación para las futuras misiones a la Luna y a Marte, con mensajes distintos para públicos técnicos, institucionales y generales. La plataforma web convierte datos de capacidad espacial por país en planes de comunicación a largo plazo. Ganó la categoría Space and Society en el IAC 2026.",
+            gl: "Un plan de comunicación para as futuras misións á Lúa e a Marte, con mensaxes distintas para públicos técnicos, institucionais e xerais. A plataforma web converte datos de capacidade espacial por país en plans de comunicación a longo prazo. Gañou a categoría Space and Society no IAC 2026.",
         },
         accent: "#6ea8ff",
         logo: "/projects/roadmap.svg",
@@ -165,9 +120,9 @@ export const projects: Project[] = [
         status: "ISU · IAC 2026",
         video: { id: "Q7CzyzCGLO0", start: 9547, kind: "talk" },
         proof: {
-            en: "Accepted for presentation at IAC 2026 · International Space University",
-            es: "Aceptado para presentación en el IAC 2026 · International Space University",
-            gl: "Aceptado para presentación no IAC 2026 · International Space University",
+            en: "Winner of the Space and Society category at IAC 2026 · International Space University",
+            es: "Ganador de la categoría Space and Society en el IAC 2026 · International Space University",
+            gl: "Gañador da categoría Space and Society no IAC 2026 · International Space University",
         },
     },
     {
@@ -228,9 +183,9 @@ export const projects: Project[] = [
         },
         year: "2026",
         blurb: {
-            en: "Rebuilds any photo, word or logo out of real Sentinel-2 views of Earth. Every tile is a place you can find. Tap one and it tells you where it is, when the satellite passed over and what lies nearby. The library holds 53,767 views of 7,039 places, picked for beauty and variety. Words and logos can be drawn in coastlines, and every mosaic saves as a full resolution poster.",
-            es: "Reconstruye cualquier foto, palabra o logo con vistas reales de la Tierra tomadas por Sentinel-2. Cada tesela es un lugar que se puede encontrar. Pulsas una y te dice dónde está, cuándo pasó el satélite y qué hay cerca. La biblioteca reúne 53.767 vistas de 7.039 lugares, elegidas por su belleza y su variedad. Las palabras y los logos se pueden dibujar con líneas de costa, y cada mosaico se guarda como póster a resolución completa.",
-            gl: "Reconstrúe calquera foto, palabra ou logo con vistas reais da Terra tomadas por Sentinel-2. Cada tesela é un lugar que se pode atopar. Premes unha e dicche onde está, cando pasou o satélite e que hai preto. A biblioteca reúne 53.767 vistas de 7.039 lugares, escollidas pola súa beleza e variedade. As palabras e os logos pódense debuxar con liñas de costa, e cada mosaico gárdase como póster a resolución completa.",
+            en: "Rebuilds any photo, word or logo out of 53,767 real Sentinel-2 views of Earth. Every tile is a place. Tap one and it tells you where it is and when the satellite passed over.",
+            es: "Reconstruye cualquier foto, palabra o logo con 53.767 vistas reales de la Tierra tomadas por Sentinel-2. Cada tesela es un lugar. Pulsas una y te dice dónde está y cuándo pasó el satélite.",
+            gl: "Reconstrúe calquera foto, palabra ou logo con 53.767 vistas reais da Terra tomadas por Sentinel-2. Cada tesela é un lugar. Premes unha e dicche onde está e cando pasou o satélite.",
         },
         accent: "#dd9461",
         logo: "/projects/copernicus-mosaic.svg",

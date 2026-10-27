@@ -32,13 +32,7 @@ const DESTINO = join(RAIZ, 'public', 'projects', 'previews');
  */
 const WEBS = [
     { id: 'all-in-space', url: 'https://allinspace.xyz/explore?embed=1', espera: 11000 },
-    { id: 'ariadne', url: 'https://ariadne-gamma.vercel.app', espera: 5000 },
     { id: 'abil', url: 'https://clearesg.vercel.app', espera: 5000 },
-    // NEXUM no lleva ?embed=1 porque su política de incrustación no está
-    // desplegada, así que nunca sale en vivo. Y no se le pasa el tutorial a
-    // base de pulsar: detrás no hay producto que enseñar sino un alta de
-    // cuenta, así que la diapositiva de bienvenida es el mejor póster honesto.
-    { id: 'nexum', url: 'https://nexumxestion.com', espera: 6000 },
     { id: 'roadmap', url: 'https://roadmap-project-five.vercel.app', espera: 9000 },
     { id: 'eoguessr', url: 'https://eoguessr.app/?embed=1', espera: 8000 },
     { id: 'rakugaki', url: 'https://rakugaki-deploy.vercel.app', espera: 7000 },
