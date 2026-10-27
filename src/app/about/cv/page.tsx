@@ -37,9 +37,6 @@ export default function CVPage() {
                     {/* Same component every other page title uses, so the CV
                         reads as one more tab and not as its own thing. */}
                     <DisplayTitle text={t.cv.title} />
-                    <p className="cv-resumen mt-5 text-white/60 text-[15px] md:text-base font-light leading-relaxed">
-                        {t.cv.summary}
-                    </p>
 
                     <div className="cv-barra">
                         <div className="cv-filtros">

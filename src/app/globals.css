@@ -718,7 +718,6 @@ select:focus-visible {
    measure for body text buried in a page but wrong for a lead: it broke after
    a third of the column and stacked seven short lines under the title. Wider
    lines, fewer of them, and the block stops pushing the record down. */
-.cv-resumen { max-width: 92ch; }
 .cv-seccion {
   font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em;
   line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(22px, 2.6vw, 34px);

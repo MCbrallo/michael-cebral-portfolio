@@ -60,7 +60,6 @@ interface Translations {
     cv: {
         eyebrow: string;
         title: string;
-        summary: string;
         filterAll: string;
         filterCareer: string;
         filterEducation: string;
@@ -126,8 +125,6 @@ const translations: Record<Language, Translations> = {
         cv: {
             eyebrow: "Strategic Communications and Outreach",
             title: "My career",
-            summary:
-                "Science communicator with a research background, focused on space science, Earth observation and public engagement. I explain technical and sensitive subjects, from environmental and emergency monitoring to security and defence, in clear language for expert, institutional and public audiences. I handle the full process, from tracking the news each morning to planning the message, writing the copy and building the visuals.",
             filterAll: "Everything",
             filterCareer: "Work",
             filterEducation: "Education",
@@ -190,8 +187,6 @@ const translations: Record<Language, Translations> = {
         cv: {
             eyebrow: "Comunicación estratégica y divulgación",
             title: "Mi trayectoria",
-            summary:
-                "Comunicador de ciencia con formación investigadora, centrado en ciencia espacial, observación de la Tierra y participación pública. Explico asuntos técnicos y delicados, desde la vigilancia ambiental y de emergencias hasta la seguridad y la defensa, en lenguaje claro para públicos expertos, institucionales y generales. Me ocupo del proceso entero, desde seguir las noticias cada mañana hasta planificar el mensaje, escribir el texto y construir los visuales.",
             filterAll: "Todo",
             filterCareer: "Trabajo",
             filterEducation: "Formación",
@@ -254,8 +249,6 @@ const translations: Record<Language, Translations> = {
         cv: {
             eyebrow: "Comunicación estratéxica e divulgación",
             title: "A miña traxectoria",
-            summary:
-                "Comunicador de ciencia con formación investigadora, centrado en ciencia espacial, observación da Terra e participación pública. Explico asuntos técnicos e delicados, desde a vixilancia ambiental e de emerxencias ata a seguridade e a defensa, en linguaxe clara para públicos expertos, institucionais e xerais. Ocúpome do proceso enteiro, desde seguir as novas cada mañá ata planificar a mensaxe, escribir o texto e construír os visuais.",
             filterAll: "Todo",
             filterCareer: "Traballo",
             filterEducation: "Formación",
