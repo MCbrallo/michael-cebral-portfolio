@@ -204,9 +204,9 @@ export const projects: Project[] = [
         },
         year: "2025",
         blurb: {
-            en: "HOXE is a polished, editorial historical timeline. It lets you relive the exact events that shaped today, across history and across space.",
-            es: "HOXE es una línea del tiempo histórica de acabado editorial. Permite revivir los hechos exactos que dieron forma al día de hoy, a lo largo de la historia y del espacio.",
-            gl: "HOXE é unha liña do tempo histórica de acabado editorial. Permite revivir os feitos exactos que deron forma ao día de hoxe, ao longo da historia e do espazo.",
+            en: "A daily briefing on the day you are living. Open it and you get what happened on this exact date, across history and across space, written the way an editor would write it and not the way a database prints it. Every entry is checked by hand, dated properly, given an image that truly matches it and paired with the music that was playing that week. A list of terms that must never appear before their time stops anachronisms before anything goes in. It reads in English, Spanish and Galician, keeps an archive and the days you save, and runs on the web and as an Android app.",
+            es: "Un resumen diario del día que estás viviendo. Al abrirlo encuentras lo que pasó en esta misma fecha, a lo largo de la historia y del espacio, escrito como lo escribiría un editor y no como lo imprime una base de datos. Cada entrada se revisa a mano, se data con cuidado, lleva una imagen que de verdad le corresponde y la música que sonaba esa semana. Una lista de términos que nunca pueden aparecer antes de su época frena los anacronismos antes de que entren. Se lee en inglés, castellano y gallego, guarda un archivo y los días que marcas, y funciona en la web y como app para Android.",
+            gl: "Un resumo diario do día que estás a vivir. Ao abrilo atopas o que pasou nesta mesma data, ao longo da historia e do espazo, escrito como o escribiría un editor e non como o imprime unha base de datos. Cada entrada revísase a man, dátase con coidado, leva unha imaxe que de verdade lle corresponde e a música que soaba esa semana. Unha lista de termos que nunca poden aparecer antes da súa época frea os anacronismos antes de que entren. Lese en galego, castelán e inglés, garda un arquivo e os días que marcas, e funciona na web e como app para Android.",
         },
         accent: "#d8b878",
         logo: "hoxe",
