@@ -157,8 +157,8 @@ export const entradas: Entrada[] = [
         lugar: "Stockholm, Sweden",
         fechas: { en: "Nov 2023 to Jun 2024", es: "Nov 2023 a Jun 2024", gl: "Nov 2023 a Xuñ 2024" },
         orden: 202311,
-        logo: "/logos/oficial/ki.svg",
-        acento: "#d9635a",
+        logo: "/logos/oficial/tedx.png",
+        acento: "#e62b1e",
         prueba: {
             en: "A TEDx event of 2,500 people · one visual identity across everything",
             es: "Un TEDx de 2.500 personas · una identidad visual para todo",
@@ -324,8 +324,8 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Nov 2022 to Jul 2023", es: "Nov 2022 a Jul 2023", gl: "Nov 2022 a Xul 2023" },
         orden: 202211,
-        logo: "/logos/oficial/usc.svg",
-        acento: "#9db35c",
+        logo: "/logos/oficial/cimus.png",
+        acento: "#56a419",
         cuerpo: {
             en: [
                 "Investigated novel low molecular weight compounds for treating rheumatoid arthritis using gene expression assays (qPCR).",
@@ -413,8 +413,8 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Sep to Nov 2022", es: "Sep a Nov 2022", gl: "Set a Nov 2022" },
         orden: 202209,
-        logo: "/logos/oficial/usc.svg",
-        acento: "#9db35c",
+        logo: "/logos/oficial/cimus.png",
+        acento: "#56a419",
         cuerpo: {
             en: [
                 "Studied prion biology and protein misfolding diseases.",
@@ -447,8 +447,8 @@ export const entradas: Entrada[] = [
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Feb to Jun 2022", es: "Feb a Jun 2022", gl: "Feb a Xuñ 2022" },
         orden: 202202,
-        logo: "/logos/oficial/usc.svg",
-        acento: "#9db35c",
+        logo: "/logos/oficial/cimus.png",
+        acento: "#56a419",
         cuerpo: {
             en: [
                 "Developed cell culture skills with suspension and adherent cells.",
