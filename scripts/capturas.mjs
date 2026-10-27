@@ -32,7 +32,6 @@ const DESTINO = join(RAIZ, 'public', 'projects', 'previews');
  */
 const WEBS = [
     { id: 'all-in-space', url: 'https://allinspace.xyz/explore?embed=1', espera: 11000 },
-    { id: 'abil', url: 'https://clearesg.vercel.app', espera: 5000 },
     { id: 'roadmap', url: 'https://roadmap-project-five.vercel.app', espera: 9000 },
     { id: 'eoguessr', url: 'https://eoguessr.app/?embed=1', espera: 8000 },
     { id: 'rakugaki', url: 'https://rakugaki-deploy.vercel.app', espera: 7000 },

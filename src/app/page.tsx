@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/HeroSection";
    front page, and setting one here would append the suffix twice. */
 export const metadata: Metadata = {
   description:
-    "Michael Cebral, science communicator working between Earth observation and space. Eight projects built and running, from a global space market platform to a territorial archive of Galicia.",
+    "Michael Cebral, science communicator working between Earth observation and space. Seven projects built and running, from a global space market platform to a territorial archive of Galicia.",
   alternates: { canonical: "/" },
 };
 

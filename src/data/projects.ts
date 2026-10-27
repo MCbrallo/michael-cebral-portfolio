@@ -83,24 +83,6 @@ export const projects: Project[] = [
         },
     },
     {
-        id: "abil",
-        name: "ABIL",
-        type: {
-            en: "Environmental Scoring",
-            es: "Puntuación ambiental",
-            gl: "Puntuación ambiental",
-        },
-        year: "2025",
-        blurb: {
-            en: "ABIL condenses satellite readings into a single environmental score for any site, made for risk, insurance, investment and ESG. Every score links back to the measurement behind it and the regulation it answers to, so people without a remote sensing background can still use it.",
-            es: "ABIL condensa lecturas de satélite en una única nota ambiental para cualquier emplazamiento, pensada para riesgo, seguros, inversión y ESG. Cada nota enlaza con la medición que hay detrás y con la norma a la que responde, así que también la puede usar quien no venga de la teledetección.",
-            gl: "ABIL condensa lecturas de satélite nunha única nota ambiental para calquera emprazamento, pensada para risco, seguros, investimento e ESG. Cada nota enlaza coa medición que hai detrás e coa norma á que responde, así que tamén a pode usar quen non veña da teledetección.",
-        },
-        accent: "#8ed973",
-        logo: "/projects/abil.svg",
-        links: [{ kind: "live", href: "https://clearesg.vercel.app" }],
-    },
-    {
         id: "roadmap",
         name: "ROADMAP",
         type: {
