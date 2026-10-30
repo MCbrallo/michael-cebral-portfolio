@@ -53,6 +53,16 @@ interface Translations {
         /** Badge on the preview: the site is running, or it is a still. */
         flagLive: string;
         flagPreview: string;
+        /** The projects console: cartridges and a two screen device. */
+        consoleTitle: string;
+        consoleHint: string;
+        consoleEmpty: string;
+        consoleOpen: string;
+        consoleEject: string;
+        /** {name} is replaced with the project name. */
+        consoleInsert: string;
+        consoleLoaded: string;
+        consoleKeys: string;
     };
     /** The CV page. Its own section: it used to borrow the About copy, which
      *  described an earlier version of the work. */
@@ -119,6 +129,14 @@ const translations: Record<Language, Translations> = {
             videoTalk: "Watch the presentation",
             flagLive: "Live",
             flagPreview: "Preview",
+            consoleTitle: "My projects",
+            consoleHint: "Insert a cartridge to explore",
+            consoleEmpty: "Insert a cartridge",
+            consoleOpen: "Open the site",
+            consoleEject: "Eject the cartridge",
+            consoleInsert: "{name}. Insert it into the console",
+            consoleLoaded: "{name} loaded",
+            consoleKeys: "It also works with a click or with the keyboard. Tab to a cartridge and press Enter.",
         },
         cv: {
             eyebrow: "Strategic Communications and Outreach",
@@ -180,6 +198,14 @@ const translations: Record<Language, Translations> = {
             videoTalk: "Ver la presentación",
             flagLive: "En vivo",
             flagPreview: "Vista previa",
+            consoleTitle: "Mis proyectos",
+            consoleHint: "Inserta un cartucho para explorar",
+            consoleEmpty: "Inserta un cartucho",
+            consoleOpen: "Abrir web",
+            consoleEject: "Expulsar el cartucho",
+            consoleInsert: "{name}. Insértalo en la consola",
+            consoleLoaded: "{name} cargado",
+            consoleKeys: "También funciona con un clic o con el teclado. Tabula hasta un cartucho y pulsa Intro.",
         },
         cv: {
             eyebrow: "Comunicación estratégica y divulgación",
@@ -241,6 +267,14 @@ const translations: Record<Language, Translations> = {
             videoTalk: "Ver a presentación",
             flagLive: "En vivo",
             flagPreview: "Vista previa",
+            consoleTitle: "Os meus proxectos",
+            consoleHint: "Insire un cartucho para explorar",
+            consoleEmpty: "Insire un cartucho",
+            consoleOpen: "Abrir a web",
+            consoleEject: "Expulsar o cartucho",
+            consoleInsert: "{name}. Insíreo na consola",
+            consoleLoaded: "{name} cargado",
+            consoleKeys: "Tamén funciona cun clic ou co teclado. Tabula ata un cartucho e preme Intro.",
         },
         cv: {
             eyebrow: "Comunicación estratéxica e divulgación",

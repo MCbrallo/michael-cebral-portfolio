@@ -19,6 +19,13 @@ export type Project = {
     accent: string;
     /** Logo image in /public/projects, or "hoxe" for the inline editorial mark. */
     logo: string;
+    /**
+     * How the logo prints on paper: on the cartridge sticker and on the ink
+     * screen of the projects console. "ink" turns a light logo into black
+     * ink, since a white mark on white paper disappears. Left out, the logo
+     * keeps its own colours.
+     */
+    markOnPaper?: "ink" | "color";
     links?: ProjectLink[];
     /** Institutions and acronyms, left untranslated on purpose. */
     status?: string;
@@ -30,6 +37,13 @@ export type Project = {
      * Turn it back to true once the site names mcebral.com as a frame ancestor.
      */
     embeddable?: boolean;
+    /**
+     * The origins the site lets frame it, copied from the frame-ancestors
+     * rule of its own Content-Security-Policy. Left out, the site sets no
+     * limit. Served from anywhere else, the browser blocks the frame and logs
+     * an error, so the console keeps the screenshot and never asks.
+     */
+    frameAncestors?: string[];
     /**
      * What the preview loads, when that is not simply the first link. Sites
      * that greet a first time visitor with a tour or a language gate take
@@ -51,6 +65,12 @@ export type Project = {
      */
     proof?: Texto;
 };
+
+/** Whether a page served from `origin` may show the project's site in a frame. */
+export function canFrameFrom(p: Project, origin: string): boolean {
+    if (p.embeddable === false) return false;
+    return !p.frameAncestors || p.frameAncestors.includes(origin);
+}
 
 // ── EDIT PROJECTS HERE ────────────────────────────────────────────────────
 // The card previews the first link, using public/projects/previews/<id>.jpg
@@ -75,6 +95,7 @@ export const projects: Project[] = [
         links: [{ kind: "live", href: "https://allinspace.xyz/explore" }],
         video: { id: "3HKsfA4ykD8", start: 321, kind: "pitch" },
         previewUrl: "https://allinspace.xyz/explore?embed=1",
+        frameAncestors: ["https://mcebral.com", "https://www.mcebral.com", "https://michael-cebral-site.vercel.app", "http://localhost:3000"],
         flagship: true,
         proof: {
             en: "200 countries profiled · 1,088 companies mapped · every figure carries its source",
@@ -98,6 +119,7 @@ export const projects: Project[] = [
         },
         accent: "#6ea8ff",
         logo: "/projects/roadmap.svg",
+        markOnPaper: "ink",
         links: [{ kind: "live", href: "https://roadmap-project-five.vercel.app" }],
         status: "ISU · IAC 2026",
         video: { id: "Q7CzyzCGLO0", start: 9547, kind: "talk" },
@@ -125,6 +147,7 @@ export const projects: Project[] = [
         logo: "/projects/eoguessr.svg",
         links: [{ kind: "live", href: "https://eoguessr.app" }],
         previewUrl: "https://eoguessr.app/?embed=1",
+        frameAncestors: ["https://mcebral.com", "https://www.mcebral.com", "https://michael-cebral-site.vercel.app", "https://mcebralloportfolio.vercel.app"],
         flagship: true,
         proof: {
             en: "Copernicus and NASA open data · built solo · playable in English, Spanish and Galician",
@@ -148,6 +171,7 @@ export const projects: Project[] = [
         },
         accent: "#cf5240",
         logo: "/projects/rakugaki.png",
+        markOnPaper: "ink",
         links: [{ kind: "play", href: "https://rakugaki-deploy.vercel.app" }],
     },
     {
@@ -185,6 +209,7 @@ export const projects: Project[] = [
         },
         accent: "#8fa76b",
         logo: "/projects/arquivonos.svg",
+        markOnPaper: "ink",
         links: [{ kind: "live", href: "https://arquivonos.com" }],
         previewUrl: "https://arquivonos.com/?embed=1",
         flagship: true,
@@ -210,6 +235,7 @@ export const projects: Project[] = [
         },
         accent: "#d8b878",
         logo: "hoxe",
+        markOnPaper: "ink",
         links: [{ kind: "live", href: "https://hoxe.org" }],
         previewUrl: "https://hoxe.org/?embed=1",
     },
