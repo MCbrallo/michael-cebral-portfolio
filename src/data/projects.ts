@@ -16,9 +16,9 @@ export type Project = {
     year: string;
     blurb: Texto;
     /**
-     * The description on the console's ink screen. Five lines at most on a
-     * phone, so it says what the thing is and stops. Left out, the console
-     * falls back to the blurb and steps its type down to fit.
+     * The description on the console's ink screen, written to fill exactly
+     * five lines of it in every language. Left out, the console falls back
+     * to the blurb, steps its type down and cuts it at the fifth line.
      */
     brief?: Texto;
     /** Primary brand colour, used for the title, halo and card accent. */
@@ -97,9 +97,9 @@ export const projects: Project[] = [
             gl: "Unha plataforma global de intelixencia de mercado espacial. Perfila máis de 200 países e cartografía 1.088 empresas en cinco sectores, con seguimento orbital en 3D e un boletín diario de novas e lanzamentos escrito en linguaxe chá.",
         },
         brief: {
-            en: "A global space market intelligence platform. It profiles more than 200 countries and maps 1,088 companies, with 3D orbital tracking and a daily feed in plain language.",
-            es: "Una plataforma global de inteligencia de mercado espacial. Perfila más de 200 países y cartografía 1.088 empresas, con seguimiento orbital en 3D y un boletín diario en lenguaje llano.",
-            gl: "Unha plataforma global de intelixencia de mercado espacial. Perfila máis de 200 países e cartografía 1.088 empresas, con seguimento orbital en 3D e un boletín diario en linguaxe chá.",
+            en: "The space economy on one screen. More than 200 countries profiled, 1,088 companies mapped, orbits tracked in 3D and a daily briefing in plain language. Every figure carries its source.",
+            es: "La economía espacial en una sola pantalla. Más de 200 países perfilados, 1.088 empresas cartografiadas, órbitas en 3D y un boletín diario escrito en lenguaje llano. Cada cifra lleva su fuente.",
+            gl: "A economía espacial nunha soa pantalla. Máis de 200 países perfilados, 1.088 empresas cartografadas, órbitas en 3D e un boletín diario escrito en linguaxe chá. Cada cifra leva a súa fonte.",
         },
         accent: "#b48bff",
         logo: "/projects/all-in-space.svg",
@@ -129,9 +129,9 @@ export const projects: Project[] = [
             gl: "Un plan de comunicación para as futuras misións á Lúa e a Marte, con mensaxes distintas para públicos técnicos, institucionais e xerais. A plataforma web converte datos de capacidade espacial por país en plans de comunicación a longo prazo. Gañou a categoría Space and Society no IAC 2026.",
         },
         brief: {
-            en: "A communication plan for future Moon and Mars missions, with its own message for technical, institutional and public audiences. It won the Space and Society category at IAC 2026.",
-            es: "Un plan de comunicación para las futuras misiones a la Luna y a Marte, con mensajes para públicos técnicos, institucionales y generales. Ganó la categoría Space and Society en el IAC 2026.",
-            gl: "Un plan de comunicación para as futuras misións á Lúa e a Marte, con mensaxes para públicos técnicos, institucionais e xerais. Gañou a categoría Space and Society no IAC 2026.",
+            en: "How to talk about going to the Moon and Mars, country by country. A web platform turns space capability data into long range communication plans. Winner of Space and Society at IAC 2026.",
+            es: "Cómo contar las misiones a la Luna y a Marte, país por país. Una plataforma web convierte datos de capacidad espacial en planes de comunicación a largo plazo. Ganó Space and Society en el IAC 2026.",
+            gl: "Como contar as misións á Lúa e a Marte, país por país. Unha plataforma web converte datos de capacidade espacial en plans de comunicación a longo prazo. Gañou Space and Society no IAC 2026.",
         },
         accent: "#6ea8ff",
         logo: "/projects/roadmap.svg",
@@ -160,9 +160,9 @@ export const projects: Project[] = [
             gl: "Un xogo diario e gratuíto que ensina a ler o planeta desde o espazo. Sóltate nun lugar real e agochado da Terra e déixache desbloquear capas de sinal de Copernicus e a NASA, vexetación, auga, relevo, calor e luces nocturnas, para razoar onde estás e cravar o alfinete. Feito en solitario con datos abertos e xogable en galego, castelán e inglés.",
         },
         brief: {
-            en: "A free daily game that teaches you to read the planet from space. You land on a hidden place on Earth and use Copernicus and NASA layers to find it and drop a pin.",
-            es: "Un juego diario y gratuito que enseña a leer el planeta desde el espacio. Apareces en un lugar oculto de la Tierra y usas capas de Copernicus y la NASA para encontrarlo.",
-            gl: "Un xogo diario e gratuíto que ensina a ler o planeta desde o espazo. Apareces nun lugar agochado da Terra e usas capas de Copernicus e a NASA para atopalo.",
+            en: "A daily game that teaches you to read the planet from space. You land somewhere hidden on Earth and unlock Copernicus and NASA layers, water, heat and night lights, until you can drop the pin.",
+            es: "Un juego diario que enseña a leer el planeta desde el espacio. Apareces en un lugar oculto de la Tierra y desbloqueas capas de Copernicus y la NASA, agua, calor y luces nocturnas, hasta clavar el alfiler.",
+            gl: "Un xogo diario que ensina a ler o planeta desde o espazo. Apareces nun lugar agochado da Terra e desbloqueas capas de Copernicus e a NASA, auga, calor e luces nocturnas, ata cravar o alfinete.",
         },
         accent: "#4ec1ce",
         logo: "/projects/eoguessr.svg",
@@ -191,9 +191,9 @@ export const projects: Project[] = [
             gl: "Un xogo de loita un contra un onde cada ataque é unha pincelada: lanzas feitizos debuxando caligrafía sumi-e en tempo real e pelexas en areas de tinta pintadas a man. Feito en solitario nun único ficheiro de canvas, con titorial en vivo, xogo en liña e catro mestres elementais.",
         },
         brief: {
-            en: "A one on one fighting game where every attack is a brushstroke. You cast spells by drawing sumi-e calligraphy in real time and duel in hand painted ink arenas.",
-            es: "Un juego de lucha uno contra uno donde cada ataque es una pincelada. Lanzas hechizos dibujando caligrafía sumi-e en tiempo real y peleas en arenas de tinta pintadas a mano.",
-            gl: "Un xogo de loita un contra un onde cada ataque é unha pincelada. Lanzas feitizos debuxando caligrafía sumi-e en tempo real e pelexas en areas de tinta pintadas a man.",
+            en: "A fighting game where every attack is a brushstroke. You cast spells by drawing sumi-e calligraphy in real time, in hand painted ink arenas. Four elemental masters and online play, built solo.",
+            es: "Un juego de lucha donde cada ataque es una pincelada. Lanzas hechizos dibujando caligrafía sumi-e en tiempo real, en arenas de tinta pintadas a mano. Cuatro maestros elementales y juego en línea.",
+            gl: "Un xogo de loita onde cada ataque é unha pincelada. Lanzas feitizos debuxando caligrafía sumi-e en tempo real, en areas de tinta pintadas a man. Catro mestres elementais e xogo en liña.",
         },
         accent: "#cf5240",
         logo: "/projects/rakugaki.png",
@@ -215,9 +215,9 @@ export const projects: Project[] = [
             gl: "Reconstrúe calquera foto, palabra ou logo con vistas reais da Terra tomadas por Sentinel-2. Cada tesela é un lugar que se pode atopar. Premes unha e dicche onde está, cando pasou o satélite e que hai preto. A biblioteca reúne 53.767 vistas de 7.039 lugares, escollidas pola súa beleza e variedade. As palabras e os logos pódense debuxar con liñas de costa, e cada mosaico gárdase como póster a resolución completa.",
         },
         brief: {
-            en: "Rebuilds any photo, word or logo out of real Sentinel-2 views. Every tile is a place on Earth. Tap one and it tells you where it is and when the satellite passed over.",
-            es: "Reconstruye cualquier foto, palabra o logo con vistas reales de Sentinel-2. Cada tesela es un lugar de la Tierra. Pulsas una y te dice dónde está y cuándo pasó el satélite.",
-            gl: "Reconstrúe calquera foto, palabra ou logo con vistas reais de Sentinel-2. Cada tesela é un lugar da Terra. Premes unha e dicche onde está e cando pasou o satélite.",
+            en: "Any photo, word or logo rebuilt from real Sentinel-2 views of Earth. Every tile is a place you can find. Tap one and it tells you where it is and when the satellite passed. 53,767 views to choose from.",
+            es: "Cualquier foto, palabra o logo reconstruido con vistas reales de Sentinel-2. Cada tesela es un lugar que puedes encontrar. Pulsas una y te dice dónde está y cuándo pasó el satélite sobre ella.",
+            gl: "Calquera foto, palabra ou logo reconstruído con vistas reais de Sentinel-2. Cada tesela é un lugar que podes atopar. Premes unha e dicche onde está e cando pasou o satélite por enriba dela.",
         },
         accent: "#dd9461",
         logo: "/projects/copernicus-mosaic.svg",
@@ -239,9 +239,9 @@ export const projects: Project[] = [
             gl: "Todo o que Galicia sabe de si mesma, nun mapa. Sinala calquera lugar e reúne a terra, a historia, a xente e o patrimonio dese punto, en trescentos trece concellos e tres mil setecentas parroquias, coa fonte aberta detrás de cada dato. O mapa viaxa ademais ao voo aéreo de 1956 e á carta de Fontán de 1845. Escrito en galego.",
         },
         brief: {
-            en: "Everything Galicia knows about itself, on one map. Point at any place and it gathers its land, history, people and heritage, with the open source behind every fact.",
-            es: "Todo lo que Galicia sabe de sí misma, en un mapa. Señala cualquier lugar y reúne su tierra, su historia, su gente y su patrimonio, con la fuente abierta detrás de cada dato.",
-            gl: "Todo o que Galicia sabe de si mesma, nun mapa. Sinala calquera lugar e reúne a súa terra, historia, xente e patrimonio, coa fonte aberta detrás de cada dato.",
+            en: "Everything Galicia knows about itself, on one map. Point at any spot and it gathers its land, history, people and heritage, across 313 councils and 3,785 parishes, each fact with its open source.",
+            es: "Todo lo que Galicia sabe de sí misma, en un mapa. Señalas un punto y reúne su tierra, su historia, su gente y su patrimonio, en 313 concellos y 3.785 parroquias, cada dato con su fuente abierta.",
+            gl: "Todo o que Galicia sabe de si mesma, nun mapa. Sinalas un punto e reúne a súa terra, historia, xente e patrimonio, en 313 concellos e 3.785 parroquias, cada dato coa súa fonte aberta.",
         },
         accent: "#8fa76b",
         logo: "/projects/arquivonos.svg",
@@ -270,9 +270,9 @@ export const projects: Project[] = [
             gl: "Un resumo diario do día que estás a vivir. Reúne o que pasou nesta mesma data ao longo da historia e do espazo, escrito como o faría un editor. Cada entrada revísase a man e leva unha imaxe que lle corresponde e a música desa semana. En galego, castelán e inglés, na web e en Android.",
         },
         brief: {
-            en: "A daily briefing on the day you are living. It gathers what happened on this date across history and space, written the way an editor would and checked by hand.",
-            es: "Un resumen diario del día que estás viviendo. Reúne lo que pasó en esta misma fecha en la historia y en el espacio, escrito como lo haría un editor y revisado a mano.",
-            gl: "Un resumo diario do día que estás a vivir. Reúne o que pasou nesta mesma data na historia e no espazo, escrito como o faría un editor e revisado a man.",
+            en: "A daily briefing on the day you are living. What happened on this date across history and space, written like an editor would and checked by hand, with an image and the music of that week.",
+            es: "Un resumen diario del día que estás viviendo. Lo que pasó en esta fecha en la historia y en el espacio, escrito como lo haría un editor y revisado a mano, con su imagen y la música de esa semana.",
+            gl: "Un resumo diario do día que estás a vivir. O que pasou nesta mesma data na historia e no espazo, escrito como o faría un editor e revisado a man, coa súa imaxe e a música desa semana.",
         },
         accent: "#d8b878",
         logo: "hoxe",

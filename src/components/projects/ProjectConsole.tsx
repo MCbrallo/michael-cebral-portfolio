@@ -61,14 +61,37 @@ const SCATTER: [number, number, number][] = [
     [156, 536, -0.03], [392, 560, 0.11], [480, 690, -0.05],
     [570, 160, 0.04], [585, 320, -0.07],
 ];
-function makeMode(name: ModeName, n: number): Mode {
+/* A window much wider than it is tall leaves room at the sides, so the scene
+   widens with it and the pile spreads into three columns of larger
+   cartridges. Columns are in column widths, rows in scene units. */
+const SCATTER3: [number, number, number][] = [
+    [1.12, 680, 0.06],
+    [0.02, 262, -0.08], [1.05, 286, 0.06], [1.98, 258, -0.05],
+    [0.08, 486, 0.07], [0.98, 510, -0.1], [2.04, 482, 0.09],
+    [2.1, 680, -0.06], [-0.1, 680, 0.05],
+];
+const WIDE_H = 740;
+const WIDE_MAX_W = 1520;
+function makeMode(name: ModeName, n: number, W = 1200): Mode {
     if (name === "wide") {
         const ds = 0.8;
+        const dev = { x: W - 510, y: 92 };
+        if (W >= 1400) {
+            /* Three loose columns between the left edge and the console */
+            const left = 80, right = dev.x - 70, cw = (right - left) / 3;
+            const homes = Array.from({ length: n }, (_, i) => {
+                const s = SCATTER3[i % SCATTER3.length];
+                return { x: left + cw * (s[0] + 0.5), y: s[1], a: s[2] };
+            });
+            return { name, W, H: WIDE_H, ds, cs: 1.2 * ds, dev, homes, head: { x: left + cw * 0.5 - 76, y: 44 }, strip: null };
+        }
+        /* Two columns, centred in the room the console leaves */
+        const shift = dev.x / 2 - 345;
         const homes = Array.from({ length: n }, (_, i) => {
             const s = SCATTER[i % SCATTER.length];
-            return { x: s[0] + Math.floor(i / SCATTER.length) * 18, y: s[1], a: s[2] };
+            return { x: s[0] + shift + Math.floor(i / SCATTER.length) * 18, y: s[1], a: s[2] };
         });
-        return { name, W: 1200, H: 740, ds, cs: 1.0 * ds, dev: { x: 690, y: 92 }, homes, head: { x: 92, y: 44 }, strip: null };
+        return { name, W, H: WIDE_H, ds, cs: 1.0 * ds, dev, homes, head: { x: 92 + shift, y: 44 }, strip: null };
     }
     const ds = 0.7;
     return {
@@ -182,7 +205,8 @@ function createEngine(o: EngineOpts) {
     const slotX = () => M.dev.x + devW() / 2;
     const slotY = () => M.dev.y + (open ? 0 : SLIDE * M.ds);
     const entryY = () => slotY() - hgt() / 2;
-    const seat = () => hgt() * 0.6;
+    /* Seated, a cartridge shows its top half, enough for the whole name on its tape */
+    const seat = () => hgt() * 0.52;
     const latchAt = () => hgt() * 0.42;
     /* The row closes up around a cartridge that is in the console or on its way there */
     const inRow = (b: Body) => b.state !== "inserted" && b.state !== "busy";
@@ -239,8 +263,9 @@ function createEngine(o: EngineOpts) {
     function layout() {
         const vw = viewport.clientWidth, vh = viewport.clientHeight;
         const name: ModeName = vw < 760 || vw / Math.max(1, vh) < 0.95 ? "narrow" : "wide";
-        const changed = name !== M.name;
-        M = makeMode(name, bodies.length); S = M.cs;
+        const W = name === "wide" ? Math.round(Math.min(WIDE_MAX_W, Math.max(1200, (WIDE_H * vw) / Math.max(1, vh)))) : 0;
+        const changed = name !== M.name || (W >= 1400) !== (M.W >= 1400);
+        M = makeMode(name, bodies.length, W || undefined); S = M.cs;
         const k = Math.min(name === "wide" ? 1.3 : 1.5, vw / M.W, vh / M.H);
         const offX = Math.max(0, (vw - M.W * k) / 2);
         const offY = Math.max(0, (vh - M.H * k) / 2) * (name === "wide" ? 0.45 : 0.5);
@@ -764,7 +789,7 @@ export function ProjectConsole() {
                                             <span className="pc-ink-logo">
                                                 <ProjectLogo project={current} />
                                             </span>
-                                            <h2 className="pc-ink-name">{current.name}</h2>
+                                            <h2 className="pc-ink-name" data-long={current.name.length > 12 ? "" : undefined}>{current.name}</h2>
                                         </div>
                                         <p className="pc-ink-text" ref={inkTextRef}>
                                             <span>{(current.brief ?? current.blurb)[language]}</span>

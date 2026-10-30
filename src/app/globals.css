@@ -1282,19 +1282,20 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 .pc-eink { position: absolute; left: 30px; right: 30px; top: 50px; bottom: 34px; border-radius: 5px; background: var(--pc-paper); overflow: hidden; color: var(--pc-print);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(0, 0, 0, .3), 0 0 0 5px #0f1012, 0 1px 0 5px rgba(255, 255, 255, .045); }
 .pc-ink-page, .pc-ink-idle, .pc-ink-flash { position: absolute; inset: 0; visibility: hidden; }
-.pc-ink-page { display: flex; flex-direction: column; align-items: flex-start; padding: 24px 28px 22px; }
+.pc-ink-page { display: flex; flex-direction: column; align-items: flex-start; padding: 22px 28px 20px; }
 /* Ink is one colour: every logo prints black on the ink screen */
-.pc-ink-top { display: flex; flex-direction: column; align-items: flex-start; }
-.pc-ink-logo { flex: none; display: block; width: 36px; height: 36px; filter: brightness(0); opacity: .86; }
+.pc-ink-top { display: flex; align-items: center; gap: 16px; }
+.pc-ink-logo { flex: none; display: block; width: 44px; height: 44px; filter: brightness(0); opacity: .86; }
 .pc-ink-logo img, .pc-ink-logo svg { width: 100%; height: 100%; object-fit: contain; display: block; }
-.pc-ink-name { margin: 14px 0 0; font-family: var(--font-playfair), Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1.05; color: #121212; }
-.pc-ink-text { flex: 1; min-height: 0; overflow: hidden; margin: 12px 0 0; font-family: var(--font-literata), Georgia, serif; font-size: 14.5px; line-height: 1.58; color: #262626; }
+.pc-ink-name { margin: 0; font-family: var(--font-playfair), Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1.05; color: #121212; }
+.pc-ink-name[data-long] { font-size: 28px; }
+.pc-ink-text { flex: 1; min-height: 0; overflow: hidden; margin: 12px 0 0; font-family: var(--font-literata), Georgia, serif; font-size: 20px; line-height: 1.5; color: #262626; }
 .pc-ink-text > span { display: block; }
 /* Past five lines the copy is cut there, with an ellipsis */
 .pc-ink-text[data-clamp] > span { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
-.pc-ink-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 10px 17px; border-radius: 3px; background: #171717; color: var(--pc-paper); text-decoration: none; font-family: var(--font-literata), Georgia, serif; font-weight: 500; font-size: 14px; }
+.pc-ink-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 10px 19px; border-radius: 3px; background: #171717; color: var(--pc-paper); text-decoration: none; font-family: var(--font-literata), Georgia, serif; font-weight: 500; font-size: 18px; }
 .pc-ink-btn:focus-visible { outline: 2px solid #171717; outline-offset: 3px; }
-.pc-ink-idle { display: grid; place-items: center; font-family: var(--font-literata), Georgia, serif; font-style: italic; font-size: 17px; color: #4a4a4a; }
+.pc-ink-idle { display: grid; place-items: center; font-family: var(--font-literata), Georgia, serif; font-style: italic; font-size: 24px; color: #4a4a4a; }
 .pc-eink[data-ink="page"] .pc-ink-page, .pc-eink[data-ink="idle"] .pc-ink-idle { visibility: visible; }
 .pc-eink[data-ink="black"] .pc-ink-flash { visibility: visible; background: #151515; }
 .pc-eink[data-ink="white"] .pc-ink-flash { visibility: visible; background: #f0efea; }
@@ -1306,14 +1307,6 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 .pc-tip span { display: block; margin-top: 4px; font: 400 13px/1.4 var(--font-literata), Georgia, serif; color: #4a4a4a; }
 
 /* On a phone the ink screen is small: its type grows so it can still be read */
-.pc[data-mode="narrow"] .pc-ink-page { padding: 24px 28px 22px; }
-/* On a phone the logo sits beside the name, so the description gets the height */
-.pc[data-mode="narrow"] .pc-ink-top { flex-direction: row; align-items: center; gap: 16px; }
-.pc[data-mode="narrow"] .pc-ink-logo { width: 44px; height: 44px; }
-.pc[data-mode="narrow"] .pc-ink-name { font-size: 34px; margin-top: 0; }
-.pc[data-mode="narrow"] .pc-ink-text { font-size: 21px; line-height: 1.45; margin-top: 10px; }
-.pc[data-mode="narrow"] .pc-ink-btn { font-size: 19px; padding: 13px 22px; margin-top: 14px; }
-.pc[data-mode="narrow"] .pc-ink-idle { font-size: 24px; }
 .pc[data-mode="narrow"] .pc-host { font-size: 16px; height: 34px; }
 
 @media (prefers-reduced-motion: reduce) {
