@@ -148,6 +148,8 @@ function createSound(enabled: () => boolean) {
         latch: () => { burst(0, 0.012, 4200, 3, 0.3); burst(0.008, 0.03, 2200, 2.5, 0.18); tone(0.004, 0.06, 160, 70, 0.22); },
         release: () => { burst(0, 0.012, 3600, 3, 0.2); tone(0.02, 0.09, 380, 720, 0.04, "triangle"); },
         refresh: () => burst(0, 0.02, 6000, 1, 0.012),
+        /* Two cartridges meeting, louder the harder they hit */
+        knock: (j: number) => { burst(0, 0.035, 900 + Math.min(1400, j * 1.4), 1.4, Math.min(0.09, 0.012 + j * 0.00005), "bandpass"); burst(0, 0.06, 260, 0.8, Math.min(0.05, j * 0.00003), "lowpass"); },
     };
 }
 
@@ -163,9 +165,11 @@ type Body = {
     state: "rest" | "drag" | "busy" | "inserted";
     hover: boolean; anim: Anim | null; awake: boolean;
     grab: { x: number; y: number } | null; ptr: { x: number; y: number } | null;
-    down: { x: number; y: number; t: number; moved: number; inserted: boolean } | null;
+    down: { x: number; y: number; t: number; moved: number; inserted: boolean; trail: { x: number; y: number; t: number }[] } | null;
     pending: { x: number; y: number; t: number; pid: number; pt: { x: number; y: number } } | null;
     rail: boolean; under: boolean; pid: number | null; wasHigh: boolean;
+    /** Thrown by hand and still in the air: landing on the console puts it in */
+    thrown: boolean;
 };
 type EngineOpts = {
     viewport: HTMLDivElement; scene: HTMLDivElement; device: HTMLDivElement; slot: HTMLDivElement;
@@ -186,7 +190,7 @@ function createEngine(o: EngineOpts) {
     const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, reduced ? 0 : ms));
     let M: Mode = makeMode("wide", o.ids.length);
     let S = M.cs, open = false, current: Body | null = null, busy = false, zTop = 100, tipFor: Body | null = null;
-    let raf = 0, last = 0, dead = false;
+    let raf = 0, last = 0, dead = false, laidOut = false, lastKnock = 0;
     /* The sliding row of cartridges on narrow screens. stripGoal is where the row
        glides to on its own, to bring a cartridge reached by keyboard into view. */
     let stripOff = 0, stripV = 0, stripGoal: number | null = null;
@@ -197,7 +201,7 @@ function createEngine(o: EngineOpts) {
     const bodies: Body[] = o.carts.map((el, i) => ({
         i, id: o.ids[i], el, x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0, lift: 0, lv: 0, tx: 0, ty: 0,
         state: "rest", hover: false, anim: null, awake: true, grab: null, ptr: null, down: null, pending: null,
-        rail: false, under: false, pid: null, wasHigh: false,
+        rail: false, under: false, pid: null, wasHigh: false, thrown: false,
     }));
 
     const hgt = () => CH * S, wid = () => CW * S;
@@ -264,8 +268,10 @@ function createEngine(o: EngineOpts) {
         const vw = viewport.clientWidth, vh = viewport.clientHeight;
         const name: ModeName = vw < 760 || vw / Math.max(1, vh) < 0.95 ? "narrow" : "wide";
         const W = name === "wide" ? Math.round(Math.min(WIDE_MAX_W, Math.max(1200, (WIDE_H * vw) / Math.max(1, vh)))) : 0;
-        const changed = name !== M.name || (W >= 1400) !== (M.W >= 1400);
+        const changed = !laidOut || name !== M.name || (W >= 1400) !== (M.W >= 1400);
+        const prevDevX = M.dev.x;
         M = makeMode(name, bodies.length, W || undefined); S = M.cs;
+        laidOut = true;
         const k = Math.min(name === "wide" ? 1.3 : 1.5, vw / M.W, vh / M.H);
         const offX = Math.max(0, (vw - M.W * k) / 2);
         const offY = Math.max(0, (vh - M.H * k) / 2) * (name === "wide" ? 0.45 : 0.5);
@@ -280,10 +286,14 @@ function createEngine(o: EngineOpts) {
         o.onMode(name);
         bodies.forEach((b) => {
             if (b.state === "inserted") { place(b); return; }
-            if (changed || b.state === "rest") {
-                b.anim = null; b.state = "rest"; b.rail = false; b.pending = null;
+            if (changed || (b.state === "rest" && M.strip)) {
+                b.anim = null; b.state = "rest"; b.rail = false; b.pending = null; b.thrown = false;
                 const h = home(b); b.x = h.x; b.y = h.y; b.a = h.a; b.vx = b.vy = b.va = 0;
                 setUnder(b, false);
+            } else if (b.state === "rest") {
+                /* On the table a cartridge stays where it lies; the room moves with the console */
+                if (prevDevX !== M.dev.x) b.x = b.x < prevDevX ? b.x * (M.dev.x / prevDevX) : b.x + (M.dev.x - prevDevX);
+                b.x = Math.max(0, Math.min(M.W, b.x)); b.y = Math.max(0, Math.min(M.H, b.y));
             }
             b.awake = true;
         });
@@ -345,7 +355,13 @@ function createEngine(o: EngineOpts) {
         await wait(chained ? 60 : 160);
         await tween(b, { y: entryY() - 4 * S, lift: 0.4 }, 170, easeIn);
         setUnder(b, false);
-        b.state = "rest"; b.lift = 0.4; b.lv = 0; b.vx = 0; b.vy = 0; b.wasHigh = true; wakeAll();
+        b.state = "rest"; b.lift = 0.4; b.lv = 0; b.vx = 0; b.vy = 0; b.wasHigh = true; b.thrown = false;
+        if (!M.strip) {
+            /* The spring throws it clear of the console, onto the table on its left */
+            b.lift = 0.55; b.lv = 2.1;
+            b.vx = -(860 + Math.random() * 160); b.vy = 300 + Math.random() * 220; b.va = (Math.random() - 0.5) * 7;
+        }
+        wakeAll();
     }
     function doEject() {
         if (!current || busy) return;
@@ -383,8 +399,8 @@ function createEngine(o: EngineOpts) {
         const pt = toScene(e);
         const dx = pt.x - b.x, dy = pt.y - b.y, cs = Math.cos(-b.a), sn = Math.sin(-b.a);
         b.grab = { x: dx * cs - dy * sn, y: dx * sn + dy * cs };
-        b.ptr = pt; b.down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, inserted: false };
-        b.state = "drag"; b.awake = true; b.pid = pid; b.el.classList.add("is-dragging");
+        b.ptr = pt; b.down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, inserted: false, trail: [{ x: pt.x, y: pt.y, t: performance.now() }] };
+        b.state = "drag"; b.awake = true; b.pid = pid; b.thrown = false; b.el.classList.add("is-dragging");
         front(b); hideTip(); sound.pick();
     }
     function startStrip(x: number, pid: number, el: HTMLElement) {
@@ -420,7 +436,7 @@ function createEngine(o: EngineOpts) {
         on(el, "pointerdown", (e) => {
             if (e.pointerType === "mouse" && e.button !== 0) return;
             sound.wake(); o.onTouched();
-            if (b.state === "inserted") { b.down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, inserted: true }; return; }
+            if (b.state === "inserted") { b.down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, inserted: true, trail: [] }; return; }
             if (b.state !== "rest" || busy) return;
             e.preventDefault();
             el.setPointerCapture(e.pointerId);
@@ -442,6 +458,8 @@ function createEngine(o: EngineOpts) {
             if (b.state !== "drag" || !b.down) return;
             b.ptr = toScene(e);
             b.down.moved = Math.max(b.down.moved, Math.hypot(e.clientX - b.down.x, e.clientY - b.down.y));
+            b.down.trail.push({ x: b.ptr.x, y: b.ptr.y, t: performance.now() });
+            if (b.down.trail.length > 8) b.down.trail.shift();
         });
         const release = (e: PointerEvent, cancelled: boolean) => {
             if (stripDrag && stripDrag.el === el) { endStrip(); return; }
@@ -462,6 +480,7 @@ function createEngine(o: EngineOpts) {
             el.classList.remove("is-dragging"); slot.removeAttribute("data-ready");
             const tap = b.down.moved < 6 && performance.now() - b.down.t < 350;
             const wasRail = b.rail;
+            const hand = handSpeed(b.down.trail);
             b.grab = null; b.ptr = null; b.down = null;
             if (cancelled) { b.state = "rest"; b.rail = false; setUnder(b, false); return; }
             if (wasRail) {
@@ -474,8 +493,20 @@ function createEngine(o: EngineOpts) {
                 return;
             }
             b.state = "rest";
-            if (tap || overDevice(b)) { void insert(b); return; }
+            /* Let go over the console it goes in, unless the hand was throwing it somewhere */
+            if (tap || (overDevice(b) && Math.hypot(hand.x, hand.y) < 500)) { void insert(b); return; }
             b.wasHigh = true;
+            if (!M.strip) {
+                /* It leaves the hand at the hand's speed, and keeps the swing it had.
+                   The harder the flick, the higher and the longer it flies. */
+                b.vx = hand.x * 0.8 + b.vx * 0.2; b.vy = hand.y * 0.8 + b.vy * 0.2;
+                const sp = Math.hypot(b.vx, b.vy);
+                if (sp > MAX_V) { b.vx *= MAX_V / sp; b.vy *= MAX_V / sp; }
+                b.va = Math.max(-16, Math.min(16, b.va));
+                b.lv = Math.min(2.4, Math.hypot(b.vx, b.vy) / 1000);
+                b.thrown = Math.hypot(b.vx, b.vy) > 260;
+                if (b.thrown) b.hover = false;
+            }
         };
         on(el, "pointerup", (e) => release(e, false));
         on(el, "pointercancel", (e) => release(e, true));
@@ -494,6 +525,115 @@ function createEngine(o: EngineOpts) {
     /* ── Physics ── */
     const K = 950, DAMP = 2 * Math.sqrt(950) * 0.85;
     const LIGHT = { x: 0.55, y: 0.83 };
+    /* On the table: lift falls under gravity, a landed cartridge slides against
+       friction, they knock into each other, the edges and the console as rigid
+       boxes, with spin and a little bounce. Units are scene pixels and seconds. */
+    const G = 20, MU = 1900, SPIN_MU = 10, BOUNCE = 0.32, GRIP = 0.35, MAX_V = 3400;
+
+    /** How fast the hand was moving when it let go, from its last tenth of a second */
+    function handSpeed(trail: { x: number; y: number; t: number }[]) {
+        const now = performance.now(), end = trail[trail.length - 1];
+        if (!end || now - end.t > 70) return { x: 0, y: 0 };
+        let start = end;
+        for (let i = trail.length - 1; i >= 0; i--) { if (end.t - trail[i].t > 100) break; start = trail[i]; }
+        const dt = (end.t - start.t) / 1000;
+        return dt < 0.012 ? { x: 0, y: 0 } : { x: (end.x - start.x) / dt, y: (end.y - start.y) / dt };
+    }
+    type Box = { x: number; y: number; a: number; hw: number; hh: number };
+    const boxOf = (b: Body): Box => ({ x: b.x, y: b.y, a: b.a, hw: wid() / 2, hh: hgt() / 2 });
+    const deviceBox = (): Box => {
+        const top = slotY(), bottom = M.dev.y + (SLIDE + BASE_H) * M.ds;
+        return { x: M.dev.x + devW() / 2, y: (top + bottom) / 2, a: 0, hw: devW() / 2, hh: (bottom - top) / 2 };
+    };
+    function corners(B: Box) {
+        const c = Math.cos(B.a), s = Math.sin(B.a);
+        return [[1, 1], [-1, 1], [-1, -1], [1, -1]].map(([i, j]) => ({ x: B.x + c * B.hw * i - s * B.hh * j, y: B.y + s * B.hw * i + c * B.hh * j }));
+    }
+    const inside = (p: { x: number; y: number }, B: Box) => {
+        const c = Math.cos(-B.a), s = Math.sin(-B.a), dx = p.x - B.x, dy = p.y - B.y;
+        return Math.abs(dx * c - dy * s) <= B.hw + 0.5 && Math.abs(dx * s + dy * c) <= B.hh + 0.5;
+    };
+    /** Separating axis test for two boxes: the push out of A into B, and where they touch */
+    function overlap(A: Box, B: Box) {
+        const axes = [A.a, A.a + Math.PI / 2, B.a, B.a + Math.PI / 2].map((t) => ({ x: Math.cos(t), y: Math.sin(t) }));
+        const rad = (X: Box, n: { x: number; y: number }) => X.hw * Math.abs(n.x * Math.cos(X.a) + n.y * Math.sin(X.a)) + X.hh * Math.abs(-n.x * Math.sin(X.a) + n.y * Math.cos(X.a));
+        const dx = B.x - A.x, dy = B.y - A.y;
+        let depth = Infinity, nx = 0, ny = 0;
+        for (const n of axes) {
+            const d = dx * n.x + dy * n.y, o = rad(A, n) + rad(B, n) - Math.abs(d);
+            if (o <= 0) return null;
+            if (o < depth) { depth = o; nx = d < 0 ? -n.x : n.x; ny = d < 0 ? -n.y : n.y; }
+        }
+        const pts = [...corners(B).filter((p) => inside(p, A)), ...corners(A).filter((p) => inside(p, B))];
+        const px = pts.length ? pts.reduce((t, p) => t + p.x, 0) / pts.length : (A.x + B.x) / 2;
+        const py = pts.length ? pts.reduce((t, p) => t + p.y, 0) / pts.length : (A.y + B.y) / 2;
+        return { nx, ny, depth, px, py };
+    }
+    /** An impulse at the contact, with friction along it. A null body is the immovable world. */
+    function contact(a: Body | null, b: Body | null, nx: number, ny: number, px: number, py: number, depth: number) {
+        const iI = 12 / (wid() * wid() + hgt() * hgt());
+        const ma = a ? 1 : 0, mb = b ? 1 : 0, ia = a ? iI : 0, ib = b ? iI : 0;
+        const rax = a ? px - a.x : 0, ray = a ? py - a.y : 0, rbx = b ? px - b.x : 0, rby = b ? py - b.y : 0;
+        /* Overlap is undone a few pixels a frame, so a cartridge dropped on another slides off it */
+        const corr = Math.min(4, Math.max(0, depth - 0.2) * 0.9) / (ma + mb);
+        if (a) { a.x -= nx * corr * ma; a.y -= ny * corr * ma; }
+        if (b) { b.x += nx * corr * mb; b.y += ny * corr * mb; }
+        const rvx = (b ? b.vx - b.va * rby : 0) - (a ? a.vx - a.va * ray : 0);
+        const rvy = (b ? b.vy + b.va * rbx : 0) - (a ? a.vy + a.va * rax : 0);
+        const vn = rvx * nx + rvy * ny;
+        if (vn >= 0) return 0;
+        const push = (jx: number, jy: number) => {
+            if (a) { a.vx -= jx * ma; a.vy -= jy * ma; a.va -= (rax * jy - ray * jx) * ia; }
+            if (b) { b.vx += jx * mb; b.vy += jy * mb; b.va += (rbx * jy - rby * jx) * ib; }
+        };
+        const ran = rax * ny - ray * nx, rbn = rbx * ny - rby * nx;
+        const j = (-(1 + BOUNCE) * vn) / (ma + mb + ran * ran * ia + rbn * rbn * ib);
+        push(j * nx, j * ny);
+        let tx = rvx - vn * nx, ty = rvy - vn * ny;
+        const tl = Math.hypot(tx, ty);
+        if (tl > 1e-6) {
+            tx /= tl; ty /= tl;
+            const rat = rax * ty - ray * tx, rbt = rbx * ty - rby * tx;
+            const jt = Math.max(-GRIP * j, Math.min(GRIP * j, -(rvx * tx + rvy * ty) / (ma + mb + rat * rat * ia + rbt * rbt * ib)));
+            push(jt * tx, jt * ty);
+        }
+        return j;
+    }
+    function knock(j: number) {
+        const now = performance.now();
+        if (j > 70 && now - lastKnock > 60) { lastKnock = now; sound.knock(j); }
+    }
+    const onTable = (b: Body) => b.state === "rest" && !b.anim && b.lift < 0.3;
+    /** The edges of the scene and the body of the console */
+    function confine(b: Body) {
+        const B = boxOf(b);
+        let worst: { nx: number; ny: number; d: number; p: { x: number; y: number } } | null = null;
+        for (const p of corners(B)) {
+            const cands = [{ nx: 1, ny: 0, d: -p.x }, { nx: -1, ny: 0, d: p.x - M.W }, { nx: 0, ny: 1, d: -p.y }, { nx: 0, ny: -1, d: p.y - M.H }];
+            for (const c of cands) if (c.d > 0 && (!worst || c.d > worst.d)) worst = { ...c, p };
+        }
+        if (worst) knock(contact(null, b, worst.nx, worst.ny, worst.p.x, worst.p.y, worst.d));
+        if (b.lift < 0.3) {
+            const hit = overlap(deviceBox(), B);
+            if (hit) knock(contact(null, b, hit.nx, hit.ny, hit.px, hit.py, hit.depth));
+        }
+    }
+    /** Cartridges lying on the table knock into each other */
+    function collide() {
+        if (M.strip) return;
+        for (let i = 0; i < bodies.length; i++) {
+            const A = bodies[i];
+            if (!onTable(A)) continue;
+            for (let k = i + 1; k < bodies.length; k++) {
+                const B = bodies[k];
+                if (!onTable(B) || (!A.awake && !B.awake)) continue;
+                const hit = overlap(boxOf(A), boxOf(B));
+                if (!hit) continue;
+                knock(contact(A, B, hit.nx, hit.ny, hit.px, hit.py, hit.depth));
+                A.awake = B.awake = true;
+            }
+        }
+    }
     function step(b: Body, dt: number): boolean {
         if (b.anim) {
             const A = b.anim; A.t += dt * 1000;
@@ -543,14 +683,46 @@ function createEngine(o: EngineOpts) {
                     b.vx += (slotX() - b.x) * 40 * h;
                 }
                 b.vx *= Math.exp(-1.2 * h); b.vy *= Math.exp(-1.2 * h); b.va *= Math.exp(-5 * h);
-            } else {
-                /* Back to its place, floating, then down */
+            } else if (M.strip) {
+                /* Back to its place in the row, floating, then down */
                 const k2 = 90, c2 = 2 * Math.sqrt(90) * 0.78;
                 b.vx += ((hm.x - b.x) * k2 - b.vx * c2) * h;
                 b.vy += ((hm.y - b.y) * k2 - b.vy * c2) * h;
                 b.va += ((hm.a - b.a) * 70 - b.va * 2 * Math.sqrt(70)) * h;
+            } else if (b.lift < 0.06 || (b.hover && b.lift < 0.3)) {
+                /* Lying on the table: sliding friction slows it and its spin to a stop */
+                const sp = Math.hypot(b.vx, b.vy);
+                if (sp > 0) { const dec = Math.min(sp, MU * h); b.vx -= (b.vx / sp) * dec; b.vy -= (b.vy / sp) * dec; }
+                b.va -= Math.sign(b.va) * Math.min(Math.abs(b.va), SPIN_MU * h);
+                b.vx *= Math.exp(-0.9 * h); b.vy *= Math.exp(-0.9 * h); b.va *= Math.exp(-1.6 * h);
+            } else {
+                /* In the air: only the air slows it */
+                b.vx *= Math.exp(-0.25 * h); b.vy *= Math.exp(-0.25 * h); b.va *= Math.exp(-0.3 * h);
             }
             b.x += b.vx * h; b.y += b.vy * h; b.a += b.va * h;
+        }
+        const free = !dragging && !M.strip;
+        if (free) {
+            const sp = Math.hypot(b.vx, b.vy);
+            if (b.hover && b.lift < 0.3 && sp < 60) {
+                b.lv += ((0.22 - b.lift) * 240 - b.lv * 22) * dt; b.lift += b.lv * dt;
+            } else {
+                /* Height under gravity: it falls, lands, and a hard landing bounces once */
+                b.lv -= G * dt; b.lift += b.lv * dt;
+                if (b.lift <= 0) {
+                    const fall = -b.lv;
+                    b.lift = 0;
+                    if (fall > 0.5) {
+                        sound.land();
+                        /* A cartridge thrown onto the console goes in */
+                        if (b.thrown && overDevice(b) && open && !busy) { b.thrown = false; b.lv = 0; void insert(b); return true; }
+                    }
+                    b.lv = fall > 1.4 ? fall * 0.24 : 0;
+                    if (b.lv === 0) b.thrown = false;
+                }
+            }
+            confine(b);
+            if (b.lift === 0 && sp < 3 && Math.abs(b.va) < 0.03) { b.vx = b.vy = b.va = 0; }
         }
         /* In the row, a cartridge sitting in its place rides the row exactly */
         if (!dragging && M.strip && stripMoving && Math.abs(b.y - hm.y) < 3 && Math.abs(b.x - hm.x) < 40) { b.x = hm.x; b.vx = 0; }
@@ -567,19 +739,22 @@ function createEngine(o: EngineOpts) {
             if (open && !current && near) slot.setAttribute("data-ready", ""); else slot.removeAttribute("data-ready");
             b.x = Math.max(0, Math.min(M.W, b.x)); b.y = Math.max(0, Math.min(M.H, b.y));
         }
-        const away = Math.hypot(b.x - hm.x, b.y - hm.y);
+        const away = free ? 0 : Math.hypot(b.x - hm.x, b.y - hm.y);
         const sliding = !!M.strip && Math.abs(b.y - hm.y) < 6;
         const target = dragging ? (b.rail ? 0.12 : 1) : away > 14 && !sliding ? 0.55 : b.hover ? 0.22 : 0;
-        b.lv += ((target - b.lift) * 240 - b.lv * 22) * dt;
-        b.lift += b.lv * dt;
-        if (b.lift > 0.45) b.wasHigh = true;
-        if (!dragging && b.wasHigh && b.lift < 0.04) { b.wasHigh = false; sound.land(); }
+        if (!free) {
+            b.lv += ((target - b.lift) * 240 - b.lv * 22) * dt;
+            b.lift += b.lv * dt;
+            if (b.lift > 0.45) b.wasHigh = true;
+            if (!dragging && b.wasHigh && b.lift < 0.04) { b.wasHigh = false; sound.land(); }
+        }
         const cs = Math.cos(-b.a), sn = Math.sin(-b.a);
         const lvx = b.vx * cs - b.vy * sn, lvy = b.vx * sn + b.vy * cs;
         const lf = reduced || b.rail ? 0 : Math.min(1, b.lift * 1.4);
         b.tx += (Math.max(-16, Math.min(16, -lvy * 0.014)) * lf - b.tx) * Math.min(1, dt * 10);
         b.ty += (Math.max(-16, Math.min(16, lvx * 0.014)) * lf - b.ty) * Math.min(1, dt * 10);
-        return dragging || Math.hypot(b.vx, b.vy) > 1.5 || Math.abs(b.va) > 0.01 || Math.abs(b.lv) > 0.004 || Math.abs(target - b.lift) > 0.003 || Math.abs(b.tx) > 0.05 || Math.abs(b.ty) > 0.05 || away > 0.5;
+        const settledLift = free ? b.lift < 0.001 && !b.hover || (b.hover && Math.abs(0.22 - b.lift) < 0.003) : Math.abs(target - b.lift) < 0.003;
+        return dragging || Math.hypot(b.vx, b.vy) > 1.5 || Math.abs(b.va) > 0.01 || Math.abs(b.lv) > 0.004 || !settledLift || Math.abs(b.tx) > 0.05 || Math.abs(b.ty) > 0.05 || away > 0.5;
     }
     function render(b: Body) {
         const scale = S * (1 + 0.075 * Math.max(0, b.lift));
@@ -616,6 +791,7 @@ function createEngine(o: EngineOpts) {
             else if (stripOff > max) { stripOff += (max - stripOff) * Math.min(1, dt * 10); stripV *= 0.6; }
             if (Math.abs(stripV) > 1 || stripOff < -0.5 || stripOff > max + 0.5) bodies.forEach((b) => { if (b.state === "rest") b.awake = true; });
         }
+        collide();
         let moving = false;
         for (const b of bodies) {
             if (!b.awake && !b.anim && b.state !== "drag") continue;

@@ -138,15 +138,16 @@ export function HeroSection() {
                     </div>
 
                     {/* Subtitle - with a gold accent rule */}
-                    <div className="flex items-center gap-4 mt-2 pointer-events-auto">
-                        <span className="h-px w-12 bg-gold/50 shrink-0" />
+                    {/* One line on a phone: tighter tracking and a shorter rule there, the desktop look unchanged */}
+                    <div className="flex items-center gap-3 md:gap-4 mt-2 pointer-events-auto">
+                        <span className="h-px w-8 md:w-12 bg-gold/50 shrink-0" />
                         <div className="overflow-hidden">
                             <motion.p
                                 key={t.hero.subtitle}
                                 initial={{ y: "100%", opacity: 0 }}
                                 animate={{ y: 0, opacity: 0.85 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="text-xs md:text-sm text-white/85 font-sans tracking-[0.38em] uppercase"
+                                className="whitespace-nowrap text-[11px] md:text-sm text-white/85 font-sans tracking-[0.22em] md:tracking-[0.38em] uppercase"
                             >
                                 {t.hero.subtitle}
                             </motion.p>
