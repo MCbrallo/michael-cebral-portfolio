@@ -280,4 +280,27 @@ export const projects: Project[] = [
         links: [{ kind: "live", href: "https://hoxe.org" }],
         previewUrl: "https://hoxe.org/?embed=1",
     },
+    {
+        id: "laikas-company",
+        name: "LAIKA’S COMPANY",
+        type: {
+            en: "Science Communication · Space",
+            es: "Comunicación científica · Espacio",
+            gl: "Comunicación científica · Espazo",
+        },
+        year: "2026",
+        blurb: {
+            en: "A science communication studio for the space sector, run by two partners. Documentaries about space companies and questions, public speaking and presentation workshops, and communication consulting. Named after Laika, the stray who became the first animal to orbit the Earth in 1957, as a promise to always tell the true story.",
+            es: "Un estudio de comunicación científica para el sector espacial, llevado por dos socios. Documentales sobre empresas y cuestiones del espacio, talleres de oratoria y presentaciones, y consultoría de comunicación. Lleva el nombre de Laika, la perra callejera que en 1957 fue el primer animal en orbitar la Tierra, como promesa de contar siempre la historia real.",
+            gl: "Un estudo de comunicación científica para o sector espacial, levado por dous socios. Documentais sobre empresas e cuestións do espazo, obradoiros de oratoria e presentacións, e consultoría de comunicación. Leva o nome de Laika, a cadela da rúa que en 1957 foi o primeiro animal en orbitar a Terra, como promesa de contar sempre a historia real.",
+        },
+        brief: {
+            en: "A science communication studio for the space sector. Documentaries, public speaking workshops and consulting. Named after the first animal in orbit, as a promise to always tell the true story.",
+            es: "Un estudio de comunicación científica para el sector espacial. Documentales, talleres de oratoria y consultoría. Lleva el nombre de la primera perra en órbita, la promesa de contar la historia real.",
+            gl: "Un estudo de comunicación científica para o sector espacial. Documentais, obradoiros de oratoria e consultoría. Leva o nome da primeira cadela en órbita, a promesa de contar a historia real.",
+        },
+        accent: "#b49171",
+        logo: "/projects/laikas-company.svg",
+        /* The link arrives later: until then the ink screen shows no button */
+    },
 ];

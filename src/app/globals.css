@@ -1215,6 +1215,11 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 .cv-tilecard { position: absolute; right: 8px; bottom: 8px; width: 46px; height: 46px; border-radius: 6px; background: #f4f6f7; transform: rotate(5deg); box-shadow: 0 3px 5px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .6); }
 .cv-card { background-color: #f0e6cf; background-image: linear-gradient(transparent 23px, #c63a2b 23px, #c63a2b 24.2px, transparent 24.2px), repeating-linear-gradient(180deg, transparent 0 31px, rgba(58, 92, 168, .3) 31px 32px, transparent 32px 39px); }
 .cv-hole { position: absolute; left: 50px; bottom: 5px; width: 10px; height: 10px; border-radius: 50%; background: #121214; box-shadow: inset 0 1px 2px #000, 0 .5px 0 rgba(255, 255, 255, .5); }
+.cv-moonglow { position: absolute; right: -40px; bottom: -52px; width: 170px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(248, 241, 223, .5) 0 .9px, transparent 1.1px) 0 0 / 3px 3px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); opacity: .55; }
+.cv-moon { filter: drop-shadow(0 0 6px rgba(243, 228, 200, .35)); }
+/* An apostrophe on the tape in red marker, the way the studio writes its name */
+.pc-tape-mark { color: #c73230; }
 .cv-dots { background-image: radial-gradient(circle, rgba(229, 67, 47, .55) 0 1.1px, transparent 1.3px); background-size: 3.2px 3.2px; -webkit-mask-image: linear-gradient(200deg, transparent 45%, #000 100%); mask-image: linear-gradient(200deg, transparent 45%, #000 100%); }
 /* Finish: paper grain over the print */
 .pc-finish { position: absolute; inset: 0; z-index: 3; pointer-events: none; mix-blend-mode: multiply; opacity: .5;

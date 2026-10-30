@@ -247,6 +247,28 @@ function NewsprintCover() {
     );
 }
 
+/* ── LAIKA’S COMPANY: asleep on the moon, in the studio's own colours ── */
+const WARM_STARS = Array.from({ length: 30 }, (_, i) => ({
+    x: +(hash(i * 5 + 11) * LW).toFixed(1),
+    y: +(hash(i * 5 + 12) * LH * 0.9).toFixed(1),
+    r: +(0.4 + hash(i * 5 + 13) * 0.7).toFixed(2),
+    o: +(0.35 + hash(i * 5 + 14) * 0.6).toFixed(2),
+}));
+
+function MoonCover({ p }: { p: Project }) {
+    return (
+        <>
+            <span className="cv-fill" style={{ background: "radial-gradient(75% 120% at 80% 78%, #4a2e1c 0%, #22150e 42%, #0b0705 74%, #070504 100%)" }} />
+            <Svg>
+                {WARM_STARS.map((s, i) => <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#f8f1df" opacity={s.o} />)}
+            </Svg>
+            <span className="cv-moonglow" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="cv-img cv-moon" src={p.logo} alt="" style={{ width: 100, height: 98, right: -10, bottom: -16 }} />
+        </>
+    );
+}
+
 /* A project without its own print gets its logo as a large stencil */
 function PlainCover({ p }: { p: Project }) {
     return (
@@ -266,6 +288,7 @@ function Print({ p }: { p: Project }) {
         case "copernicus-mosaic": return <MosaicCover p={p} />;
         case "arquivonos": return <ArchiveCover p={p} />;
         case "hoxe": return <NewsprintCover />;
+        case "laikas-company": return <MoonCover p={p} />;
         default: return <PlainCover p={p} />;
     }
 }
@@ -289,7 +312,9 @@ export function CartridgeFace({ p, i }: { p: Project; i: number }) {
                 <Print p={p} />
                 <span className="pc-finish" />
                 <span className="pc-tape-wrap" style={{ transform: `rotate(${TAPE_TILT[i % TAPE_TILT.length]}deg)` }}>
-                    <span className="pc-tape" style={{ fontSize: tapeSize(p.name) }}>{p.name}</span>
+                    <span className="pc-tape" style={{ fontSize: tapeSize(p.name) }}>
+                        {p.name.split(/([’'])/).map((part, k) => (k % 2 ? <span key={k} className="pc-tape-mark">{part}</span> : part))}
+                    </span>
                 </span>
                 <span className="pc-gloss" />
             </span>
