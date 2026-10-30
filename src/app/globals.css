@@ -1196,19 +1196,40 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 .pc-grip { position: absolute; top: 40px; width: 4px; height: 40px; border-radius: 2px; background: repeating-linear-gradient(180deg, rgba(255, 255, 255, .09) 0 1px, rgba(0, 0, 0, .45) 1px 3px); }
 .pc-grip.l { left: 2px; }
 .pc-grip.r { right: 2px; }
-.pc-sticker { position: absolute; left: 12px; right: 12px; top: 21px; height: 80px; border-radius: 4px; overflow: hidden; transform: rotate(var(--tilt, 0deg)); text-align: left;
-  background-color: var(--paper, #efebe2); background-image: linear-gradient(180deg, rgba(255, 255, 255, .4), rgba(0, 0, 0, .06));
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 1px 2px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(255, 255, 255, .45); }
-.pc-art, .pc-ink { position: absolute; display: block; pointer-events: none; }
-.pc-art { object-fit: contain; }
-.pc-ink { -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
-.pc-written { position: absolute; left: 8px; top: 6px; max-width: 98px; z-index: 2; font-family: var(--font-marker), "Comic Sans MS", cursive; color: var(--pc-print); line-height: 1.02; letter-spacing: .01em;
-  transform: rotate(-2deg); transform-origin: left top; overflow-wrap: normal; word-break: keep-all; text-shadow: 0 0 3px var(--paper, #efebe2), 0 0 1px var(--paper, #efebe2); }
-/* Cover textures, each one tied to a single project */
-.pc-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(31, 53, 86, .12) 1px, transparent 1px), linear-gradient(90deg, rgba(31, 53, 86, .12) 1px, transparent 1px); background-size: 10px 10px; }
-.pc-tiles { position: absolute; inset: -4px; background-size: 15px 15px; background-repeat: repeat; opacity: .26; filter: saturate(.8); }
-.pc-frameline { position: absolute; inset: 4px; border: 1px solid rgba(43, 38, 32, .4); box-shadow: inset 0 0 0 2px var(--paper, #ebe6d8), inset 0 0 0 3px rgba(43, 38, 32, .25); }
-.pc-cols { position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, transparent 0 37px, rgba(0, 0, 0, .1) 37px 38px), repeating-linear-gradient(180deg, transparent 0 5px, rgba(0, 0, 0, .05) 5px 6px); background-position: 0 30px; }
+/* The label sits in a shallow bed moulded into the shell */
+.pc-bed { position: absolute; left: 9px; right: 9px; top: 17px; height: 92px; border-radius: 6px; background: rgba(0, 0, 0, .34); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .7), 0 1px 0 rgba(255, 255, 255, .07); }
+.pc-label { position: absolute; left: 12px; top: 20px; width: 152px; height: 86px; border-radius: 3px; overflow: hidden; isolation: isolate; transform: rotate(var(--tilt, 0deg)); text-align: left;
+  box-shadow: 0 0 0 .5px rgba(0, 0, 0, .55), 0 1px 1.5px rgba(0, 0, 0, .5); }
+/* Print layers */
+.cv-fill, .cv-svg, .cv-ink, .cv-img, .cv-glyph { position: absolute; display: block; pointer-events: none; }
+.cv-fill, .cv-svg { inset: 0; width: 100%; height: 100%; }
+.cv-img { object-fit: contain; }
+.cv-ink { -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
+.cv-glow { filter: blur(7px); opacity: .75; }
+.cv-pin { filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, .35)); }
+.cv-blueprint { background-image: linear-gradient(rgba(255, 255, 255, .16) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .16) 1px, transparent 1px), linear-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .07) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 7px 7px, 7px 7px; background-position: -3px -2px; box-shadow: inset 0 0 22px rgba(4, 16, 44, .7); }
+.cv-sun { position: absolute; left: 82px; top: 23px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle, #ff9a3c 0 58%, rgba(255, 154, 60, 0) 72%); mix-blend-mode: multiply; opacity: .78; transform: translate(-3px, 2px); }
+.cv-washi { background-color: #f3ecdf; background-image: repeating-linear-gradient(97deg, rgba(120, 96, 60, .05) 0 1px, transparent 1px 5px), repeating-linear-gradient(7deg, rgba(120, 96, 60, .04) 0 1px, transparent 1px 9px); }
+.cv-seal { position: absolute; right: 7px; bottom: 7px; width: 26px; height: 26px; border-radius: 3px; background: #c4281a; transform: rotate(6deg); box-shadow: inset 0 0 0 2.5px #c4281a, inset 0 0 0 3.5px #f6efe2; opacity: .93; }
+.cv-tilecard { position: absolute; right: 8px; bottom: 8px; width: 46px; height: 46px; border-radius: 6px; background: #f4f6f7; transform: rotate(5deg); box-shadow: 0 3px 5px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .6); }
+.cv-card { background-color: #f0e6cf; background-image: linear-gradient(transparent 23px, #c63a2b 23px, #c63a2b 24.2px, transparent 24.2px), repeating-linear-gradient(180deg, transparent 0 31px, rgba(58, 92, 168, .3) 31px 32px, transparent 32px 39px); }
+.cv-hole { position: absolute; left: 50px; bottom: 5px; width: 10px; height: 10px; border-radius: 50%; background: #121214; box-shadow: inset 0 1px 2px #000, 0 .5px 0 rgba(255, 255, 255, .5); }
+.cv-dots { background-image: radial-gradient(circle, rgba(229, 67, 47, .55) 0 1.1px, transparent 1.3px); background-size: 3.2px 3.2px; -webkit-mask-image: linear-gradient(200deg, transparent 45%, #000 100%); mask-image: linear-gradient(200deg, transparent 45%, #000 100%); }
+/* Finish: paper grain over the print */
+.pc-finish { position: absolute; inset: 0; z-index: 3; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1  0 0 0 0 .08  0 0 0 0 .06  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), inset 0 0 7px rgba(0, 0, 0, .28); }
+/* The name, in marker, on a strip of masking tape */
+.pc-tape-wrap { position: absolute; left: 5px; top: 5px; z-index: 4; transform-origin: left top; filter: drop-shadow(0 1px .8px rgba(0, 0, 0, .45)); }
+.pc-tape { display: block; max-width: 96px; padding: 3px 9px 2px 8px; font-family: var(--font-marker), "Comic Sans MS", cursive; color: #121110; line-height: 1.04; letter-spacing: .01em; overflow-wrap: normal; word-break: keep-all;
+  background-color: rgba(236, 226, 199, .95);
+  background-image: repeating-linear-gradient(90deg, rgba(150, 128, 80, .07) 0 1px, transparent 1px 3px), linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(150, 128, 80, .1));
+  clip-path: polygon(0 4%, 3% 0, 6% 6%, 4% 18%, 7% 30%, 3% 44%, 6% 58%, 2% 70%, 5% 84%, 3% 100%, 97% 100%, 94% 88%, 98% 74%, 95% 60%, 99% 46%, 96% 32%, 99% 18%, 95% 6%, 98% 0, 100% 3%); }
+/* Laminate: a sheen that slides as the cartridge tilts */
+.pc-gloss { position: absolute; inset: 0; z-index: 5; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .26) 42%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, 0) 58%, rgba(255, 255, 255, .1) 68%, rgba(255, 255, 255, 0) 76%);
+  background-size: 260% 100%; background-position: var(--sheen, 62%) 0; }
 .pc-contacts { position: absolute; left: 34px; right: 34px; bottom: 0; height: 10px; border-radius: 2px 2px 0 0; background: #0a0a0c; overflow: hidden; box-shadow: inset 0 1px 1px rgba(0, 0, 0, .85); }
 .pc-contacts::before { content: ""; position: absolute; left: 5px; right: 5px; top: 2px; bottom: 0; background: repeating-linear-gradient(90deg, #e6c56c 0 1px, #c9a44a 1px 4px, #7a5f22 4px 5px, transparent 5px 8px); }
 .pc-grain { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: .5; mix-blend-mode: overlay;
@@ -1267,10 +1288,10 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 .pc-ink-logo { flex: none; display: block; width: 36px; height: 36px; filter: brightness(0); opacity: .86; }
 .pc-ink-logo img, .pc-ink-logo svg { width: 100%; height: 100%; object-fit: contain; display: block; }
 .pc-ink-name { margin: 14px 0 0; font-family: var(--font-playfair), Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1.05; color: #121212; }
-.pc-ink-text { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: none; margin: 12px 0 0; font-family: var(--font-literata), Georgia, serif; font-size: 14.5px; line-height: 1.58; color: #262626; }
-/* More text than screen: the last line fades, so it reads as continuing rather than cut */
-.pc-ink-text[data-more] { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 2.2em), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 2.2em), transparent); }
-.pc-ink-text::-webkit-scrollbar { display: none; }
+.pc-ink-text { flex: 1; min-height: 0; overflow: hidden; margin: 12px 0 0; font-family: var(--font-literata), Georgia, serif; font-size: 14.5px; line-height: 1.58; color: #262626; }
+.pc-ink-text > span { display: block; }
+/* Past five lines the copy is cut there, with an ellipsis */
+.pc-ink-text[data-clamp] > span { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
 .pc-ink-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 10px 17px; border-radius: 3px; background: #171717; color: var(--pc-paper); text-decoration: none; font-family: var(--font-literata), Georgia, serif; font-weight: 500; font-size: 14px; }
 .pc-ink-btn:focus-visible { outline: 2px solid #171717; outline-offset: 3px; }
 .pc-ink-idle { display: grid; place-items: center; font-family: var(--font-literata), Georgia, serif; font-style: italic; font-size: 17px; color: #4a4a4a; }

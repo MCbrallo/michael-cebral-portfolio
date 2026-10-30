@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { Literata, Permanent_Marker } from "next/font/google";
+import { CartridgeFace } from "@/components/projects/Cartridge";
 import { ProjectLogo } from "@/components/projects/ProjectLogo";
 import { useLanguage } from "@/context/LanguageContext";
-import { canFrameFrom, projects, type Project } from "@/data/projects";
+import { canFrameFrom, projects } from "@/data/projects";
 
 /* The cartridge stickers are written by hand, the ink screen is set for reading. */
 const marker = Permanent_Marker({ weight: "400", subsets: ["latin"], variable: "--font-marker", display: "swap" });
@@ -60,9 +61,9 @@ function makeMode(name: ModeName, n: number): Mode {
     }
     const ds = 0.7;
     return {
-        name, W: 420, H: 822, ds, cs: 1.06 * ds,
-        dev: { x: (420 - DEV_W * ds) / 2, y: 136 }, homes: [], head: { x: 22, y: 0 },
-        strip: { y: 754, first: 78, step: 146 },
+        name, W: 420, H: 834, ds, cs: 1.06 * ds,
+        dev: { x: (420 - DEV_W * ds) / 2, y: 148 }, homes: [], head: { x: 22, y: 14 },
+        strip: { y: 766, first: 78, step: 146 },
     };
 }
 
@@ -559,6 +560,7 @@ function createEngine(o: EngineOpts) {
         st.setProperty("--cy", `${(ly * cd).toFixed(1)}px`);
         st.setProperty("--cb", `${(2 + 9 * L).toFixed(1)}px`);
         st.setProperty("--co", (0.55 - 0.4 * L).toFixed(3));
+        st.setProperty("--sheen", `${(62 - b.ty * 2.6 + b.tx * 1.2 - L * 10).toFixed(1)}%`);
     }
     function frame(now: number) {
         raf = 0;
@@ -618,107 +620,6 @@ function createEngine(o: EngineOpts) {
             listeners.forEach(([el, type, fn]) => el.removeEventListener(type, fn));
         },
     };
-}
-
-/* ── Cartridge covers. Each one is drawn from its own logo, so no two
-   cartridges look alike. A project without its own cover gets the default:
-   its logo as a large watermark. Positions are in sticker pixels (152 x 80). ── */
-const PAPER: Record<string, string> = {
-    "all-in-space": "#ebe5f4",
-    roadmap: "#e7ecf3",
-    eoguessr: "#e2f0ef",
-    rakugaki: "#f2ebdc",
-    "copernicus-mosaic": "#efe8dd",
-    arquivonos: "#ebe6d8",
-    hoxe: "#f1eee5",
-};
-
-function Ink({ src, color, style }: { src: string; color: string; style: CSSProperties }) {
-    return (
-        <span
-            className="pc-ink"
-            aria-hidden="true"
-            style={{ ...style, backgroundColor: color, WebkitMaskImage: `url(${src})`, maskImage: `url(${src})` }}
-        />
-    );
-}
-
-function HoxeMark({ color, style }: { color: string; style: CSSProperties }) {
-    return (
-        <svg className="pc-art" viewBox="0 0 100 100" fill="none" stroke={color} strokeWidth={8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={style}>
-            <path d="M 40 15 L 20 15 C 14 15 10 19 10 25 L 10 85 C 10 91 14 95 20 95 L 80 95 C 86 95 90 91 90 85 L 90 25 C 90 19 86 15 80 15 L 60 15" />
-            <path d="M 32 35 L 68 75 M 68 35 L 32 75" strokeWidth={9} />
-        </svg>
-    );
-}
-
-function Cover({ p }: { p: Project }) {
-    switch (p.id) {
-        case "all-in-space":
-            /* The mark, oversized and cut by the edge of the label */
-            return (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img className="pc-art" src={p.logo} alt="" style={{ width: 124, height: 124, right: -34, bottom: -50, transform: "rotate(-12deg)" }} />
-            );
-        case "roadmap":
-            /* A compass rose over chart paper */
-            return (
-                <>
-                    <span className="pc-grid" />
-                    <Ink src={p.logo} color="#1f3556" style={{ width: 92, height: 92, right: -24, top: 2, transform: "rotate(14deg)" }} />
-                </>
-            );
-        case "eoguessr":
-            /* Pins dropped on a map, joined by the route between guesses */
-            return (
-                <>
-                    <svg className="pc-art" viewBox="0 0 152 80" aria-hidden="true" style={{ inset: 0, width: "100%", height: "100%" }}>
-                        <path d="M70 66 C 86 50, 96 70, 110 50 S 128 24, 134 22" fill="none" stroke="#2f8f99" strokeWidth={1.6} strokeDasharray="3 4" strokeLinecap="round" />
-                    </svg>
-                    {[
-                        { w: 30, r: -8, right: 6, top: 2 },
-                        { w: 20, r: 10, right: 36, top: 34 },
-                        { w: 15, r: -6, right: 76, top: 52 },
-                    ].map((pin, i) => (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img key={i} className="pc-art" src={p.logo} alt="" style={{ width: pin.w, height: pin.w, right: pin.right, top: pin.top, transform: `rotate(${pin.r}deg)` }} />
-                    ))}
-                </>
-            );
-        case "rakugaki":
-            /* The kanji, brushed large in red ink */
-            return <Ink src={p.logo} color="#b8382b" style={{ width: 156, height: 64, left: -6, bottom: -10, transform: "rotate(-4deg)", opacity: 0.92 }} />;
-        case "copernicus-mosaic":
-            /* The globe tiled into a mosaic, with one full tile on top */
-            return (
-                <>
-                    <span className="pc-tiles" style={{ backgroundImage: `url(${p.logo})` }} />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="pc-art" src={p.logo} alt="" style={{ width: 58, height: 58, right: 6, bottom: 4 }} />
-                </>
-            );
-        case "arquivonos":
-            /* An engraved portrait inside an archive frame */
-            return (
-                <>
-                    <span className="pc-frameline" />
-                    <Ink src={p.logo} color="#2b2620" style={{ width: 92, height: 92, right: -14, bottom: -30 }} />
-                </>
-            );
-        case "hoxe":
-            /* Newsprint columns and the mark printed twice, slightly off register */
-            return (
-                <>
-                    <span className="pc-cols" />
-                    <HoxeMark color="#c9a24a" style={{ width: 66, height: 66, right: 3, top: 9, transform: "rotate(-8deg)" }} />
-                    <HoxeMark color="#1b1b1b" style={{ width: 66, height: 66, right: 6, top: 7, transform: "rotate(-8deg)" }} />
-                </>
-            );
-        default:
-            return p.logo === "hoxe" ? null : (
-                <Ink src={p.logo} color="#1b1b1b" style={{ width: 84, height: 84, right: -16, bottom: -22, opacity: 0.2 }} />
-            );
-    }
 }
 
 /* Facts about the browser that never change while the page is open. The server
@@ -791,18 +692,25 @@ export function ProjectConsole() {
     }, [power, loaded]);
     const live = power === "on" && !!loaded && liveFor === loaded;
 
-    /* The description fits its screen. Long ones step the type down a little, never
-       below what reads at a glance; whatever still does not fit scrolls under a fade. */
+    /* The description is five lines at most. The briefs are written to fit;
+       anything longer steps the type down a little, and only past that is it
+       cut at the fifth line. */
     useEffect(() => {
         const el = inkTextRef.current;
-        if (!el) return;
+        const copy = el?.firstElementChild as HTMLElement | null | undefined;
+        if (!el || !copy) return;
         const fit = () => {
             el.style.fontSize = "";
+            el.removeAttribute("data-clamp");
             const base = parseFloat(getComputedStyle(el).fontSize);
+            const over = () => {
+                const cs = getComputedStyle(el);
+                const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.5;
+                return copy.offsetHeight > lh * 5 + 2 || copy.offsetHeight > el.clientHeight + 1;
+            };
             let size = base;
-            while (el.scrollHeight > el.clientHeight + 1 && size > base * 0.84) { size -= 0.5; el.style.fontSize = `${size}px`; }
-            el.scrollTop = 0;
-            el.toggleAttribute("data-more", el.scrollHeight > el.clientHeight + 1);
+            while (over() && size > base * 0.8) { size -= 0.5; el.style.fontSize = `${size}px`; }
+            el.toggleAttribute("data-clamp", over());
         };
         fit();
         let alive = true;
@@ -817,11 +725,6 @@ export function ProjectConsole() {
     /* Two of the sites only let named origins frame them. Anywhere else the
        browser would block the frame, so the screen keeps the screenshot. */
     const showFrame = live && canFrame && !!site && !!current && !!origin && canFrameFrom(current, origin);
-    /* Sized by the longest word, so a name never breaks inside a word */
-    const nameSize = (n: string) => {
-        const longest = Math.max(...n.split(" ").map((w) => w.length));
-        return longest <= 5 ? 20 : longest <= 7 ? 17 : longest <= 8 ? 16 : 13.5;
-    };
 
     return (
         <div className={`pc ${marker.variable} ${literata.variable}`} data-mode={mode}>
@@ -852,12 +755,8 @@ export function ProjectConsole() {
                                             </span>
                                             <h2 className="pc-ink-name">{current.name}</h2>
                                         </div>
-                                        <p
-                                            className="pc-ink-text"
-                                            ref={inkTextRef}
-                                            onScroll={(e) => { const el = e.currentTarget; el.toggleAttribute("data-more", el.scrollTop + el.clientHeight < el.scrollHeight - 2); }}
-                                        >
-                                            {current.blurb[language]}
+                                        <p className="pc-ink-text" ref={inkTextRef}>
+                                            <span>{(current.brief ?? current.blurb)[language]}</span>
                                         </p>
                                         {href && (
                                             <a className="pc-ink-btn" href={href} target="_blank" rel="noopener noreferrer">
@@ -917,17 +816,7 @@ export function ProjectConsole() {
                             aria-label={t.projects.consoleInsert.replace("{name}", p.name)}
                             style={{ "--accent": p.accent, "--tilt": `${TILTS[i % TILTS.length]}deg` } as CSSProperties}
                         >
-                            <span className="pc-cart-body">
-                                <span className="pc-ridges" />
-                                <span className="pc-grip l" />
-                                <span className="pc-grip r" />
-                                <span className="pc-sticker" style={{ "--paper": PAPER[p.id] ?? "#efebe2" } as CSSProperties}>
-                                    <Cover p={p} />
-                                    <span className="pc-written" style={{ fontSize: nameSize(p.name) }}>{p.name}</span>
-                                </span>
-                                <span className="pc-contacts" />
-                                <span className="pc-grain" />
-                            </span>
+                            <CartridgeFace p={p} i={i} />
                         </button>
                     ))}
 
