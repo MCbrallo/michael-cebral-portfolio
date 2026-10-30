@@ -215,7 +215,7 @@ export const projects: Project[] = [
             gl: "Reconstrúe calquera foto, palabra ou logo con vistas reais da Terra tomadas por Sentinel-2. Cada tesela é un lugar que se pode atopar. Premes unha e dicche onde está, cando pasou o satélite e que hai preto. A biblioteca reúne 53.767 vistas de 7.039 lugares, escollidas pola súa beleza e variedade. As palabras e os logos pódense debuxar con liñas de costa, e cada mosaico gárdase como póster a resolución completa.",
         },
         brief: {
-            en: "Any photo, word or logo rebuilt from real Sentinel-2 views of Earth. Every tile is a place you can find. Tap one and it tells you where it is and when the satellite passed. 53,767 views to choose from.",
+            en: "Any photo, word or logo rebuilt from real Sentinel-2 views of Earth. Every tile is a place you can find. Tap one and it tells you where it is and when the satellite passed right over it.",
             es: "Cualquier foto, palabra o logo reconstruido con vistas reales de Sentinel-2. Cada tesela es un lugar que puedes encontrar. Pulsas una y te dice dónde está y cuándo pasó el satélite sobre ella.",
             gl: "Calquera foto, palabra ou logo reconstruído con vistas reais de Sentinel-2. Cada tesela é un lugar que podes atopar. Premes unha e dicche onde está e cando pasou o satélite por enriba dela.",
         },
