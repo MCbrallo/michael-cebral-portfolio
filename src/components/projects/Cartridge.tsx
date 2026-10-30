@@ -78,22 +78,25 @@ function OrbitCover({ p }: { p: Project }) {
     );
 }
 
-/* ── ROADMAP: a cyanotype of the route out ── */
+/* ── ROADMAP: a cyanotype, Mars on its orbit, made at the International Space University ── */
 function CyanotypeCover({ p }: { p: Project }) {
     return (
         <>
             <span className="cv-fill" style={{ background: "linear-gradient(158deg, #2a63b8 0%, #17448f 46%, #0c2a63 100%)" }} />
             <span className="cv-fill cv-blueprint" />
+            <Svg>
+                <g fill="none" stroke="#fff" strokeWidth=".8">
+                    <circle cx="118" cy="58" r="54" opacity=".32" />
+                    <circle cx="118" cy="58" r="76" opacity=".22" />
+                </g>
+            </Svg>
             <Ink src={p.logo} fill="#f3efe4" style={{ width: 98, height: 115, right: -14, top: -12, transform: "rotate(12deg)", opacity: 0.96 }} />
             <Svg>
-                <path d="M 4 92 C 22 70, 44 66, 58 56 S 86 34, 96 22" fill="none" stroke="#fff" strokeWidth="1.1" strokeDasharray="2.2 3" strokeLinecap="round" opacity=".9" />
-                <circle cx="6" cy="92" r="17" fill="#57a7ff" />
-                <path d="M -6 84 q 7 -7 14 -2 t 11 -5 M 4 94 q 5 -4 10 -1" fill="none" stroke="#a6e3a0" strokeWidth="3" strokeLinecap="round" opacity=".9" />
-                <circle cx="6" cy="92" r="17" fill="none" stroke="#fff" strokeOpacity=".75" strokeWidth=".9" />
-                <circle cx="58" cy="56" r="3.2" fill="#e9e6dc" />
-                <circle cx="96" cy="22" r="5.6" fill="#ff6a3d" />
-                <circle cx="96" cy="22" r="9" fill="none" stroke="#ff6a3d" strokeOpacity=".55" strokeWidth=".8" />
+                <circle cx="46.6" cy="34" r="5.6" fill="#ff6a3d" />
+                <circle cx="46.6" cy="34" r="9" fill="none" stroke="#ff6a3d" strokeOpacity=".55" strokeWidth=".8" />
             </Svg>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="cv-img" src="/logos/oficial/isu.png" alt="" style={{ width: 30, height: 17, left: 8, bottom: 7, opacity: 0.92 }} />
         </>
     );
 }
