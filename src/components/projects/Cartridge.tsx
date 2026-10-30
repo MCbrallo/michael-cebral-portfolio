@@ -78,7 +78,7 @@ function OrbitCover({ p }: { p: Project }) {
     );
 }
 
-/* ── ROADMAP: a cyanotype, Mars on its orbit, made at the International Space University ── */
+/* ── ROADMAP: a cyanotype of the globe and its orbits, made at the International Space University ── */
 function CyanotypeCover({ p }: { p: Project }) {
     return (
         <>
@@ -91,10 +91,6 @@ function CyanotypeCover({ p }: { p: Project }) {
                 </g>
             </Svg>
             <Ink src={p.logo} fill="#f3efe4" style={{ width: 98, height: 115, right: -14, top: -12, transform: "rotate(12deg)", opacity: 0.96 }} />
-            <Svg>
-                <circle cx="46.6" cy="34" r="5.6" fill="#ff6a3d" />
-                <circle cx="46.6" cy="34" r="9" fill="none" stroke="#ff6a3d" strokeOpacity=".55" strokeWidth=".8" />
-            </Svg>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="cv-img" src="/logos/oficial/isu.png" alt="" style={{ width: 30, height: 17, left: 8, bottom: 7, opacity: 0.92 }} />
         </>
