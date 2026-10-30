@@ -1,15 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
-import { Literata, Permanent_Marker } from "next/font/google";
+import localFont from "next/font/local";
 import { CartridgeFace } from "@/components/projects/Cartridge";
 import { ProjectLogo } from "@/components/projects/ProjectLogo";
 import { useLanguage } from "@/context/LanguageContext";
 import { canFrameFrom, projects } from "@/data/projects";
 
-/* The cartridge stickers are written by hand, the ink screen is set for reading. */
-const marker = Permanent_Marker({ weight: "400", subsets: ["latin"], variable: "--font-marker", display: "swap" });
-const literata = Literata({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-literata", display: "swap" });
+/* The cartridge names are written by hand, the ink screen is set for reading.
+   Both fonts ship with the site (src/fonts, latin subset, licences beside
+   them). Fetched from Google at build time, Literata sometimes came back as a
+   font URL that Turbopack cannot parse, and the production build failed or
+   passed depending on which Google server answered. */
+const marker = localFont({ src: "../../fonts/permanent-marker-latin-400-normal.woff2", weight: "400", variable: "--font-marker", display: "swap" });
+const literata = localFont({
+    src: [
+        { path: "../../fonts/literata-latin-400-normal.woff2", weight: "400", style: "normal" },
+        { path: "../../fonts/literata-latin-500-normal.woff2", weight: "500", style: "normal" },
+    ],
+    variable: "--font-literata",
+    display: "swap",
+});
 
 type Power = "off" | "boot" | "on";
 type Ink = "idle" | "black" | "white" | "page";
