@@ -12,7 +12,9 @@ import { canFrameFrom, projects } from "@/data/projects";
    them). Fetched from Google at build time, Literata sometimes came back as a
    font URL that Turbopack cannot parse, and the production build failed or
    passed depending on which Google server answered. */
-const marker = localFont({ src: "../../fonts/permanent-marker-latin-400-normal.woff2", weight: "400", variable: "--font-marker", display: "swap" });
+/* The marker only writes the names on the tape, always in capitals: the file keeps
+   capitals, accented capitals, figures and punctuation, a little over half its weight */
+const marker = localFont({ src: "../../fonts/permanent-marker-caps.woff2", weight: "400", variable: "--font-marker", display: "swap" });
 const literata = localFont({
     src: [
         { path: "../../fonts/literata-latin-400-normal.woff2", weight: "400", style: "normal" },
@@ -53,45 +55,36 @@ type Mode = {
 /* Wide: a loose pile of cartridges on the left, the console high on the right.
    Narrow: the console on top and the cartridges in a row along the bottom that
    slides sideways. Both fit one screen; nothing scrolls the page.
-   The first cartridge goes into the console on arrival, so its place sits apart
-   below the pile: while it is away the pile reads whole instead of missing one. */
-const SCATTER: [number, number, number][] = [
-    [270, 682, 0.06],
-    [168, 236, -0.09], [400, 256, 0.07], [190, 386, 0.05], [424, 410, -0.1],
-    [156, 536, -0.03], [392, 560, 0.11], [480, 690, -0.05],
-    [570, 160, 0.04], [585, 320, -0.07],
-];
-/* A window much wider than it is tall leaves room at the sides, so the scene
-   widens with it and the pile spreads into three columns of larger
-   cartridges. Columns are in column widths, rows in scene units. */
-const SCATTER3: [number, number, number][] = [
-    [1.12, 680, 0.06],
-    [0.02, 262, -0.08], [1.05, 286, 0.06], [1.98, 258, -0.05],
-    [0.08, 486, 0.07], [0.98, 510, -0.1], [2.04, 482, 0.09],
-    [2.1, 680, -0.06], [-0.1, 680, 0.05],
-];
+   The pile starts as a loose grid of three columns between the title and a
+   clear margin above the bottom edge, each cartridge nudged and turned a little.
+   The first cartridge goes into the console on arrival; its place is the one
+   after the last, so while it is away the grid simply reads one shorter. */
 const WIDE_H = 740;
 const WIDE_MAX_W = 1520;
+const PILE_TOP = 168;
+const PILE_BOTTOM = 670;
+/* Small fixed offsets, so the pile looks dropped rather than laid out: x in column widths, y in scene units */
+const NUDGE: [number, number, number][] = [
+    [0.04, 6, -0.08], [-0.06, 18, 0.06], [0.05, -8, -0.05], [-0.03, 12, 0.07], [0.07, 2, -0.1],
+    [-0.05, -6, 0.09], [0.02, 14, -0.04], [-0.08, 4, 0.05], [0.06, -10, -0.07], [-0.02, 8, 0.04],
+];
 function makeMode(name: ModeName, n: number, W = 1200): Mode {
     if (name === "wide") {
         const ds = 0.8;
         const dev = { x: W - 510, y: 92 };
-        if (W >= 1400) {
-            /* Three loose columns between the left edge and the console */
-            const left = 80, right = dev.x - 70, cw = (right - left) / 3;
-            const homes = Array.from({ length: n }, (_, i) => {
-                const s = SCATTER3[i % SCATTER3.length];
-                return { x: left + cw * (s[0] + 0.5), y: s[1], a: s[2] };
-            });
-            return { name, W, H: WIDE_H, ds, cs: 1.2 * ds, dev, homes, head: { x: left + cw * 0.5 - 76, y: 44 }, strip: null };
-        }
-        /* Two columns, centred in the room the console leaves */
-        const shift = dev.x / 2 - 345;
+        const left = 70, right = dev.x - 70, cw = (right - left) / 3;
+        const rows = Math.max(1, Math.ceil(n / 3));
+        /* As large as the columns and the rows allow, never past 1.2 times the console's scale */
+        const cs = Math.min(1.2 * ds, (cw * 0.8) / CW, ((PILE_BOTTOM - PILE_TOP) / rows) * 0.74 / CH);
+        const ch = CH * cs, top = PILE_TOP + ch / 2, bottom = PILE_BOTTOM - ch / 2;
+        /* Rows close enough to read as one pile */
+        const gap = rows > 1 ? Math.min((bottom - top) / (rows - 1), ch * 1.7) : 0;
         const homes = Array.from({ length: n }, (_, i) => {
-            const s = SCATTER[i % SCATTER.length];
-            return { x: s[0] + shift + Math.floor(i / SCATTER.length) * 18, y: s[1], a: s[2] };
+            const slot = (i + n - 1) % n; /* the first cartridge takes the last place */
+            const r = Math.floor(slot / 3), c = slot % 3, nd = NUDGE[i % NUDGE.length];
+            return { x: left + cw * (c + 0.5 + nd[0] * 0.6), y: Math.min(bottom, top + gap * r + nd[1]), a: nd[2] };
         });
-        return { name, W, H: WIDE_H, ds, cs: 1.0 * ds, dev, homes, head: { x: 92 + shift, y: 44 }, strip: null };
+        return { name, W, H: WIDE_H, ds, cs, dev, homes, head: { x: left + cw * 0.5 - (CW * cs) / 2, y: 44 }, strip: null };
     }
     const ds = 0.7;
     return {
@@ -160,6 +153,8 @@ function createSound(enabled: () => boolean) {
 };
 type Body = {
     i: number; id: string; el: HTMLButtonElement;
+    /** The cast shadow and the laminate sheen: the only parts restyled each frame */
+    shade: HTMLElement | null; gloss: HTMLElement | null;
     x: number; y: number; a: number; vx: number; vy: number; va: number;
     lift: number; lv: number; tx: number; ty: number;
     state: "rest" | "drag" | "busy" | "inserted";
@@ -199,7 +194,8 @@ function createEngine(o: EngineOpts) {
     const later = (fn: () => void, ms: number) => { timers.push(window.setTimeout(fn, reduced ? 0 : ms)); };
 
     const bodies: Body[] = o.carts.map((el, i) => ({
-        i, id: o.ids[i], el, x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0, lift: 0, lv: 0, tx: 0, ty: 0,
+        i, id: o.ids[i], el, shade: el.querySelector<HTMLElement>(".pc-cart-shadow"), gloss: el.querySelector<HTMLElement>(".pc-gloss"),
+        x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0, lift: 0, lv: 0, tx: 0, ty: 0,
         state: "rest", hover: false, anim: null, awake: true, grab: null, ptr: null, down: null, pending: null,
         rail: false, under: false, pid: null, wasHigh: false, thrown: false,
     }));
@@ -268,7 +264,7 @@ function createEngine(o: EngineOpts) {
         const vw = viewport.clientWidth, vh = viewport.clientHeight;
         const name: ModeName = vw < 760 || vw / Math.max(1, vh) < 0.95 ? "narrow" : "wide";
         const W = name === "wide" ? Math.round(Math.min(WIDE_MAX_W, Math.max(1200, (WIDE_H * vw) / Math.max(1, vh)))) : 0;
-        const changed = !laidOut || name !== M.name || (W >= 1400) !== (M.W >= 1400);
+        const changed = !laidOut || name !== M.name;
         const prevDevX = M.dev.x;
         M = makeMode(name, bodies.length, W || undefined); S = M.cs;
         laidOut = true;
@@ -761,17 +757,18 @@ function createEngine(o: EngineOpts) {
         const st = b.el.style;
         st.transform = `translate3d(${(b.x - CW / 2).toFixed(2)}px,${(b.y - CH / 2).toFixed(2)}px,0) rotate(${b.a.toFixed(4)}rad) rotateX(${b.tx.toFixed(2)}deg) rotateY(${b.ty.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
         const L = Math.max(0, b.lift), d = 3 + 30 * L, cd = 1 + 5 * L;
+        const sh = (b.shade ?? b.el).style;
         const cs = Math.cos(-b.a), sn = Math.sin(-b.a);
         const lx = ((LIGHT.x * cs - LIGHT.y * sn) / scale) * S, ly = ((LIGHT.x * sn + LIGHT.y * cs) / scale) * S;
-        st.setProperty("--sx", `${(lx * d).toFixed(1)}px`);
-        st.setProperty("--sy", `${(ly * d).toFixed(1)}px`);
-        st.setProperty("--sb", `${(7 + 38 * L).toFixed(1)}px`);
-        st.setProperty("--so", (0.6 - 0.28 * L).toFixed(3));
-        st.setProperty("--cx", `${(lx * cd).toFixed(1)}px`);
-        st.setProperty("--cy", `${(ly * cd).toFixed(1)}px`);
-        st.setProperty("--cb", `${(2 + 9 * L).toFixed(1)}px`);
-        st.setProperty("--co", (0.55 - 0.4 * L).toFixed(3));
-        st.setProperty("--sheen", `${(62 - b.ty * 2.6 + b.tx * 1.2 - L * 10).toFixed(1)}%`);
+        sh.setProperty("--sx", `${(lx * d).toFixed(1)}px`);
+        sh.setProperty("--sy", `${(ly * d).toFixed(1)}px`);
+        sh.setProperty("--sb", `${(7 + 38 * L).toFixed(1)}px`);
+        sh.setProperty("--so", (0.6 - 0.28 * L).toFixed(3));
+        sh.setProperty("--cx", `${(lx * cd).toFixed(1)}px`);
+        sh.setProperty("--cy", `${(ly * cd).toFixed(1)}px`);
+        sh.setProperty("--cb", `${(2 + 9 * L).toFixed(1)}px`);
+        sh.setProperty("--co", (0.55 - 0.4 * L).toFixed(3));
+        b.gloss?.style.setProperty("--sheen", (62 - b.ty * 2.6 + b.tx * 1.2 - L * 10).toFixed(1));
     }
     function frame(now: number) {
         raf = 0;
@@ -897,10 +894,19 @@ export function ProjectConsole() {
     }, []);
 
     /* The live site loads only once the screen is on, and only one at a time. */
+    /* It waits for the browser to be idle: the site in the frame is a whole page of its
+       own, and it should not compete with this one while it is still settling */
     useEffect(() => {
         if (power !== "on" || !loaded) return;
-        const id = window.setTimeout(() => setLiveFor(loaded), 300);
-        return () => window.clearTimeout(id);
+        let idle = 0;
+        const t = window.setTimeout(() => {
+            if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => setLiveFor(loaded), { timeout: 1500 });
+            else setLiveFor(loaded);
+        }, 400);
+        return () => {
+            window.clearTimeout(t);
+            if (idle && "cancelIdleCallback" in window) window.cancelIdleCallback(idle);
+        };
     }, [power, loaded]);
     const live = power === "on" && !!loaded && liveFor === loaded;
 

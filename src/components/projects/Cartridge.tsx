@@ -92,7 +92,7 @@ function CyanotypeCover({ p }: { p: Project }) {
             </Svg>
             <Ink src={p.logo} fill="#f3efe4" style={{ width: 98, height: 115, right: -14, top: -12, transform: "rotate(12deg)", opacity: 0.96 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="cv-img" src="/logos/oficial/isu.png" alt="" style={{ width: 30, height: 17, left: 8, bottom: 7, opacity: 0.92 }} />
+            <img className="cv-img" src="/projects/isu-mark.webp" alt="" style={{ width: 30, height: 17, left: 8, bottom: 7, opacity: 0.92 }} />
         </>
     );
 }
@@ -303,6 +303,8 @@ const TAPE_TILT = [-3.5, 2, -2, 3, -4, 1.5, -2.5, 2.5];
 
 export function CartridgeFace({ p, i }: { p: Project; i: number }) {
     return (
+        <>
+        <span className="pc-cart-shadow" />
         <span className="pc-cart-body">
             <span className="pc-ridges" />
             <span className="pc-grip l" />
@@ -321,5 +323,6 @@ export function CartridgeFace({ p, i }: { p: Project; i: number }) {
             <span className="pc-contacts" />
             <span className="pc-grain" />
         </span>
+        </>
     );
 }
