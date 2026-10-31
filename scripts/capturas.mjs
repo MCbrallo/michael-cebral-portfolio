@@ -38,6 +38,7 @@ const WEBS = [
     { id: 'copernicus-mosaic', url: 'https://copernicus-mosaic.netlify.app/?embed=1', espera: 12000 },
     { id: 'arquivonos', url: 'https://arquivonos.com/?embed=1', espera: 10000 },
     { id: 'hoxe', url: 'https://hoxe.org/?embed=1', espera: 6000 },
+    { id: 'laikas-company', url: 'https://laikas-company.vercel.app', espera: 9000 },
 ];
 
 const soloEste = process.argv[2];
