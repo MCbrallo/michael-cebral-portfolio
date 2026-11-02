@@ -968,7 +968,7 @@ export function ProjectConsole() {
                                 {current && (
                                     <div className="pc-ink-page">
                                         <div className="pc-ink-top">
-                                            <span className="pc-ink-logo">
+                                            <span className="pc-ink-logo" data-tones={current.inkTones ? "" : undefined} style={current.inkTones ? ({ "--ink-tones": current.inkTones } as CSSProperties) : undefined}>
                                                 <ProjectLogo project={current} />
                                             </span>
                                             <h2 className="pc-ink-name" data-long={current.name.length > 12 ? "" : undefined}>{current.name}</h2>

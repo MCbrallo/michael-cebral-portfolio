@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { createConstellations, type Projector } from "@/lib/constellations";
 
 /**
  * The real sky, drifting — WebGL, no library.
@@ -11,7 +12,8 @@ import { usePathname } from "next/navigation";
  * motion: the camera travels along the galactic plane, so the band of the
  * Milky Way never leaves the frame, while it slowly leans and rises.
  *
- * Nothing follows the pointer. The render loop pauses when the tab is hidden,
+ * The pointer only names things: rest it near a bright star in empty sky and
+ * its constellation draws itself (see lib/constellations). The render loop pauses when the tab is hidden,
  * scales quality by FPS, survives a lost WebGL context, and holds still under
  * prefers-reduced-motion.
  */
@@ -67,6 +69,8 @@ let catalogue: Promise<number[][]> | null = null;
 
 export function SkyBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const linesRef = useRef<SVGSVGElement>(null);
+    const labelRef = useRef<HTMLDivElement>(null);
     // /about hands the whole viewport to the room, which is opaque and brings its
     // own WebGL scene. The sky has nothing to draw there.
     const paused = usePathname() === "/about";
@@ -257,6 +261,13 @@ export function SkyBackground() {
             return { f, r: comb(r0, Math.cos(ro), u0, Math.sin(ro)), u: comb(u0, Math.cos(ro), r0, -Math.sin(ro)) };
         }
 
+        // Constellations: only where there is a real pointer to rest on a star.
+        // Under reduced motion the sky is drawn on demand, once now and once after the dwell.
+        const lines = linesRef.current, label = labelRef.current;
+        const cons = lines && label && matchMedia("(pointer: fine)").matches
+            ? createConstellations(lines, label, radec, () => { if (reduce) { draw(); setTimeout(draw, 220); } })
+            : null;
+
         if (epoch < 0) epoch = performance.now();
         let fade = 0;
         let fadeFrom = -1;
@@ -274,6 +285,17 @@ export function SkyBackground() {
             if (ready && fadeFrom < 0) fadeFrom = now;
             fade = reduce ? (ready ? 1 : 0) : fadeFrom < 0 ? 0 : Math.min(1, (now - fadeFrom) / 2200);
             const e = fade * fade * (3 - 2 * fade);
+
+            if (cons) {
+                // The same projection as the stars, in CSS pixels.
+                const cw = canvas!.clientWidth || 1, ch = canvas!.clientHeight || 1;
+                const project: Projector = (v) => {
+                    const z = dot(v, f);
+                    if (z < 0.05) return null;
+                    return [(dot(v, r) / (z * tanX) + 1) / 2 * cw, (1 - dot(v, u) / (z * ty)) / 2 * ch];
+                };
+                cons.update(project, cw, ch, fade >= 1);
+            }
 
             gl!.viewport(0, 0, W, H);
             gl!.disable(gl!.BLEND);
@@ -346,6 +368,7 @@ export function SkyBackground() {
             running = false;
             cancelAnimationFrame(raf);
             img.onload = null;
+            cons?.dispose();
             window.removeEventListener("resize", resize);
             document.removeEventListener("visibilitychange", onVisibility);
         };
@@ -368,11 +391,15 @@ export function SkyBackground() {
     if (paused) return null;
 
     return (
-        <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className="fixed inset-0 w-full h-full block pointer-events-none"
-            style={{ background: "#04050c" }}
-        />
+        <>
+            <canvas
+                ref={canvasRef}
+                aria-hidden="true"
+                className="fixed inset-0 w-full h-full block pointer-events-none"
+                style={{ background: "#04050c" }}
+            />
+            <svg ref={linesRef} className="sky-lines" aria-hidden="true" />
+            <div ref={labelRef} className="sky-label" aria-hidden="true" />
+        </>
     );
 }

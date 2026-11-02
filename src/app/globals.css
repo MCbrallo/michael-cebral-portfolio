@@ -714,20 +714,14 @@ select:focus-visible {
    the eyebrow, the filters, the bullets, the button and every hover at once
    is gone: it was on so many things that it marked none of them.
    ══════════════════════════════════════════════════════════════ */
-/* The opening paragraph was capped at 54 characters a line, which is a good
-   measure for body text buried in a page but wrong for a lead: it broke after
-   a third of the column and stacked seven short lines under the title. Wider
-   lines, fewer of them, and the block stops pushing the record down. */
-.cv-seccion {
-  font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em;
-  line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(22px, 2.6vw, 34px);
-}
-
+/* The record, set like the CV pages of an annual report: hairlines, a year
+   that stays in view, and the institution's colour where it means something.
+   No glass, no halos, no pills. */
 .cv-barra {
-  margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 34px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
 }
-.cv-filtros { display: flex; flex-wrap: wrap; gap: 22px; }
+.cv-filtros { display: flex; flex-wrap: wrap; gap: 26px; }
 .cv-filtro {
   position: relative; padding-bottom: 7px;
   font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em;
@@ -744,130 +738,111 @@ select:focus-visible {
 .cv-filtro.is-on { color: #F5F5F7; }
 .cv-filtro.is-on::after { transform: scaleX(1); }
 
-.cv-lista { display: flex; flex-direction: column; gap: clamp(22px, 2.6vw, 34px); }
-.cv-fila {
-  display: grid; grid-template-columns: 168px minmax(0, 1fr);
-  gap: clamp(20px, 2.6vw, 40px); align-items: start;
+/* The download is a line of text with the site's gold under it */
+.cv-descarga {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 7px;
+  text-decoration-color: rgba(212, 175, 55, 0.5);
+  transition: color 0.3s, text-decoration-color 0.3s;
 }
-.cv-cuando { padding-top: 4px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-.cv-fechas {
-  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(255, 255, 255, 0.42);
-}
-.cv-tipo {
-  font-family: var(--font-sans); font-size: 9.5px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: color-mix(in srgb, var(--accent, #fff) 78%, #F5F5F7);
-  border: 1px solid color-mix(in srgb, var(--accent, #fff) 32%, transparent);
-  border-radius: 999px; padding: 5px 11px;
-}
+.cv-descarga span { color: #D4AF37; transition: transform 0.3s; }
+.cv-descarga:hover { color: #F5F5F7; text-decoration-color: #D4AF37; }
+.cv-descarga:hover span { transform: translateY(2px); }
 
-/* The same glass surface the project cards use, tinted by the institution */
-.cv-tarjeta {
-  position: relative; display: flex; align-items: flex-start;
-  gap: clamp(18px, 2.4vw, 32px);
-  padding: clamp(20px, 2.2vw, 30px);
-  border-radius: 18px;
-  border: 1px solid color-mix(in srgb, var(--accent, #fff) 16%, rgba(255, 255, 255, 0.08));
-  background:
-    radial-gradient(140% 120% at 0% 0%, color-mix(in srgb, var(--accent, #fff) 10%, transparent), transparent 55%),
-    linear-gradient(165deg, rgba(20, 24, 44, 0.5), rgba(8, 10, 22, 0.4));
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  transition: border-color 0.35s, box-shadow 0.35s;
+.cv-registro { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.cv-grupo {
+  display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: clamp(20px, 3vw, 48px);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
-.cv-fila:hover .cv-tarjeta {
-  border-color: color-mix(in srgb, var(--accent, #fff) 38%, transparent);
-  box-shadow: 0 14px 46px rgba(0, 0, 0, 0.3),
-    0 0 52px -14px color-mix(in srgb, var(--accent, #fff) 42%, transparent);
+/* The year waits at the top while its entries pass */
+.cv-ano {
+  position: sticky; top: 104px; align-self: start; padding-top: 30px;
+  font-family: var(--font-playfair), Georgia, serif; font-size: clamp(34px, 3.4vw, 46px); font-weight: 500;
+  line-height: 1; letter-spacing: -0.02em; color: rgba(245, 245, 247, 0.92);
+  font-variant-numeric: lining-nums;
 }
+.cv-entrada { position: relative; padding: 32px 0 38px; }
+.cv-entrada + .cv-entrada { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+/* The institution's colour opens its entry, and runs the whole rule on hover */
+.cv-entrada::before {
+  content: ""; position: absolute; left: 0; top: -1px; width: 44px; height: 1px;
+  background: var(--accent, #fff);
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s;
+}
+.cv-entrada:hover::before { width: 100%; opacity: 0.7; }
 
-/* Logos sit free over the accent halo, the way they do on the projects, and
-   with no plate at all. That became possible once they were taken from each
-   institution's own site: six of the seven publish a negative version, made
-   by them for exactly this ground. Nothing here recolours anything, so what
-   shows is the official mark. */
-.cv-logo {
-  position: relative; flex: none;
-  width: clamp(66px, 6.6vw, 92px); height: clamp(46px, 4.6vw, 62px);
-  display: flex; align-items: center; justify-content: center;
+.cv-cabeza { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; }
+.cv-titular { min-width: 0; }
+.cv-meta {
+  display: flex; flex-wrap: wrap; gap: 0 12px;
+  font-family: var(--font-sans); font-size: 12.5px; letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.48); font-variant-numeric: tabular-nums;
 }
-.cv-logo::before {
-  content: ""; position: absolute; inset: -30% -18%;
-  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent, #fff) 40%, transparent), transparent 68%);
-  filter: blur(14px);
-}
-.cv-logo img {
-  position: relative;
-  max-width: 100%; max-height: 100%; object-fit: contain;
-  opacity: 0.88; transition: opacity 0.35s;
-}
-.cv-fila:hover .cv-logo img { opacity: 1; }
-
-.cv-cuerpo { min-width: 0; flex: 1 1 auto; }
+.cv-meta span { color: rgba(255, 255, 255, 0.32); }
+.cv-meta span::before { content: "·"; margin-right: 12px; }
 .cv-papel {
-  font-size: clamp(20px, 2.2vw, 29px); font-weight: 600; letter-spacing: -0.018em;
-  line-height: 1.16; color: #F5F5F7;
+  margin-top: 10px;
+  font-family: var(--font-playfair), Georgia, serif; font-size: clamp(21px, 2.1vw, 28px); font-weight: 600;
+  letter-spacing: -0.015em; line-height: 1.18; color: #F5F5F7;
 }
-.cv-org {
-  margin-top: 9px;
-  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: rgba(255, 255, 255, 0.42); line-height: 1.7;
-}
+.cv-org { margin-top: 8px; font-family: var(--font-sans); font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.5); }
+.cv-org-nombre { color: color-mix(in srgb, var(--accent, #fff) 50%, #F5F5F7); }
+.cv-lugar::before { content: "—"; margin: 0 0.55em; color: rgba(255, 255, 255, 0.25); }
+
+/* The official marks, as each institution publishes them for a dark ground */
+.cv-logo { flex: none; width: 108px; height: 44px; margin-top: 2px; display: flex; align-items: center; justify-content: flex-end; }
+.cv-logo img { max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0.8; transition: opacity 0.4s; }
+.cv-entrada:hover .cv-logo img { opacity: 1; }
+
 .cv-prueba {
-  margin-top: 18px; padding-left: 13px;
-  border-left: 2px solid color-mix(in srgb, var(--accent, #fff) 62%, transparent);
-  font-family: var(--font-sans); font-size: 10.5px; line-height: 1.65;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--accent, #fff) 72%, #F5F5F7);
+  margin-top: 16px;
+  font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-size: 16px; line-height: 1.5;
+  color: color-mix(in srgb, var(--accent, #fff) 62%, #F5F5F7);
 }
-.cv-puntos { margin-top: 18px; display: flex; flex-direction: column; gap: 9px; }
-.cv-puntos li {
-  position: relative; padding-left: 18px;
-  color: rgba(255, 255, 255, 0.72); font-size: 15px; line-height: 1.66; font-weight: 300;
-}
-.cv-puntos li::before {
-  content: ""; position: absolute; left: 0; top: 11px;
-  width: 5px; height: 1px; background: color-mix(in srgb, var(--accent, #fff) 70%, transparent);
-}
-.cv-etiquetas { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 9px; }
+.cv-puntos { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
+.cv-puntos li { position: relative; padding-left: 20px; color: rgba(255, 255, 255, 0.74); font-size: 15px; line-height: 1.68; font-weight: 300; }
+.cv-puntos li::before { content: "–"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.3); }
+.cv-temas { margin-top: 16px; font-family: var(--font-sans); font-size: 12.5px; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.36); }
 
-.cv-competencias {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 26px);
+/* What I work with: four columns under a rule, the way the record is set */
+.cv-saber { margin-top: clamp(96px, 10vw, 140px); }
+.cv-seccion {
+  font-family: var(--font-playfair), Georgia, serif; font-size: clamp(26px, 3vw, 38px); font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(26px, 3vw, 40px);
 }
-.cv-competencia {
-  padding: clamp(20px, 2.2vw, 28px); border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(165deg, rgba(20, 24, 44, 0.44), rgba(8, 10, 22, 0.34));
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  transition: border-color 0.35s;
-}
-.cv-competencia:hover { border-color: rgba(255, 255, 255, 0.2); }
+.cv-competencias { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(24px, 3vw, 44px); }
+.cv-competencia { border-top: 1px solid rgba(255, 255, 255, 0.16); padding-top: 18px; }
 .cv-competencia-titulo {
-  font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 0.22em;
-  text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin-bottom: 18px;
+  font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-weight: 400;
+  font-size: 18px; line-height: 1.3; color: rgba(245, 245, 247, 0.92); margin-bottom: 14px;
 }
-.cv-competencia ul { display: flex; flex-direction: column; gap: 9px; }
-.cv-competencia li {
-  position: relative; padding-left: 18px;
-  color: rgba(255, 255, 255, 0.7); font-size: 14.5px; line-height: 1.6; font-weight: 300;
-}
-.cv-competencia li::before {
-  content: ""; position: absolute; left: 0; top: 10px;
-  width: 5px; height: 1px; background: rgba(255, 255, 255, 0.34);
-}
+.cv-competencia ul { display: flex; flex-direction: column; gap: 6px; }
+.cv-competencia li { color: rgba(255, 255, 255, 0.66); font-size: 14.5px; line-height: 1.6; font-weight: 300; }
 
+@media (max-width: 1100px) {
+  .cv-competencias { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 860px) {
-  .cv-fila { grid-template-columns: 1fr; gap: 12px; }
-  .cv-cuando { flex-direction: row; align-items: center; gap: 12px; padding-top: 0; }
-  .cv-competencias { grid-template-columns: 1fr; }
+  .cv-grupo { grid-template-columns: 1fr; gap: 0; }
+  .cv-ano { position: static; padding-top: 22px; font-size: 30px; }
+  .cv-entrada { padding: 20px 0 28px; }
+  /* Under a year the stroke on the rule read as an underline: here the
+     institution's colour leads the date instead */
+  .cv-entrada::before { display: none; }
+  .cv-meta { align-items: center; }
+  .cv-meta::before { content: ""; width: 18px; height: 1px; background: var(--accent, #fff); }
+  .cv-logo { width: 76px; height: 32px; }
 }
 @media (max-width: 560px) {
-  .cv-tarjeta { flex-direction: column; }
+  .cv-competencias { grid-template-columns: 1fr; }
+  .cv-cabeza { gap: 16px; }
+  .cv-lugar { display: block; }
+  .cv-lugar::before { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cv-filtro::after, .cv-tarjeta, .cv-logo img, .cv-competencia { transition: none; }
+  .cv-filtro::after, .cv-entrada::before, .cv-logo img, .cv-descarga, .cv-descarga span { transition: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1077,27 +1052,17 @@ select:focus-visible {
   .proj-chevron { order: 1; margin-left: auto; align-self: center; }
   .proj-meta { order: 2; padding-left: 28px; }
 
-  /* The record: the filter is a row of real controls rather than three words
-     with a hairline under them. */
-  .cv-barra { margin-top: 26px; padding-top: 18px; gap: 14px; }
-  .cv-filtros { gap: 8px; width: 100%; }
+  /* The record: the filter stays three words, each a full-height target,
+     with the same underline as on a wide screen. */
+  .cv-barra { margin-top: 26px; padding-top: 8px; gap: 4px 16px; }
+  .cv-filtros { gap: 0 22px; }
   .cv-filtro {
-    flex: 1 1 auto; padding: 0 12px; min-height: 44px;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 11.5px; letter-spacing: 0.12em;
-    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px;
-    background: rgba(255, 255, 255, 0.03);
-    -webkit-tap-highlight-color: transparent;
+    min-height: 44px; padding-bottom: 0; display: inline-flex; align-items: center;
+    font-size: 11.5px; letter-spacing: 0.14em; -webkit-tap-highlight-color: transparent;
   }
-  /* The underline was the state on a wide screen. Here the pill carries it,
-     so the line would only be noise. */
-  .cv-filtro::after { display: none; }
-  .cv-filtro.is-on {
-    color: #06070e; background: #F5F5F7; border-color: #F5F5F7; font-weight: 600;
-  }
-  .cv-fechas { font-size: 11.5px; }
-  .cv-org { font-size: 12px; line-height: 1.5; }
-  .cv-tipo { font-size: 10.5px; }
+  .cv-filtro::after { bottom: 9px; }
+  .cv-descarga { min-height: 44px; font-size: 11.5px; }
+  .cv-org { font-size: 13.5px; }
 
   /* The About gallery keeps its drama without taking two thirds of the page. */
   .rep { padding: 13px 14px 15px; }
@@ -1142,7 +1107,7 @@ select:focus-visible {
   }
   .flag-second { padding: 0; }
   .cv-filtro {
-    min-height: 44px; padding: 0 14px;
+    min-height: 44px; padding: 0;
     display: inline-flex; align-items: center; justify-content: center;
   }
   .rep .rep-mandos button {
@@ -1296,6 +1261,8 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 /* Ink is one colour: every logo prints black on the ink screen */
 .pc-ink-top { display: flex; align-items: center; gap: 16px; }
 .pc-ink-logo { flex: none; display: block; width: 44px; height: 44px; filter: brightness(0); opacity: .86; }
+/* ...unless the logo is drawn in tones: then it prints in greys, multiplied into the paper */
+.pc-ink-logo[data-tones] { filter: var(--ink-tones); opacity: 1; mix-blend-mode: multiply; }
 .pc-ink-logo img, .pc-ink-logo svg { width: 100%; height: 100%; object-fit: contain; display: block; }
 .pc-ink-name { margin: 0; font-family: var(--font-playfair), Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1.05; color: #121212; }
 .pc-ink-name[data-long] { font-size: 28px; }
@@ -1321,4 +1288,29 @@ html.pc-noscroll, html.pc-noscroll body { overflow: hidden; overscroll-behavior:
 
 @media (prefers-reduced-motion: reduce) {
   .pc-slider { transition: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   Constellations: drawn over the sky's veil, under the page (lib/constellations)
+---------------------------------------------------------------------------- */
+.sky-lines { position: fixed; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.sky-cons { filter: drop-shadow(0 0 3px rgba(150, 185, 255, .55)); transition: opacity .8s ease; }
+.sky-cons.is-out { opacity: 0; }
+.sky-cons path { fill: none; stroke: rgba(200, 218, 255, .42); stroke-width: .8; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s cubic-bezier(.22, .61, .36, 1); }
+.sky-cons.is-on path { stroke-dashoffset: 0; }
+.sky-cons circle { fill: rgba(228, 236, 255, .9); opacity: 0; transition: opacity 1s ease .5s; }
+.sky-cons.is-on circle { opacity: 1; }
+.sky-ring { fill: none; stroke: rgba(228, 236, 255, .6); stroke-width: .8; opacity: 0; transform-box: fill-box; transform-origin: center;
+  transform: scale(.6); transition: opacity .5s ease, transform .9s cubic-bezier(.22, .61, .36, 1); }
+.sky-ring.is-on { opacity: 1; transform: scale(1); }
+.sky-label { position: fixed; left: 0; top: 0; z-index: 1; display: grid; gap: 5px; pointer-events: none; white-space: nowrap; text-shadow: 0 0 10px rgba(4, 5, 12, .95), 0 0 2px rgba(4, 5, 12, .9);
+  opacity: 0; transition: opacity .6s ease; }
+.sky-label.is-on { opacity: 1; transition-delay: .3s; }
+.sky-label[data-side="left"] { text-align: right; }
+.sky-label b { font: italic 400 16px/1 var(--font-playfair), Georgia, serif; color: rgba(255, 255, 255, .9); letter-spacing: .01em; }
+.sky-label span { font: 400 9.5px/1 var(--font-inter), system-ui, sans-serif; letter-spacing: .32em; text-transform: uppercase; color: rgba(196, 212, 255, .55); }
+@media (prefers-reduced-motion: reduce) {
+  .sky-cons path { transition: none; }
+  .sky-ring { transition: opacity .5s ease; transform: none; }
 }

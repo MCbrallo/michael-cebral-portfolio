@@ -137,10 +137,8 @@ export function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Subtitle - with a gold accent rule */}
-                    {/* One line on a phone: tighter tracking and a shorter rule there, the desktop look unchanged */}
-                    <div className="flex items-center gap-3 md:gap-4 mt-2 pointer-events-auto">
-                        <span className="h-px w-8 md:w-12 bg-gold/50 shrink-0" />
+                    {/* Subtitle, aligned with the name. One line on a phone: tighter tracking there */}
+                    <div className="flex items-center mt-2 pointer-events-auto">
                         <div className="overflow-hidden">
                             <motion.p
                                 key={t.hero.subtitle}

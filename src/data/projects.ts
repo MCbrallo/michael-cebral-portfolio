@@ -32,6 +32,12 @@ export type Project = {
      * keeps its own colours.
      */
     markOnPaper?: "ink" | "color";
+    /**
+     * The ink screen prints every logo as a black silhouette, which wipes out
+     * a mark drawn in tones (an illustration, a mosaic, a pin with a letter
+     * in it). A CSS filter here prints it in greys instead, tuned per logo.
+     */
+    inkTones?: string;
     links?: ProjectLink[];
     /** Institutions and acronyms, left untranslated on purpose. */
     status?: string;
@@ -166,6 +172,7 @@ export const projects: Project[] = [
         },
         accent: "#4ec1ce",
         logo: "/projects/eoguessr.svg",
+        inkTones: "grayscale(1) brightness(.6) contrast(3)",
         links: [{ kind: "live", href: "https://eoguessr.app" }],
         previewUrl: "https://eoguessr.app/?embed=1",
         frameAncestors: ["https://mcebral.com", "https://www.mcebral.com", "https://michael-cebral-site.vercel.app", "https://mcebralloportfolio.vercel.app"],
@@ -221,6 +228,7 @@ export const projects: Project[] = [
         },
         accent: "#dd9461",
         logo: "/projects/copernicus-mosaic.svg",
+        inkTones: "grayscale(1) brightness(1.1) contrast(1.8)",
         links: [{ kind: "live", href: "https://copernicus-mosaic.netlify.app" }],
         previewUrl: "https://copernicus-mosaic.netlify.app/?embed=1",
     },
@@ -301,6 +309,7 @@ export const projects: Project[] = [
         },
         accent: "#b49171",
         logo: "/projects/laikas-company.svg",
+        inkTones: "grayscale(1) contrast(2.4) brightness(.85)",
         links: [{ kind: "live", href: "https://laikas-company.vercel.app" }],
     },
 ];
