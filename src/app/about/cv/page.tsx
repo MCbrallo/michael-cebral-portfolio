@@ -8,10 +8,10 @@ import { entradas, competencias, type Entrada, type Tipo } from '@/data/cv';
 type Filtro = Tipo | 'all';
 
 /**
- * The record, set like the CV pages of an annual report: no cards, no pills.
- * Entries hang under their year, which stays in view while its entries pass.
- * Each institution brings its colour as a short stroke over its entry, as the
- * tint of its name and of its evidence line, and nothing else.
+ * The record, set like the CV pages of an annual report: no cards, no pills,
+ * one rule per year. Entries hang under their year, which stays in view while
+ * its entries pass. Each institution brings its colour as a dot by the date
+ * and the tint of its name and key fact, and nothing else.
  */
 export default function CVPage() {
     const { t, language } = useLanguage();
@@ -67,8 +67,11 @@ export default function CVPage() {
                         </div>
 
                         <a href="/Michael_Cebral_CV.pdf" download className="cv-descarga">
+                            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                                <path d="M8 2.5v7.5M4.75 7 8 10.25 11.25 7M3 13h10" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                             {t.cv.download}
-                            <span aria-hidden="true">↓</span>
+                            <small>PDF</small>
                         </a>
                     </div>
                 </header>
@@ -89,7 +92,6 @@ export default function CVPage() {
                                             <div className="cv-titular">
                                                 <p className="cv-meta">
                                                     <time>{e.fechas[language]}</time>
-                                                    <span>{e.tipo === 'education' ? t.cv.labelEducation : t.cv.labelCareer}</span>
                                                 </p>
                                                 <h2 className="cv-papel">{e.titulo[language]}</h2>
                                                 <p className="cv-org">
@@ -114,7 +116,7 @@ export default function CVPage() {
                                         </ul>
 
                                         {e.etiquetas[language].length > 0 && (
-                                            <p className="cv-temas">{e.etiquetas[language].join(' · ')}</p>
+                                            <p className="cv-temas">{e.etiquetas[language].join(', ')}</p>
                                         )}
                                     </article>
                                 ))}

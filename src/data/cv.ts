@@ -7,6 +7,9 @@ import type { Texto } from "@/data/projects";
  * names stay in their own language: "Premio Extraordinario Fin de Carrera" is
  * the name of a thing, not a sentence.
  *
+ * The voice is plain: what was done, where, and what came of it, in short
+ * sentences. No dashes and no middle dots inside the copy; commas do the work.
+ *
  * Ordering comes from `orden`, a plain year and month number, and not from
  * parsing the date label. The label reads differently in each language, so
  * sorting on it broke the moment the dates were translated.
@@ -30,7 +33,7 @@ export type Entrada = {
     orden: number;
     logo?: string;
     acento: string;
-    /** The evidence line, in the same slot and shape used across the site. */
+    /** One plain line with the key fact: a grant, a grade, a scale. */
     prueba?: Texto;
     cuerpo: { en: string[]; es: string[]; gl: string[] };
     etiquetas: { en: string[]; es: string[]; gl: string[] };
@@ -42,29 +45,29 @@ export const entradas: Entrada[] = [
         tipo: "career",
         titulo: {
             en: "Science Communication and Research Evaluation Intern",
-            es: "Becario de Comunicación Científica y Evaluación de la Investigación",
-            gl: "Bolseiro de Comunicación Científica e Avaliación da Investigación",
+            es: "Becario de comunicación científica y evaluación de la investigación",
+            gl: "Bolseiro de comunicación científica e avaliación da investigación",
         },
-        organizacion: "European Space Agency · Exploration Science Office, ESTEC",
+        organizacion: "European Space Agency, Exploration Science Office (ESTEC)",
         lugar: "Noordwijk, Netherlands",
-        fechas: { en: "Jul to Oct 2026", es: "Jul a Oct 2026", gl: "Xul a Out 2026" },
+        fechas: { en: "Jul to Sep 2026", es: "Jul a Sep 2026", gl: "Xul a Set 2026" },
         orden: 202607,
         logo: "/logos/oficial/esa.svg",
         acento: "#5b9bd5",
         prueba: {
-            en: "Incoming · human spaceflight programme",
-            es: "Entrante · programa de vuelo espacial tripulado",
-            gl: "Entrante · programa de voo espacial tripulado",
+            en: "Human Spaceflight Programme",
+            es: "Programa de vuelo espacial tripulado",
+            gl: "Programa de voo espacial tripulado",
         },
         cuerpo: {
             en: [
-                "Joining ESA's human spaceflight programme to help communicate exploration science and support research evaluation, for readers who range from review panels to the wider public.",
+                "Worked on science communication and supported research evaluation in ESA's human spaceflight programme, writing for review panels as well as the general public.",
             ],
             es: [
-                "Me incorporo al programa de vuelo espacial tripulado de la ESA para comunicar la ciencia de la exploración y apoyar la evaluación de la investigación, para lectores que van desde paneles de revisión hasta el público general.",
+                "Trabajé en comunicación científica y apoyé la evaluación de la investigación en el programa de vuelo espacial tripulado de la ESA, con textos para paneles de evaluación y para el público general.",
             ],
             gl: [
-                "Incorpórome ao programa de voo espacial tripulado da ESA para comunicar a ciencia da exploración e apoiar a avaliación da investigación, para lectores que van desde paneis de revisión ata o público xeral.",
+                "Traballei en comunicación científica e apoiei a avaliación da investigación no programa de voo espacial tripulado da ESA, con textos para paneis de avaliación e para o público xeral.",
             ],
         },
         etiquetas: {
@@ -77,25 +80,25 @@ export const entradas: Entrada[] = [
         id: "isu-master",
         tipo: "education",
         titulo: {
-            en: "Master's degree in Space Studies · Space Policy and Entrepreneurship",
-            es: "Máster en Estudios Espaciales · Política Espacial y Emprendimiento",
-            gl: "Máster en Estudos Espaciais · Política Espacial e Emprendemento",
+            en: "Master's degree in Space Studies",
+            es: "Máster en Estudios Espaciales",
+            gl: "Máster en Estudos Espaciais",
         },
         organizacion: "International Space University",
         lugar: "Strasbourg, France",
-        fechas: { en: "2025 to 2027", es: "2025 a 2027", gl: "2025 a 2027" },
+        fechas: { en: "2025 to 2026", es: "2025 a 2026", gl: "2025 a 2026" },
         orden: 202508,
         logo: "/logos/oficial/isu.png",
         acento: "#8b83dd",
         prueba: {
-            en: "Full scholarship · Fundación Barrié",
-            es: "Beca completa · Fundación Barrié",
-            gl: "Bolsa completa · Fundación Barrié",
+            en: "Full scholarship from Fundación Barrié",
+            es: "Beca completa de la Fundación Barrié",
+            gl: "Bolsa completa da Fundación Barrié",
         },
         cuerpo: {
-            en: ["Space policy and entrepreneurship, alongside executive certificates in space applications."],
-            es: ["Política espacial y emprendimiento, junto a certificados ejecutivos en aplicaciones espaciales."],
-            gl: ["Política espacial e emprendemento, xunto a certificados executivos en aplicacións espaciais."],
+            en: ["Specialisation in space policy and entrepreneurship, plus executive certificates in space applications."],
+            es: ["Especialidad en política espacial y emprendimiento, además de certificados ejecutivos en aplicaciones espaciales."],
+            gl: ["Especialidade en política espacial e emprendemento, ademais de certificados executivos en aplicacións espaciais."],
         },
         etiquetas: {
             en: ["Space policy", "Entrepreneurship"],
@@ -111,32 +114,32 @@ export const entradas: Entrada[] = [
             es: "Ingeniero de investigación e investigador de máster",
             gl: "Enxeñeiro de investigación e investigador de máster",
         },
-        organizacion: "Giacomello Lab · SciLifeLab, KTH Royal Institute of Technology",
+        organizacion: "Giacomello Lab, SciLifeLab, KTH Royal Institute of Technology",
         lugar: "Stockholm, Sweden",
         fechas: { en: "Nov 2024 to Aug 2025", es: "Nov 2024 a Ago 2025", gl: "Nov 2024 a Ago 2025" },
         orden: 202411,
         logo: "/logos/oficial/scilifelab.svg",
         acento: "#4fb3a3",
         prueba: {
-            en: "NASA Rodent Research 9 · pipelines kept on as the lab standard",
-            es: "NASA Rodent Research 9 · pipelines adoptados como estándar del laboratorio",
-            gl: "NASA Rodent Research 9 · pipelines adoptados como estándar do laboratorio",
+            en: "Data from NASA's Rodent Research 9 mission",
+            es: "Datos de la misión Rodent Research 9 de la NASA",
+            gl: "Datos da misión Rodent Research 9 da NASA",
         },
         cuerpo: {
             en: [
-                "Made dense spaceflight biology data, the NASA Rodent Research 9 bone and muscle samples, readable for specialists and non specialists alike, through clear summaries and figures.",
-                "Wrote reproducible data pipelines in R and Python that the lab kept on as its standard.",
-                "Produced the figures and summaries the team relied on internally and in its outreach.",
+                "Worked with bone and muscle data from NASA's Rodent Research 9 mission and presented it in clear summaries and figures for specialists and a general audience.",
+                "Wrote reproducible data pipelines in R and Python, which the lab now uses as its standard.",
+                "Prepared figures and summaries for internal use and for the lab's outreach.",
             ],
             es: [
-                "Hice legibles, para especialistas y para quien no lo es, datos densos de biología de vuelo espacial: las muestras de hueso y músculo de NASA Rodent Research 9, con resúmenes y figuras claras.",
-                "Escribí pipelines de datos reproducibles en R y Python que el laboratorio adoptó como estándar.",
-                "Produje las figuras y los resúmenes que el equipo usó por dentro y en divulgación.",
+                "Trabajé con datos de hueso y músculo de la misión Rodent Research 9 de la NASA y los presenté en resúmenes y figuras claros para especialistas y público general.",
+                "Escribí pipelines de datos reproducibles en R y Python, que el laboratorio usa ahora como estándar.",
+                "Preparé figuras y resúmenes para uso interno y para la divulgación del laboratorio.",
             ],
             gl: [
-                "Fixen lexibles, para especialistas e para quen non o é, datos densos de bioloxía de voo espacial: as mostras de óso e músculo de NASA Rodent Research 9, con resumos e figuras claras.",
-                "Escribín pipelines de datos reproducibles en R e Python que o laboratorio adoptou como estándar.",
-                "Producín as figuras e os resumos que o equipo usou por dentro e en divulgación.",
+                "Traballei con datos de óso e músculo da misión Rodent Research 9 da NASA e presenteinos en resumos e figuras claros para especialistas e público xeral.",
+                "Escribín pipelines de datos reproducibles en R e Python, que o laboratorio usa agora como estándar.",
+                "Preparei figuras e resumos para uso interno e para a divulgación do laboratorio.",
             ],
         },
         etiquetas: {
@@ -150,32 +153,32 @@ export const entradas: Entrada[] = [
         tipo: "career",
         titulo: {
             en: "Design and Communications Coordinator",
-            es: "Coordinador de Diseño y Comunicación",
-            gl: "Coordinador de Deseño e Comunicación",
+            es: "Coordinador de diseño y comunicación",
+            gl: "Coordinador de deseño e comunicación",
         },
-        organizacion: "TEDxKI · Karolinska Institutet",
+        organizacion: "TEDxKI, Karolinska Institutet",
         lugar: "Stockholm, Sweden",
         fechas: { en: "Nov 2023 to Jun 2024", es: "Nov 2023 a Jun 2024", gl: "Nov 2023 a Xuñ 2024" },
         orden: 202311,
         logo: "/logos/oficial/tedx.png",
         acento: "#e62b1e",
         prueba: {
-            en: "A TEDx event of 2,500 people · one visual identity across everything",
-            es: "Un TEDx de 2.500 personas · una identidad visual para todo",
-            gl: "Un TEDx de 2.500 persoas · unha identidade visual para todo",
+            en: "TEDx event with 2,500 attendees",
+            es: "Evento TEDx con 2.500 asistentes",
+            gl: "Evento TEDx con 2.500 asistentes",
         },
         cuerpo: {
             en: [
-                "Ran the visual identity and every piece of communication for a TEDx event of 2,500 people: slides, signage, social posts and speaker decks, all held to one coherent style.",
-                "Built the slide templates and visual guidelines that every speaker worked from.",
+                "Led the visual identity and communication for the event: slides, signage, social media and speaker presentations, all in one consistent style.",
+                "Created the slide templates and visual guidelines used by every speaker.",
             ],
             es: [
-                "Llevé la identidad visual y toda la comunicación de un TEDx de 2.500 personas: diapositivas, señalética, redes y presentaciones de ponentes, todo bajo un mismo estilo.",
-                "Construí las plantillas y las guías visuales con las que trabajó cada ponente.",
+                "Dirigí la identidad visual y la comunicación del evento: diapositivas, señalética, redes sociales y presentaciones de los ponentes, con un estilo común.",
+                "Creé las plantillas y las guías visuales que usaron todos los ponentes.",
             ],
             gl: [
-                "Levei a identidade visual e toda a comunicación dun TEDx de 2.500 persoas: diapositivas, sinaléctica, redes e presentacións de relatores, todo baixo un mesmo estilo.",
-                "Construín as plantillas e as guías visuais coas que traballou cada relator.",
+                "Dirixín a identidade visual e a comunicación do evento: diapositivas, sinaléctica, redes sociais e presentacións dos relatores, cun estilo común.",
+                "Creei as plantillas e as guías visuais que usaron todos os relatores.",
             ],
         },
         etiquetas: {
@@ -198,22 +201,22 @@ export const entradas: Entrada[] = [
         orden: 201901,
         acento: "#c9d2d3",
         prueba: {
-            en: "Around 30 public talks · three countries · six years",
-            es: "Unas 30 charlas públicas · tres países · seis años",
-            gl: "Arredor de 30 charlas públicas · tres países · seis anos",
+            en: "About 30 talks in three countries since 2019",
+            es: "Unas 30 charlas en tres países desde 2019",
+            gl: "Arredor de 30 charlas en tres países desde 2019",
         },
         cuerpo: {
             en: [
-                "Gave around 30 public talks in three countries over six years, from primary school classrooms to international conferences, designing the slides, graphics and posts for each one.",
-                "Reshaped the same science, across space, biology and research careers, to fit whoever was in the room.",
+                "Talks for audiences ranging from primary school pupils to international conferences, with my own slides, graphics and posts for each one.",
+                "Topics include space, biology and research careers, adapted to each audience.",
             ],
             es: [
-                "Di unas 30 charlas públicas en tres países a lo largo de seis años, desde aulas de primaria hasta congresos internacionales, diseñando las diapositivas, los gráficos y las publicaciones de cada una.",
-                "Rehíce la misma ciencia, entre espacio, biología y carreras de investigación, para encajar con quien tuviera delante.",
+                "Charlas para públicos que van desde alumnos de primaria hasta congresos internacionales, con diapositivas, gráficos y publicaciones propias para cada una.",
+                "Los temas incluyen espacio, biología y carreras científicas, adaptados a cada público.",
             ],
             gl: [
-                "Dei arredor de 30 charlas públicas en tres países ao longo de seis anos, desde aulas de primaria ata congresos internacionais, deseñando as diapositivas, os gráficos e as publicacións de cada unha.",
-                "Refixen a mesma ciencia, entre espazo, bioloxía e carreiras de investigación, para encaixar con quen tivese diante.",
+                "Charlas para públicos que van desde alumnado de primaria ata congresos internacionais, con diapositivas, gráficos e publicacións propias para cada unha.",
+                "Os temas inclúen espazo, bioloxía e carreiras científicas, adaptados a cada público.",
             ],
         },
         etiquetas: {
@@ -230,7 +233,7 @@ export const entradas: Entrada[] = [
             es: "Escuela de verano de investigación en gravedad",
             gl: "Escola de verán de investigación en gravidade",
         },
-        organizacion: "European Space Agency · ELGRA",
+        organizacion: "European Space Agency, ELGRA",
         lugar: "Transinne, Belgium",
         fechas: { en: "2024", es: "2024", gl: "2024" },
         orden: 202406,
@@ -238,9 +241,9 @@ export const entradas: Entrada[] = [
         acento: "#5b9bd5",
         prueba: { en: "Grade A", es: "Calificación A", gl: "Cualificación A" },
         cuerpo: {
-            en: ["Microgravity research, and the ground platforms that stand in for it."],
-            es: ["Investigación en microgravedad y las plataformas en tierra que la sustituyen."],
-            gl: ["Investigación en microgravidade e as plataformas en terra que a substitúen."],
+            en: ["Microgravity research and the ground facilities used to simulate it."],
+            es: ["Investigación en microgravedad y las instalaciones en tierra que se usan para simularla."],
+            gl: ["Investigación en microgravidade e as instalacións en terra que se usan para simulala."],
         },
         etiquetas: {
             en: ["Microgravity", "ESA Academy"],
@@ -256,7 +259,7 @@ export const entradas: Entrada[] = [
             es: "Asistente de investigación",
             gl: "Asistente de investigación",
         },
-        organizacion: "Anna Rising Lab · Karolinska Institutet",
+        organizacion: "Anna Rising Lab, Karolinska Institutet",
         lugar: "Stockholm, Sweden",
         fechas: { en: "Mar to Jun 2024", es: "Mar a Jun 2024", gl: "Mar a Xuñ 2024" },
         orden: 202403,
@@ -264,16 +267,16 @@ export const entradas: Entrada[] = [
         acento: "#c07aa0",
         cuerpo: {
             en: [
-                "Produced recombinant spider silk proteins and assembled 3D scaffolds.",
-                "Generated protocols for structural characterisation.",
+                "Produced recombinant spider silk proteins and assembled them into 3D scaffolds.",
+                "Wrote protocols for structural characterisation.",
             ],
             es: [
-                "Produje proteínas recombinantes de seda de araña y ensamblé andamios 3D.",
-                "Generé protocolos para caracterización estructural.",
+                "Produje proteínas recombinantes de seda de araña y las ensamblé en andamios 3D.",
+                "Redacté protocolos de caracterización estructural.",
             ],
             gl: [
-                "Producín proteínas recombinantes de seda de araña e ensamblei estadas 3D.",
-                "Xerei protocolos para caracterización estrutural.",
+                "Producín proteínas recombinantes de seda de araña e ensambleinas en estadas 3D.",
+                "Redactei protocolos de caracterización estrutural.",
             ],
         },
         etiquetas: {
@@ -297,14 +300,14 @@ export const entradas: Entrada[] = [
         logo: "/logos/oficial/ki.svg",
         acento: "#c07aa0",
         prueba: {
-            en: "Grade VG, highest distinction · full scholarship, Fundación la Caixa",
-            es: "Calificación VG, máxima distinción · beca completa, Fundación la Caixa",
-            gl: "Cualificación VG, máxima distinción · bolsa completa, Fundación la Caixa",
+            en: "Highest grade (VG) and a full scholarship from Fundación la Caixa",
+            es: "Máxima calificación (VG) y beca completa de la Fundación la Caixa",
+            gl: "Máxima cualificación (VG) e bolsa completa da Fundación la Caixa",
         },
         cuerpo: {
-            en: ["Biomedicine, with the thesis carried out at SciLifeLab on spaceflight biology data."],
-            es: ["Biomedicina, con el trabajo de fin de máster en SciLifeLab sobre datos de biología de vuelo espacial."],
-            gl: ["Biomedicina, co traballo de fin de máster en SciLifeLab sobre datos de bioloxía de voo espacial."],
+            en: ["Master's thesis at SciLifeLab on spaceflight biology data."],
+            es: ["Trabajo de fin de máster en SciLifeLab sobre datos de biología espacial."],
+            gl: ["Traballo de fin de máster en SciLifeLab sobre datos de bioloxía espacial."],
         },
         etiquetas: {
             en: ["Biomedicine", "Research"],
@@ -320,7 +323,7 @@ export const entradas: Entrada[] = [
             es: "Investigador de trabajo de fin de grado",
             gl: "Investigador de traballo de fin de grao",
         },
-        organizacion: "CiMUS · Universidade de Santiago de Compostela",
+        organizacion: "CiMUS, Universidade de Santiago de Compostela",
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Nov 2022 to Jul 2023", es: "Nov 2022 a Jul 2023", gl: "Nov 2022 a Xul 2023" },
         orden: 202211,
@@ -328,16 +331,16 @@ export const entradas: Entrada[] = [
         acento: "#56a419",
         cuerpo: {
             en: [
-                "Investigated novel low molecular weight compounds for treating rheumatoid arthritis using gene expression assays (qPCR).",
-                "Explored the efficacy of eprinomectin in reducing pro inflammatory cytokine secretion in vitro.",
+                "Tested new low molecular weight compounds for rheumatoid arthritis using gene expression assays (qPCR).",
+                "Studied whether eprinomectin reduces the secretion of proinflammatory cytokines in vitro.",
             ],
             es: [
-                "Investigué compuestos novedosos de bajo peso molecular para el tratamiento de la artritis reumatoide mediante ensayos de expresión génica (qPCR).",
-                "Exploré la eficacia de la eprinomectina en la reducción de la secreción de citoquinas proinflamatorias in vitro.",
+                "Probé nuevos compuestos de bajo peso molecular para la artritis reumatoide con ensayos de expresión génica (qPCR).",
+                "Estudié si la eprinomectina reduce la secreción de citoquinas proinflamatorias in vitro.",
             ],
             gl: [
-                "Investiguei compostos novos de baixo peso molecular para o tratamento da artrite reumatoide mediante ensaios de expresión xénica (qPCR).",
-                "Explorei a eficacia da eprinomectina na redución da secreción de citocinas proinflamatorias in vitro.",
+                "Probei novos compostos de baixo peso molecular para a artrite reumatoide con ensaios de expresión xénica (qPCR).",
+                "Estudei se a eprinomectina reduce a secreción de citocinas proinflamatorias in vitro.",
             ],
         },
         etiquetas: {
@@ -361,14 +364,14 @@ export const entradas: Entrada[] = [
         logo: "/logos/oficial/usc.svg",
         acento: "#9db35c",
         prueba: {
-            en: "9.2 out of 10 · Premio Extraordinario Fin de Carrera, top of the class · Academic Excellence Awards, Xunta de Galicia",
-            es: "9,2 sobre 10 · Premio Extraordinario Fin de Carrera, primero de la promoción · Premios de Excelencia Académica, Xunta de Galicia",
-            gl: "9,2 sobre 10 · Premio Extraordinario Fin de Carreira, primeiro da promoción · Premios de Excelencia Académica, Xunta de Galicia",
+            en: "Average grade 9.2 out of 10, Premio Extraordinario Fin de Carrera (top of the class) and Academic Excellence Awards from the Xunta de Galicia",
+            es: "Nota media de 9,2 sobre 10, Premio Extraordinario Fin de Carrera (primero de la promoción) y Premios de Excelencia Académica de la Xunta de Galicia",
+            gl: "Nota media de 9,2 sobre 10, Premio Extraordinario Fin de Carreira (primeiro da promoción) e Premios de Excelencia Académica da Xunta de Galicia",
         },
         cuerpo: {
-            en: ["Biotechnology, with three research placements at CiMUS alongside the degree."],
-            es: ["Biotecnología, con tres estancias de investigación en el CiMUS durante la carrera."],
-            gl: ["Biotecnoloxía, con tres estadías de investigación no CiMUS durante a carreira."],
+            en: ["Included three research placements at CiMUS."],
+            es: ["Incluyó tres estancias de investigación en el CiMUS."],
+            gl: ["Incluíu tres estadías de investigación no CiMUS."],
         },
         etiquetas: {
             en: ["Biotechnology"],
@@ -384,16 +387,16 @@ export const entradas: Entrada[] = [
             es: "Estudiante de prácticas en investigación",
             gl: "Estudante de prácticas en investigación",
         },
-        organizacion: "Pereira-Acedo Lab · ILDH, University College London",
+        organizacion: "Pereira-Acedo Lab, ILDH, University College London",
         lugar: "London, United Kingdom",
         fechas: { en: "Jul to Sep 2022", es: "Jul a Sep 2022", gl: "Xul a Set 2022" },
         orden: 202207,
         logo: "/logos/oficial/ucl.svg",
         acento: "#a77fd4",
         cuerpo: {
-            en: ["Generated 3D tumour spheroids to test novel photosensitive therapeutic compounds."],
-            es: ["Generé esferoides tumorales 3D para probar nuevos compuestos terapéuticos fotosensibles."],
-            gl: ["Xerei esferoides tumorais 3D para probar novos compostos terapéuticos fotosensibles."],
+            en: ["Grew 3D tumour spheroids to test new photosensitive therapeutic compounds."],
+            es: ["Cultivé esferoides tumorales 3D para probar nuevos compuestos terapéuticos fotosensibles."],
+            gl: ["Cultivei esferoides tumorais 3D para probar novos compostos terapéuticos fotosensibles."],
         },
         etiquetas: {
             en: ["Oncology", "Research"],
@@ -409,7 +412,7 @@ export const entradas: Entrada[] = [
             es: "Estudiante de prácticas en investigación",
             gl: "Estudante de prácticas en investigación",
         },
-        organizacion: "Prionlab · CiMUS, Universidade de Santiago de Compostela",
+        organizacion: "Prionlab, CiMUS, Universidade de Santiago de Compostela",
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Sep to Nov 2022", es: "Sep a Nov 2022", gl: "Set a Nov 2022" },
         orden: 202209,
@@ -417,16 +420,16 @@ export const entradas: Entrada[] = [
         acento: "#56a419",
         cuerpo: {
             en: [
-                "Studied prion biology and protein misfolding diseases.",
-                "Learned proteomics techniques for protein structural elucidation.",
+                "Studied prion biology and diseases caused by protein misfolding.",
+                "Learned proteomics techniques for determining protein structure.",
             ],
             es: [
-                "Estudié la biología de los priones y las enfermedades por plegamiento incorrecto de proteínas.",
-                "Aprendí técnicas de proteómica para la elucidación estructural de proteínas.",
+                "Estudié la biología de los priones y las enfermedades causadas por el plegamiento incorrecto de proteínas.",
+                "Aprendí técnicas de proteómica para determinar la estructura de proteínas.",
             ],
             gl: [
-                "Estudei a bioloxía dos prións e as enfermidades por pregamento incorrecto de proteínas.",
-                "Aprendín técnicas de proteómica para a elucidación estrutural de proteínas.",
+                "Estudei a bioloxía dos prións e as enfermidades causadas polo pregamento incorrecto de proteínas.",
+                "Aprendín técnicas de proteómica para determinar a estrutura de proteínas.",
             ],
         },
         etiquetas: {
@@ -443,7 +446,7 @@ export const entradas: Entrada[] = [
             es: "Estudiante de prácticas en investigación",
             gl: "Estudante de prácticas en investigación",
         },
-        organizacion: "Immunity and Small Molecules Lab · CiMUS, Universidade de Santiago de Compostela",
+        organizacion: "Immunity and Small Molecules Lab, CiMUS, Universidade de Santiago de Compostela",
         lugar: "Santiago de Compostela, Spain",
         fechas: { en: "Feb to Jun 2022", es: "Feb a Jun 2022", gl: "Feb a Xuñ 2022" },
         orden: 202202,
@@ -451,16 +454,16 @@ export const entradas: Entrada[] = [
         acento: "#56a419",
         cuerpo: {
             en: [
-                "Developed cell culture skills with suspension and adherent cells.",
-                "Performed colorimetric quantification (ELISA) and flow cytometry analysis.",
+                "Cell culture with suspension and adherent cells.",
+                "ELISA quantification and flow cytometry analysis.",
             ],
             es: [
-                "Desarrollé habilidades de cultivo celular con células en suspensión y adherentes.",
-                "Realicé cuantificación colorimétrica (ELISA) y análisis de citometría de flujo.",
+                "Cultivo celular con células en suspensión y adherentes.",
+                "Cuantificación por ELISA y análisis por citometría de flujo.",
             ],
             gl: [
-                "Desenvolvín habilidades de cultivo celular con células en suspensión e adherentes.",
-                "Realicei cuantificación colorimétrica (ELISA) e análise de citometría de fluxo.",
+                "Cultivo celular con células en suspensión e adherentes.",
+                "Cuantificación por ELISA e análise por citometría de fluxo.",
             ],
         },
         etiquetas: {
@@ -482,9 +485,9 @@ export const competencias: { titulo: Texto; puntos: Texto[] }[] = [
         puntos: [
             { en: "Science communication", es: "Comunicación científica", gl: "Comunicación científica" },
             { en: "Copywriting and editing", es: "Redacción y edición", gl: "Redacción e edición" },
-            { en: "Public speaking", es: "Oratoria y charlas", gl: "Oratoria e charlas" },
-            { en: "Daily news monitoring and curation", es: "Seguimiento y curación diaria de noticias", gl: "Seguimento e curación diaria de novas" },
-            { en: "Messaging for technical, institutional and public audiences", es: "Mensajes para públicos técnicos, institucionales y generales", gl: "Mensaxes para públicos técnicos, institucionais e xerais" },
+            { en: "Public speaking", es: "Oratoria", gl: "Oratoria" },
+            { en: "Daily news monitoring and curation", es: "Seguimiento y selección diaria de noticias", gl: "Seguimento e selección diaria de novas" },
+            { en: "Writing for technical, institutional and general audiences", es: "Textos para públicos técnicos, institucionales y generales", gl: "Textos para públicos técnicos, institucionais e xerais" },
         ],
     },
     {
@@ -523,7 +526,7 @@ export const competencias: { titulo: Texto; puntos: Texto[] }[] = [
         },
         puntos: [
             { en: "Spanish and Galician, mother tongues", es: "Español y gallego, lenguas maternas", gl: "Castelán e galego, linguas maternas" },
-            { en: "English, C2 listening and reading, C1 spoken and written", es: "Inglés, C2 comprensión, C1 expresión", gl: "Inglés, C2 comprensión, C1 expresión" },
+            { en: "English, C2 listening and reading, C1 speaking and writing", es: "Inglés, C2 comprensión, C1 expresión", gl: "Inglés, C2 comprensión, C1 expresión" },
             { en: "Portuguese, C1", es: "Portugués, C1", gl: "Portugués, C1" },
             { en: "French, A2", es: "Francés, A2", gl: "Francés, A2" },
         ],

@@ -714,109 +714,94 @@ select:focus-visible {
    the eyebrow, the filters, the bullets, the button and every hover at once
    is gone: it was on so many things that it marked none of them.
    ══════════════════════════════════════════════════════════════ */
-/* The record, set like the CV pages of an annual report: hairlines, a year
-   that stays in view, and the institution's colour where it means something.
-   No glass, no halos, no pills. */
+/* The record, set like the CV pages of an annual report: one rule per year,
+   a year that stays in view, and the institution's colour where it means
+   something. No glass, no halos, no pills, no italics. */
 .cv-barra {
-  margin-top: 34px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 30px;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
 }
-.cv-filtros { display: flex; flex-wrap: wrap; gap: 26px; }
+/* The filter is three words; the one in use is simply the bright one */
+.cv-filtros { display: flex; flex-wrap: wrap; gap: 6px 26px; }
 .cv-filtro {
-  position: relative; padding-bottom: 7px;
-  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em;
-  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
-  transition: color 0.3s;
+  font-family: var(--font-sans); font-size: 14px; letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.42); transition: color 0.3s;
 }
-.cv-filtro::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
-  background: #F5F5F7; transform: scaleX(0); transform-origin: left;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.cv-filtro:hover { color: rgba(255, 255, 255, 0.72); }
-.cv-filtro:hover::after { transform: scaleX(1); background: rgba(255, 255, 255, 0.3); }
-.cv-filtro.is-on { color: #F5F5F7; }
-.cv-filtro.is-on::after { transform: scaleX(1); }
+.cv-filtro:hover { color: rgba(255, 255, 255, 0.75); }
+.cv-filtro.is-on { color: #F5F5F7; font-weight: 500; }
 
-/* The download is a line of text with the site's gold under it */
+/* The download is a quiet button: a fine frame that turns white on hover */
 .cv-descarga {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
-  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 7px;
-  text-decoration-color: rgba(212, 175, 55, 0.5);
-  transition: color 0.3s, text-decoration-color 0.3s;
+  display: inline-flex; align-items: center; gap: 10px; height: 42px; padding: 0 18px 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; letter-spacing: 0.01em; color: #F5F5F7;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
 }
-.cv-descarga span { color: #D4AF37; transition: transform 0.3s; }
-.cv-descarga:hover { color: #F5F5F7; text-decoration-color: #D4AF37; }
-.cv-descarga:hover span { transform: translateY(2px); }
+.cv-descarga svg { width: 16px; height: 16px; color: #D4AF37; transition: color 0.3s, transform 0.3s; }
+.cv-descarga small { font-size: 11px; font-weight: 400; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.4); transition: color 0.3s; }
+.cv-descarga:hover { background: #F5F5F7; border-color: #F5F5F7; color: #06070e; }
+.cv-descarga:hover svg { color: #06070e; transform: translateY(1px); }
+.cv-descarga:hover small { color: rgba(6, 7, 14, 0.5); }
+.cv-descarga:focus-visible { outline: 2px solid #D4AF37; outline-offset: 3px; }
 
-.cv-registro { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 .cv-grupo {
   display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: clamp(20px, 3vw, 48px);
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 /* The year waits at the top while its entries pass */
 .cv-ano {
-  position: sticky; top: 104px; align-self: start; padding-top: 30px;
+  position: sticky; top: 104px; align-self: start; padding-top: 34px;
   font-family: var(--font-playfair), Georgia, serif; font-size: clamp(34px, 3.4vw, 46px); font-weight: 500;
   line-height: 1; letter-spacing: -0.02em; color: rgba(245, 245, 247, 0.92);
   font-variant-numeric: lining-nums;
 }
-.cv-entrada { position: relative; padding: 32px 0 38px; }
-.cv-entrada + .cv-entrada { border-top: 1px solid rgba(255, 255, 255, 0.08); }
-/* The institution's colour opens its entry, and runs the whole rule on hover */
-.cv-entrada::before {
-  content: ""; position: absolute; left: 0; top: -1px; width: 44px; height: 1px;
-  background: var(--accent, #fff);
-  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s;
-}
-.cv-entrada:hover::before { width: 100%; opacity: 0.7; }
+.cv-entradas { padding: 6px 0 22px; }
+.cv-entrada { padding: 30px 0 18px; }
 
 .cv-cabeza { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; }
 .cv-titular { min-width: 0; }
+/* The institution's colour, once, as a dot by the date */
 .cv-meta {
-  display: flex; flex-wrap: wrap; gap: 0 12px;
-  font-family: var(--font-sans); font-size: 12.5px; letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.48); font-variant-numeric: tabular-nums;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans); font-size: 13px; letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.5); font-variant-numeric: tabular-nums;
 }
-.cv-meta span { color: rgba(255, 255, 255, 0.32); }
-.cv-meta span::before { content: "·"; margin-right: 12px; }
+.cv-meta::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent, #fff); }
 .cv-papel {
   margin-top: 10px;
   font-family: var(--font-playfair), Georgia, serif; font-size: clamp(21px, 2.1vw, 28px); font-weight: 600;
-  letter-spacing: -0.015em; line-height: 1.18; color: #F5F5F7;
+  letter-spacing: -0.015em; line-height: 1.2; color: #F5F5F7;
 }
 .cv-org { margin-top: 8px; font-family: var(--font-sans); font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.5); }
-.cv-org-nombre { color: color-mix(in srgb, var(--accent, #fff) 50%, #F5F5F7); }
-.cv-lugar::before { content: "—"; margin: 0 0.55em; color: rgba(255, 255, 255, 0.25); }
+.cv-org-nombre { color: color-mix(in srgb, var(--accent, #fff) 45%, #F5F5F7); }
+.cv-lugar::before { content: ", "; }
 
 /* The official marks, as each institution publishes them for a dark ground */
 .cv-logo { flex: none; width: 108px; height: 44px; margin-top: 2px; display: flex; align-items: center; justify-content: flex-end; }
-.cv-logo img { max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0.8; transition: opacity 0.4s; }
-.cv-entrada:hover .cv-logo img { opacity: 1; }
+/* ...with a faint glow in the institution's colour, a little stronger on hover */
+.cv-logo img { max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0.86;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent, #fff) 60%, transparent));
+  transition: opacity 0.4s, filter 0.4s; }
+.cv-entrada:hover .cv-logo img { opacity: 1; filter: drop-shadow(0 0 16px color-mix(in srgb, var(--accent, #fff) 80%, transparent)); }
 
 .cv-prueba {
-  margin-top: 16px;
-  font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-size: 16px; line-height: 1.5;
-  color: color-mix(in srgb, var(--accent, #fff) 62%, #F5F5F7);
+  margin-top: 14px; font-family: var(--font-sans); font-size: 14.5px; line-height: 1.55;
+  color: color-mix(in srgb, var(--accent, #fff) 55%, #F5F5F7);
 }
-.cv-puntos { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
-.cv-puntos li { position: relative; padding-left: 20px; color: rgba(255, 255, 255, 0.74); font-size: 15px; line-height: 1.68; font-weight: 300; }
-.cv-puntos li::before { content: "–"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.3); }
-.cv-temas { margin-top: 16px; font-family: var(--font-sans); font-size: 12.5px; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.36); }
+.cv-puntos { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+.cv-puntos li { color: rgba(255, 255, 255, 0.74); font-size: 15px; line-height: 1.7; font-weight: 300; }
+.cv-temas { margin-top: 12px; font-family: var(--font-sans); font-size: 12.5px; letter-spacing: 0.01em; color: rgba(255, 255, 255, 0.36); }
 
-/* What I work with: four columns under a rule, the way the record is set */
-.cv-saber { margin-top: clamp(96px, 10vw, 140px); }
+/* Skills and languages: four columns, set like the record */
+.cv-saber { margin-top: clamp(80px, 9vw, 120px); padding-top: clamp(40px, 5vw, 56px); border-top: 1px solid rgba(255, 255, 255, 0.12); }
 .cv-seccion {
   font-family: var(--font-playfair), Georgia, serif; font-size: clamp(26px, 3vw, 38px); font-weight: 600;
   letter-spacing: -0.02em; line-height: 1.1; color: #F5F5F7; margin-bottom: clamp(26px, 3vw, 40px);
 }
 .cv-competencias { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(24px, 3vw, 44px); }
-.cv-competencia { border-top: 1px solid rgba(255, 255, 255, 0.16); padding-top: 18px; }
 .cv-competencia-titulo {
-  font-family: var(--font-playfair), Georgia, serif; font-style: italic; font-weight: 400;
-  font-size: 18px; line-height: 1.3; color: rgba(245, 245, 247, 0.92); margin-bottom: 14px;
+  font-family: var(--font-playfair), Georgia, serif; font-weight: 500;
+  font-size: 18px; line-height: 1.3; color: rgba(245, 245, 247, 0.94); margin-bottom: 12px;
 }
 .cv-competencia ul { display: flex; flex-direction: column; gap: 6px; }
 .cv-competencia li { color: rgba(255, 255, 255, 0.66); font-size: 14.5px; line-height: 1.6; font-weight: 300; }
@@ -826,23 +811,19 @@ select:focus-visible {
 }
 @media (max-width: 860px) {
   .cv-grupo { grid-template-columns: 1fr; gap: 0; }
-  .cv-ano { position: static; padding-top: 22px; font-size: 30px; }
-  .cv-entrada { padding: 20px 0 28px; }
-  /* Under a year the stroke on the rule read as an underline: here the
-     institution's colour leads the date instead */
-  .cv-entrada::before { display: none; }
-  .cv-meta { align-items: center; }
-  .cv-meta::before { content: ""; width: 18px; height: 1px; background: var(--accent, #fff); }
+  .cv-ano { position: static; padding-top: 24px; font-size: 30px; }
+  .cv-entradas { padding: 0 0 16px; }
+  .cv-entrada { padding: 22px 0 12px; }
   .cv-logo { width: 76px; height: 32px; }
 }
 @media (max-width: 560px) {
   .cv-competencias { grid-template-columns: 1fr; }
   .cv-cabeza { gap: 16px; }
   .cv-lugar { display: block; }
-  .cv-lugar::before { display: none; }
+  .cv-lugar::before { content: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cv-filtro::after, .cv-entrada::before, .cv-logo img, .cv-descarga, .cv-descarga span { transition: none; }
+  .cv-logo img, .cv-descarga, .cv-descarga svg, .cv-descarga small { transition: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1052,16 +1033,11 @@ select:focus-visible {
   .proj-chevron { order: 1; margin-left: auto; align-self: center; }
   .proj-meta { order: 2; padding-left: 28px; }
 
-  /* The record: the filter stays three words, each a full-height target,
-     with the same underline as on a wide screen. */
-  .cv-barra { margin-top: 26px; padding-top: 8px; gap: 4px 16px; }
-  .cv-filtros { gap: 0 22px; }
-  .cv-filtro {
-    min-height: 44px; padding-bottom: 0; display: inline-flex; align-items: center;
-    font-size: 11.5px; letter-spacing: 0.14em; -webkit-tap-highlight-color: transparent;
-  }
-  .cv-filtro::after { bottom: 9px; }
-  .cv-descarga { min-height: 44px; font-size: 11.5px; }
+  /* The record: the three filter words stay words, each a full-height target */
+  .cv-barra { margin-top: 22px; gap: 10px 16px; }
+  .cv-filtros { gap: 0 24px; }
+  .cv-filtro { min-height: 44px; display: inline-flex; align-items: center; font-size: 15px; -webkit-tap-highlight-color: transparent; }
+  .cv-descarga { height: 46px; }
   .cv-org { font-size: 13.5px; }
 
   /* The About gallery keeps its drama without taking two thirds of the page. */
