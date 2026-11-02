@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import { SkipLink } from "@/components/SkipLink";
-import { NebulaBackground } from "@/components/NebulaBackground";
+import { SkyBackground } from "@/components/SkyBackground";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -114,9 +114,9 @@ export default function RootLayout({
         className={`${playfair.variable} ${bodoni.variable} ${inter.variable} antialiased bg-background text-foreground flex flex-col min-h-[var(--pantalla)] font-sans overflow-x-hidden`}
       >
         <LanguageProvider>
-          {/* Global Interactive Nebula Background (WebGL) */}
+          {/* Global sky background (WebGL): the real Milky Way, drifting */}
           <div className="fixed inset-0 z-[-1] pointer-events-none bg-[#04050c]">
-              <NebulaBackground />
+              <SkyBackground />
               {/* Readability scrim over the shader — keeps headlines legible
                   while letting the dust breathe at the edges. */}
               <div
