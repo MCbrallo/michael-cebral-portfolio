@@ -269,6 +269,58 @@ function MoonCover({ p }: { p: Project }) {
     );
 }
 
+/* ── VALADO: the two posts of the icon, printed large on its meadow, the rails
+   running off both edges and the app's own padlock hung between the posts.
+   Geometry in the 108 unit grid of the app's launcher icon (ic_mono.xml). ── */
+const POST = "M35.76 30.63A.67.67 0 0 1 36.85 30.24L49.88 41.57A.53.53 0 0 1 50.06 41.97V72.8A1.07 1.07 0 0 1 48.99 73.87H35.23A1.07 1.07 0 0 1 34.16 72.8V41.48A20.04 20.04 0 0 1 34.46 38.03Z";
+const BEVEL = "M35.76 30.63A.67.67 0 0 1 36.85 30.24L49.88 41.57A.53.53 0 0 1 50.06 41.97V43.2L36.4 31.5Z";
+const K = 1.9;
+const MARK = `translate(1.1 -48.46) scale(${K})`;
+const railY = (u: number) => u * K - 48.46;
+/* Short strokes of grass leaning the way they lean on the icon */
+const BLADES = Array.from({ length: 64 }, (_, i) => {
+    const x = +(hash(i * 3 + 101) * 158 - 4).toFixed(1), y = +(hash(i * 3 + 102) * 92 - 3).toFixed(1);
+    const l = 4 + hash(i * 3 + 103) * 7;
+    return { x, y, x2: +(x + l * 0.95).toFixed(1), y2: +(y - l * 0.33).toFixed(1), o: +(0.18 + hash(i * 7 + 104) * 0.3).toFixed(2) };
+});
+
+function FenceCover() {
+    return (
+        <>
+            <span className="cv-fill" style={{ background: "linear-gradient(160deg, #4b7442 0%, #3e5f34 52%, #31522a 100%)" }} />
+            <Svg>
+                {BLADES.map((b, i) => <line key={i} x1={b.x} y1={b.y} x2={b.x2} y2={b.y2} stroke="#8fbf74" strokeWidth=".8" strokeLinecap="round" opacity={b.o} />)}
+                {[44.11, 63.35].map((u) => (
+                    <g key={u}>
+                        <rect x="-2" y={railY(u) + 1.4} width="156" height={2.81 * K} fill="#1f3a19" opacity=".45" />
+                        <rect x="-2" y={railY(u)} width="156" height={2.81 * K} fill="#c49b5d" />
+                        <rect x="-2" y={railY(u)} width="156" height="1.2" fill="#dcb87e" />
+                    </g>
+                ))}
+                {[0, 23.78].map((dx) => (
+                    <g key={dx} transform={`${MARK} translate(${dx} 0)`}>
+                        <path d={POST} fill="#1f3a19" opacity=".5" transform="translate(.9 .75)" />
+                        <path d={POST} fill="#f3d195" />
+                        <path d={BEVEL} fill="#fcecc9" />
+                    </g>
+                ))}
+                <g transform={MARK} fill="none" stroke="#b07f43" strokeWidth=".55" strokeLinecap="round">
+                    <path d="M37.2 49.9C37.6 53.6 38.6 58.4 39.6 62.3S40.8 66.6 41.2 68.2" />
+                    <path d="M61.6 39.1L61 44.1M62.5 45.3C62.2 51.4 61.6 59.6 61.2 65.7M70.5 47C70 51.6 69.4 55.8 68.8 59.2M67.9 62.6L67.3 64.4" />
+                    <ellipse cx="68.45" cy="60.9" rx=".85" ry="1.35" transform="rotate(14 68.45 60.9)" />
+                </g>
+                {/* The padlock is the app's own icon, from its 24 grid */}
+                <g transform={`translate(${54 * K + 1.1 - 12 * 0.95} ${railY(44.11) - 3.6}) scale(.95)`}>
+                    <path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#2b2622" strokeWidth="2" strokeLinecap="round" />
+                    <rect x="5" y="11" width="14" height="10" rx="2.5" fill="#c94a2c" />
+                    <rect x="5" y="11" width="14" height="2.2" rx="1.1" fill="#e2704d" />
+                    <path d="M12 15v2" stroke="#4a1c10" strokeWidth="1.8" strokeLinecap="round" />
+                </g>
+            </Svg>
+        </>
+    );
+}
+
 /* A project without its own print gets its logo as a large stencil */
 function PlainCover({ p }: { p: Project }) {
     return (
@@ -289,6 +341,7 @@ function Print({ p }: { p: Project }) {
         case "arquivonos": return <ArchiveCover p={p} />;
         case "hoxe": return <NewsprintCover />;
         case "laikas-company": return <MoonCover p={p} />;
+        case "valado": return <FenceCover />;
         default: return <PlainCover p={p} />;
     }
 }

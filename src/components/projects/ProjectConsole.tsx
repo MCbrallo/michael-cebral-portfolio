@@ -938,8 +938,13 @@ export function ProjectConsole() {
 
     const current = projects.find((p) => p.id === loaded) ?? null;
     const tipProject = projects.find((p) => p.id === tipId) ?? null;
-    const site = current ? current.previewUrl ?? current.links?.[0]?.href : undefined;
-    const href = current?.links?.[0]?.href;
+    const link = current?.links?.[0];
+    /* An app with no site of its own is a file to download. There is nothing
+       to run in the frame, so the screen keeps its poster and the address bar
+       names the file. */
+    const file = link?.kind === "download" ? link.href.split("/").pop() : undefined;
+    const site = current ? current.previewUrl ?? (file ? undefined : link?.href) : undefined;
+    const href = link?.href;
     /* Two of the sites only let named origins frame them. Anywhere else the
        browser would block the frame, so the screen keeps the screenshot. */
     const showFrame = live && canFrame && !!site && !!current && !!origin && canFrameFrom(current, origin);
@@ -976,7 +981,12 @@ export function ProjectConsole() {
                                         <p className="pc-ink-text" ref={inkTextRef}>
                                             <span>{(current.brief ?? current.blurb)[language]}</span>
                                         </p>
-                                        {href && (
+                                        {href && file && (
+                                            <a className="pc-ink-btn" href={href} download={file}>
+                                                {t.projects.consoleDownload} <span aria-hidden="true">↓</span>
+                                            </a>
+                                        )}
+                                        {href && !file && (
                                             <a className="pc-ink-btn" href={href} target="_blank" rel="noopener noreferrer">
                                                 {t.projects.consoleOpen} <span aria-hidden="true">↗</span>
                                             </a>
@@ -997,7 +1007,7 @@ export function ProjectConsole() {
                                     {current && <ProjectLogo project={current} />}
                                 </div>
                                 <div className="pc-view">
-                                    <div className="pc-host">{site ? site.replace(/^https?:\/\//, "").replace(/\/?\?.*$/, "").replace(/\/$/, "") : ""}</div>
+                                    <div className="pc-host">{site ? site.replace(/^https?:\/\//, "").replace(/\/?\?.*$/, "").replace(/\/$/, "") : file ?? ""}</div>
                                     <div className="pc-shot">
                                         {current && (
                                             // eslint-disable-next-line @next/next/no-img-element

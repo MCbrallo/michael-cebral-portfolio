@@ -58,6 +58,8 @@ interface Translations {
         consoleHint: string;
         consoleEmpty: string;
         consoleOpen: string;
+        /** The same button when the project is a file to install, not a site. */
+        consoleDownload: string;
         consoleEject: string;
         /** {name} is replaced with the project name. */
         consoleInsert: string;
@@ -133,6 +135,7 @@ const translations: Record<Language, Translations> = {
             consoleHint: "Insert a cartridge to explore",
             consoleEmpty: "Insert a cartridge",
             consoleOpen: "Open the site",
+            consoleDownload: "Download the APK",
             consoleEject: "Eject the cartridge",
             consoleInsert: "{name}. Insert it into the console",
             consoleLoaded: "{name} loaded",
@@ -202,6 +205,7 @@ const translations: Record<Language, Translations> = {
             consoleHint: "Inserta un cartucho para explorar",
             consoleEmpty: "Inserta un cartucho",
             consoleOpen: "Abrir web",
+            consoleDownload: "Descargar el APK",
             consoleEject: "Expulsar el cartucho",
             consoleInsert: "{name}. Insértalo en la consola",
             consoleLoaded: "{name} cargado",
@@ -271,6 +275,7 @@ const translations: Record<Language, Translations> = {
             consoleHint: "Insire un cartucho para explorar",
             consoleEmpty: "Insire un cartucho",
             consoleOpen: "Abrir a web",
+            consoleDownload: "Descargar o APK",
             consoleEject: "Expulsar o cartucho",
             consoleInsert: "{name}. Insíreo na consola",
             consoleLoaded: "{name} cargado",

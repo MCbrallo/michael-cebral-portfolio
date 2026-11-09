@@ -13,6 +13,20 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    async headers() {
+        return [
+            {
+                // Android hands a download to the installer by its type. Sent as
+                // a generic file, some phones save the APK and then cannot open
+                // it from the notification.
+                source: '/downloads/:file(.*\\.apk)',
+                headers: [
+                    { key: 'Content-Type', value: 'application/vnd.android.package-archive' },
+                    { key: 'Content-Disposition', value: 'attachment' },
+                ],
+            },
+        ];
+    },
     async redirects() {
         return [
             {

@@ -41,6 +41,9 @@ const WEBS = [
     { id: 'laikas-company', url: 'https://laikas-company.vercel.app', espera: 9000 },
 ];
 
+// Valado no tiene web: es una app de Android que se descarga. Su póster son tres
+// pantallas de la propia app, sacadas del APK, y se rehace a mano cuando cambie.
+
 const soloEste = process.argv[2];
 const cola = soloEste ? WEBS.filter((w) => w.id === soloEste) : WEBS;
 if (!cola.length) {

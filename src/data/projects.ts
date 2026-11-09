@@ -5,8 +5,12 @@
  */
 export type Texto = { en: string; es: string; gl: string };
 
-/** "live" for something running, "play" for something you play. */
-export type ProjectLink = { kind: "live" | "play"; href: string };
+/**
+ * "live" for something running, "play" for something you play, "download"
+ * for a file to install, such as an Android app with no site of its own.
+ * A download never loads in the console's frame: the screen keeps the poster.
+ */
+export type ProjectLink = { kind: "live" | "play" | "download"; href: string };
 
 export type Project = {
     id: string;
@@ -311,5 +315,28 @@ export const projects: Project[] = [
         logo: "/projects/laikas-company.svg",
         inkTones: "grayscale(1) contrast(2.4) brightness(.85)",
         links: [{ kind: "live", href: "https://laikas-company.vercel.app" }],
+    },
+    {
+        id: "valado",
+        name: "VALADO",
+        type: {
+            en: "Social Media Blocker · Android",
+            es: "Bloqueador de redes sociales · Android",
+            gl: "Bloqueador de redes sociais · Android",
+        },
+        year: "2026",
+        blurb: {
+            en: "An Android app that puts a fence around social media. It blocks every network, from TikTok and X to YouTube and Reddit, along with their websites and any search that mentions them. Instagram stays, but only with the people you follow. No Reels, no Explore and no suggested posts. A local filter covers the whole phone and sends nothing to any server. In strict mode it cannot be switched off or uninstalled. To leave you ask for the key and wait the hours or days you chose, so not even you at two in the morning can undo it.",
+            es: "Una app de Android que le pone una valla a las redes sociales. Bloquea todas, de TikTok y X a YouTube y Reddit, con sus webs y cualquier búsqueda que las mencione. Instagram se queda, pero solo con la gente que sigues. Sin reels, sin Explorar y sin publicaciones sugeridas. Un filtro local cubre todo el móvil y no manda nada a ningún servidor. En modo estricto no se puede apagar ni desinstalar. Para salir pides la llave y esperas las horas o los días que elegiste, así que ni tu yo de las dos de la mañana puede deshacerlo.",
+            gl: "Unha app de Android que lles pon un valado ás redes sociais. Bloquea todas, de TikTok e X a YouTube e Reddit, coas súas webs e calquera busca que as mencione. Instagram queda, pero só coa xente que segues. Sen reels, sen Explorar e sen publicacións suxeridas. Un filtro local cobre todo o móbil e non manda nada a ningún servidor. En modo estrito non se pode apagar nin desinstalar. Para saír pides a chave e agardas as horas ou os días que escolleches, así que nin o teu eu das dúas da mañá pode desfacelo.",
+        },
+        brief: {
+            en: "An Android app that fences off social media. It blocks every network, its websites and the searches that lead to it. Instagram stays, with only the people you follow. In strict mode, switching it off takes a key and a wait.",
+            es: "Una app de Android que le pone una valla a las redes sociales. Bloquea todas, con sus webs y sus búsquedas. Instagram se queda, solo con la gente que sigues. En modo estricto, para apagarla pides la llave y esperas.",
+            gl: "Unha app de Android que lles pon un valado ás redes sociais. Bloquea todas, coas súas webs e as súas buscas. Instagram queda, só coa xente que segues. En modo estrito, para apagala pides a chave e agardas.",
+        },
+        accent: "#79a05b",
+        logo: "/projects/valado.svg",
+        links: [{ kind: "download", href: "/downloads/Valado-1.6.apk" }],
     },
 ];
