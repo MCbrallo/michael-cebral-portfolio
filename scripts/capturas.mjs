@@ -38,7 +38,7 @@ const WEBS = [
     { id: 'copernicus-mosaic', url: 'https://copernicus-mosaic.netlify.app/?embed=1', espera: 12000 },
     { id: 'arquivonos', url: 'https://arquivonos.com/?embed=1', espera: 10000 },
     { id: 'hoxe', url: 'https://hoxe.org/?embed=1', espera: 6000 },
-    { id: 'laikas-company', url: 'https://laikas-company.vercel.app', espera: 9000 },
+    { id: 'laikas-company', url: 'https://www.laikas.company', espera: 9000 },
 ];
 
 // Valado no tiene web: es una app de Android que se descarga. Su póster son tres

@@ -314,7 +314,7 @@ export const projects: Project[] = [
         accent: "#b49171",
         logo: "/projects/laikas-company.svg",
         inkTones: "grayscale(1) contrast(2.4) brightness(.85)",
-        links: [{ kind: "live", href: "https://laikas-company.vercel.app" }],
+        links: [{ kind: "live", href: "https://www.laikas.company" }],
     },
     {
         id: "valado",
