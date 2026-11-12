@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
     async headers() {
         return [
             {
+                // The Sample Newsroom demo runs in WordPress Playground, which
+                // downloads its blueprint and two zip files from here. That
+                // page lives on another site, so the browser needs to be told
+                // it may read them.
+                source: '/newsroom/playground/:path*',
+                headers: [
+                    { key: 'Access-Control-Allow-Origin', value: '*' },
+                ],
+            },
+            {
                 // Android hands a download to the installer by its type. Sent as
                 // a generic file, some phones save the APK and then cannot open
                 // it from the notification.
@@ -24,6 +34,17 @@ const nextConfig: NextConfig = {
                     { key: 'Content-Type', value: 'application/vnd.android.package-archive' },
                     { key: 'Content-Disposition', value: 'attachment' },
                 ],
+            },
+        ];
+    },
+    async rewrites() {
+        return [
+            {
+                // Sample Newsroom is a static copy of a WordPress site kept in
+                // public/newsroom. Next does not serve the index of a public
+                // folder by itself, so the address is pointed at the file.
+                source: '/newsroom',
+                destination: '/newsroom/index.html',
             },
         ];
     },

@@ -1,0 +1,607 @@
+/*
+Theme Name: Sample Newsroom
+Theme URI: https://mcebral.com
+Author: Michael Cebral
+Author URI: https://mcebral.com
+Description: A block theme for a news site about accelerator technology, made as a work sample. White pages, CERN blue for the masthead and for actions, a navy for the deep surfaces and a copper for small marks. Two self hosted fonts, Roboto for text and Newsreader for headlines. No trackers and no JavaScript. Motion is limited to one entrance and short transitions, and it stops for visitors who ask for less.
+Requires at least: 6.7
+Tested up to: 7.1
+Requires PHP: 8.0
+Version: 1.4.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: accnews
+*/
+
+/* ------------------------------------------------------------------ tokens */
+/* Colour has three jobs. CERN blue is the masthead of every page and the colour of links and
+   actions. Navy is for the deep surfaces, the foot of the lead story and the footer. Copper only
+   marks a state or a stress: the page you are on, the link being pointed at, the markers of a
+   list of key points. It never fills a surface and never colours running text. */
+body {
+	--ink: var(--wp--preset--color--black);
+	--ink-soft: #3B414D;
+	--slate: var(--wp--preset--color--slate);
+	--blue: var(--wp--preset--color--blue);
+	--blue-dark: var(--wp--preset--color--blue-dark);
+	--mist: var(--wp--preset--color--mist);
+	--navy: var(--wp--preset--color--navy);
+	--copper: var(--wp--preset--color--copper);
+	--copper-light: var(--wp--preset--color--copper-light);
+	--sans: var(--wp--preset--font-family--sans);
+	--serif: var(--wp--preset--font-family--serif);
+	--shadow-soft: var(--wp--preset--shadow--soft);
+	--shadow-raised: var(--wp--preset--shadow--raised);
+	--pad: var(--wp--style--root--padding-left);
+	--wide: var(--wp--style--global--wide-size);
+	--gap: 2rem;
+	--ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--focus: var(--blue);
+	--mark: var(--copper);
+	--arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 6h13.2M9.6 1.4 14.2 6l-4.6 4.6' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+	/* One radius, for every photograph, drawing, tinted panel and button. */
+	--radius: 6px;
+
+	/* Type. Six sizes for the headline face, 20 and then steps of 8 pixels from 24 to 56, and
+	   five for the text face. The larger headline sizes shrink with the screen, and on a phone
+	   they come down to two, 24 and 30. The lead headline has its own steps. Under the photograph
+	   on a tablet it reaches 36, and beside it on a very wide screen it grows past 48, up to 56. */
+	--serif-1: 1.25rem;                          /* 20  small card titles */
+	--serif-2: 1.5rem;                           /* 24  card titles, the name of the site */
+	--serif-3: clamp(1.5rem, 3vw, 2rem);         /* 32  subheadings, large card titles, quotes */
+	--serif-4: clamp(1.875rem, 3.4vw, 2.5rem);   /* 40  section headings */
+	--serif-5: clamp(1.875rem, 4.6vw, 2.25rem);  /* 48  the lead headline */
+	--serif-6: clamp(1.875rem, 5vw, 3.5rem);     /* 56  titles of articles and pages */
+	--sans-1: 0.8125rem;                         /* 13  credits and captions */
+	--sans-2: 0.875rem;                          /* 14  facts about an article, labels */
+	--sans-3: 1rem;                              /* 16  menus, summaries, asides */
+	--sans-4: 1.125rem;                          /* 18  running text */
+	--sans-5: clamp(1.125rem, 2.1vw, 1.375rem);  /* 22  standfirsts */
+}
+/* On the narrowest phones a headline of 30 pixels would break a long title into five lines. */
+@media (max-width: 339px) {
+	body { --serif-4: 1.75rem; --serif-5: 1.75rem; --serif-6: 1.75rem; }
+}
+@media (min-width: 900px) {
+	body { --serif-5: clamp(1.875rem, 3.35vw, clamp(3rem, 0.75rem + 2vw, 3.5rem)); }
+}
+
+/* -------------------------------------------------------------------- base */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; font-kerning: normal; }
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+img { display: block; max-width: 100%; height: auto; }
+a { text-decoration-thickness: 0.06em; text-underline-offset: 0.22em; text-decoration-skip-ink: auto; }
+::selection { background: var(--blue); color: #fff; }
+
+/* Focus. Blue on light surfaces and white on the blue and navy ones, set through one variable. */
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.fb-masthead, .fb-hero__frame, .fb-footer { --focus: #fff; --mark: var(--copper-light); }
+.fb-masthead ::selection, .fb-hero__frame ::selection, .fb-footer ::selection { background: #fff; color: var(--navy); }
+.skip-link.screen-reader-text:focus { top: 0.5rem; left: 0.5rem; z-index: 100; padding: 0.75rem 1.125rem; border-radius: var(--radius); background: #fff; color: var(--blue); font-size: var(--sans-3); font-weight: 500; text-decoration: none; box-shadow: var(--shadow-raised); outline: 2px solid var(--blue); outline-offset: -4px; }
+
+/* The page fills the window, so a short page still ends with the footer at the bottom. */
+.wp-site-blocks { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: 100vh; min-height: 100svh; }
+
+/* The bands of a page sit against each other. Spacing lives inside each band. */
+.wp-site-blocks > *,
+.wp-site-blocks > main > *,
+.wp-site-blocks > main > article > * { margin-block: 0; }
+
+/* ------------------------------------------------------------ small pieces */
+.wp-site-blocks .fb-meta { gap: 0 0.875rem; align-items: center; font-size: var(--sans-2); line-height: 1.5; color: var(--slate); font-variant-numeric: lining-nums; }
+.wp-site-blocks .fb-meta > * { margin: 0; }
+.fb-meta .wp-block-post-terms { font-weight: 500; color: var(--ink); }
+.fb-meta .wp-block-post-terms a { display: inline-block; margin-block: -0.375rem; padding-block: 0.75rem; color: inherit; text-decoration: none; }
+.fb-meta .wp-block-post-terms a:hover { text-decoration: underline; text-decoration-color: var(--mark); text-decoration-thickness: 0.09em; }
+
+.wp-site-blocks .fb-credit { margin: 0; font-size: var(--sans-1); line-height: 1.45; color: var(--slate); }
+.fb-credit a { color: inherit; }
+
+/* Buttons and links that lead somewhere end in a small arrow that moves when pointed at. */
+.wp-site-blocks .fb-button { display: inline-flex; align-items: center; gap: 0.625rem; margin: 0; padding: 0.8125rem 1.25rem 0.8125rem 1.375rem; border-radius: var(--radius); background: var(--blue); color: #fff; font-size: var(--sans-3); font-weight: 500; line-height: 1.25; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; }
+.wp-site-blocks .fb-button:hover { background: var(--blue-dark); color: #fff; }
+.fb-button::after,
+.fb-link a::after,
+.fb-go::after { content: ""; flex: none; display: inline-block; width: 1em; height: 0.75em; background: currentColor; -webkit-mask: var(--arrow) center / contain no-repeat; mask: var(--arrow) center / contain no-repeat; transition: transform 0.3s var(--ease); }
+.fb-link a::after,
+.fb-go::after { margin-left: 0.5rem; vertical-align: -0.02em; }
+.fb-button:hover::after,
+.fb-link a:hover::after { transform: translateX(3px); }
+
+.wp-site-blocks .fb-link,
+.wp-site-blocks .fb-go { margin: 0; font-size: var(--sans-3); font-weight: 500; line-height: 1.5; }
+.fb-link a { display: inline-block; padding-block: 0.625rem; text-decoration: none; transition: color 0.2s ease; }
+.fb-link a:hover { text-decoration: underline; }
+.fb-go { color: var(--blue); }
+
+.wp-site-blocks .fb-kicker { margin: 0 0 0.5rem; font-size: var(--sans-3); line-height: 1.4; color: var(--slate); }
+
+/* ------------------------------------------------------------------ header */
+/* A pale strip says whose work this is. Under it the masthead is a band of CERN blue, on every
+   page. On the front page the lead story begins in the same blue, so the two read as one sheet. */
+.fb-topbar { padding-block: 0.5rem; background: var(--mist); color: var(--slate); font-size: var(--sans-1); line-height: 1.125rem; }
+.fb-topbar .fb-topbar__row { flex-wrap: wrap; gap: 0 1.5rem; }
+.fb-topbar .fb-topbar__row p { margin: 0; }
+.fb-topbar strong { font-weight: 500; color: var(--ink); }
+
+.fb-masthead { padding-block: 0.75rem; background: var(--blue); color: #fff; }
+.fb-masthead .fb-masthead__row { align-items: center; gap: 0 2rem; }
+/* The name of the site. The mark stands at the left, as tall as the two lines beside it, from
+   the top of the capitals of the name to the baseline of the line under it. The sizes are whole
+   pixels, so the straight edges of the mark stay sharp. */
+.wp-site-blocks .fb-brand { display: flex; margin: 0; }
+.fb-brand a { display: inline-grid; grid-template-columns: auto auto; grid-template-rows: 1.75rem 1.125rem; justify-content: start; align-items: center; column-gap: 0.8125rem; color: inherit; text-decoration: none; }
+.fb-brand__name { font-family: var(--serif); font-size: var(--serif-2); font-weight: 600; line-height: 1.75rem; letter-spacing: -0.018em; white-space: nowrap; }
+.fb-brand__tag { font-size: var(--sans-1); line-height: 1.0625rem; color: rgb(255 255 255 / 0.82); white-space: nowrap; }
+
+/* The mark is a block cut in two by the path of a beam that is bent one way and then the other,
+   as it is between the poles of a magnet. The path is made of two arcs of a circle and it draws
+   the S of the name. It is one shape in the colour of the text, with no state of its own. */
+.fb-mark { grid-row: 1 / span 2; display: block; width: 2.375rem; height: 2.375rem; }
+
+/* The menu. A copper line grows under the link being pointed at and stays under the current page. */
+.fb-masthead .wp-block-navigation { color: #fff; font-size: var(--sans-3); }
+.fb-masthead .wp-block-navigation__container { gap: 0 2rem; }
+.fb-masthead .wp-block-navigation-item__content { padding: 0.625rem 0; color: #fff; background: linear-gradient(var(--mark), var(--mark)) no-repeat 0 calc(100% - 0.375rem) / 0 2px; transition: background-size 0.35s var(--ease); }
+.fb-masthead .wp-block-navigation-item__content:hover,
+.fb-masthead .wp-block-navigation-item__content[aria-current] { background-size: 100% 2px; }
+/* Below 700 pixels the menu takes a row of its own. The name and each link of the menu stay
+   44 pixels tall, and nothing else adds to the height. */
+@media (max-width: 699px) {
+	.fb-topbar { padding-block: 0.375rem; }
+	.fb-masthead { padding-block: 0.25rem 0; }
+	.fb-masthead .fb-masthead__row { row-gap: 0; }
+	.fb-masthead .wp-block-navigation { width: 100%; }
+	.fb-masthead .wp-block-navigation__container { justify-content: flex-start; width: 100%; gap: 0 1.25rem; }
+}
+@media (max-width: 399px) {
+	.fb-masthead .wp-block-navigation__container { gap: 0 1rem; }
+}
+@media (max-width: 359px) {
+	.fb-masthead .wp-block-navigation { font-size: var(--sans-2); }
+	.fb-masthead .wp-block-navigation__container { gap: 0 0.875rem; }
+	.fb-masthead .wp-block-navigation-item__content { padding-block: 0.75rem; }
+}
+
+/* -------------------------------------------------------- front page, lead */
+/* The lead story has two parts. The text sits on a field that starts in the blue of the masthead
+   and deepens to navy, and the photograph stands beside it at its full height, so nothing covers
+   the machine. Where they meet the photograph thins out and the field shows through. On small
+   screens the photograph goes first. The whole text leads to the article through one link, the
+   button, so the keyboard stops here once. */
+.fb-hero .wp-block-post-template { margin: 0; padding: 0; list-style: none; }
+.fb-hero .fb-hero__frame { position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(180deg, var(--blue) 0%, #062C8A 24%, #0A2163 62%, var(--navy) 100%); color: #fff; }
+.fb-hero .fb-hero__frame > * { margin: 0; }
+.fb-hero .fb-hero__frame .wp-block-post-featured-image { position: relative; overflow: hidden; margin: 0; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, rgb(0 0 0 / 0.88) 78%, rgb(0 0 0 / 0.62) 85%, rgb(0 0 0 / 0.3) 92%, rgb(0 0 0 / 0.08) 97%, rgb(0 0 0 / 0) 100%); mask-image: linear-gradient(180deg, #000 0%, #000 72%, rgb(0 0 0 / 0.88) 78%, rgb(0 0 0 / 0.62) 85%, rgb(0 0 0 / 0.3) 92%, rgb(0 0 0 / 0.08) 97%, rgb(0 0 0 / 0) 100%); }
+.fb-hero .fb-hero__frame .wp-block-post-featured-image img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: var(--fb-focus, 50% 50%); }
+.fb-hero .fb-hero__content { position: static; padding-block: 0.25rem clamp(2.25rem, 6vw, 3.5rem); }
+.fb-hero .fb-hero__text > * { margin: 0; }
+.fb-hero .wp-block-post-title { font-family: var(--serif); font-size: var(--serif-5); font-weight: 500; line-height: 1.06; letter-spacing: -0.014em; text-wrap: balance; transition: color 0.3s ease; }
+.fb-hero .wp-block-post-excerpt { margin-top: 1.25rem; font-size: var(--sans-4); line-height: 1.55; color: rgb(255 255 255 / 0.9); }
+.fb-hero .wp-block-post-excerpt p { margin: 0; }
+.fb-hero .fb-hero__text .fb-meta { margin-top: 1.125rem; color: rgb(255 255 255 / 0.8); }
+.fb-hero .fb-hero__text .fb-meta .wp-block-post-terms { color: #fff; }
+.fb-hero .fb-hero__text .fb-button { margin-top: 1.75rem; background: #fff; color: var(--navy); }
+.fb-hero .fb-hero__text .fb-button::before { content: ""; position: absolute; inset: 0; }
+.fb-hero .fb-hero__text .fb-button:hover { background: #fff; color: var(--blue); }
+.fb-hero .fb-hero__frame:has(.fb-button:hover) .wp-block-post-title { color: #FCEEE2; }
+.fb-hero .fb-hero__foot { padding-block: 0.75rem 0; }
+.fb-hero .fb-hero__foot .fb-credit { margin-block: 0; }
+@media (min-width: 600px) and (max-width: 899px) {
+	.fb-hero .fb-hero__frame .wp-block-post-featured-image img { aspect-ratio: 3 / 2; }
+}
+@media (min-width: 900px) {
+	/* The text panel is as wide as 13.75 times the size of the headline, the measure in which a
+	   headline of about seventy letters sets in three lines. Newsreader draws its letters a
+	   little wider as they grow, so the measure leaves room for the largest size. The lead story
+	   is as tall as the window allows, less the header and the line of the photo credit under it. */
+	.fb-hero .fb-hero__frame { --hero-text: calc(13.75 * var(--serif-5)); display: grid; align-items: center; min-height: clamp(30rem, min(100vh - 9.5rem, 56vw), 58rem); min-height: clamp(30rem, min(100svh - 9.5rem, 56vw), 58rem); }
+	.fb-hero .fb-hero__frame .wp-block-post-featured-image { position: absolute; inset-block: 0; right: 0; left: calc(max(var(--pad), (100% - var(--wide)) / 2) + var(--hero-text) + 2.5rem); z-index: -1; -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.1) 1.6%, rgb(0 0 0 / 0.32) 3.9%, rgb(0 0 0 / 0.6) 6.8%, rgb(0 0 0 / 0.84) 9.9%, #000 13%, #000 100%); mask-image: linear-gradient(90deg, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.1) 1.6%, rgb(0 0 0 / 0.32) 3.9%, rgb(0 0 0 / 0.6) 6.8%, rgb(0 0 0 / 0.84) 9.9%, #000 13%, #000 100%); }
+	.fb-hero .fb-hero__frame .wp-block-post-featured-image img { height: 100%; aspect-ratio: auto; }
+	.fb-hero .fb-hero__content { padding-block: clamp(3rem, 7vh, 4.5rem); }
+	.fb-hero .fb-hero__text > * { max-width: min(var(--hero-text), 35rem); }
+	.fb-hero .fb-hero__text > .wp-block-post-title { max-width: var(--hero-text); }
+	.fb-hero .wp-block-post-excerpt { font-size: clamp(var(--sans-3), 1.4vw, var(--sans-4)); }
+}
+
+/* ---------------------------------------------------------------- sections */
+.fb-section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.fb-section .fb-section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem 3rem; margin-bottom: clamp(1.75rem, 3.2vw, 2.75rem); }
+.fb-section .fb-section-head > * { margin: 0; }
+.fb-section h2 { font-size: var(--serif-4); font-weight: 500; line-height: 1.1; letter-spacing: -0.016em; }
+.fb-section .fb-deck { max-width: 31rem; font-size: var(--sans-3); line-height: 1.5; color: var(--slate); }
+.fb-section .fb-back { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* Bands on a tint close a page before the footer. */
+.fb-close, .fb-more { background: var(--mist); }
+
+/* ------------------------------------------------------------------- cards */
+/* A card shows the subject and the reading time. The date is left for the article itself. */
+.fb-cards .wp-block-post-template { display: grid; grid-template-columns: 1fr !important; gap: 2.75rem var(--gap); margin: 0; padding: 0; list-style: none; }
+.fb-cards .wp-block-post { position: relative; display: flex; flex-direction: column; margin: 0; }
+.fb-cards .wp-block-post > * { margin: 0; }
+.fb-cards .wp-block-post-featured-image { overflow: hidden; border-radius: var(--radius); background: var(--mist); box-shadow: var(--shadow-soft); transition: box-shadow 0.5s var(--ease); }
+.fb-cards .wp-block-post-featured-image img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: var(--fb-focus, 50% 50%); transition: transform 0.9s var(--ease); }
+.fb-cards .wp-block-post-title { margin-top: 1.125rem; font-family: var(--serif); font-size: var(--serif-2); font-weight: 500; line-height: 1.16; letter-spacing: -0.012em; text-wrap: balance; }
+.fb-cards .wp-block-post-title a { text-decoration-color: transparent; transition: text-decoration-color 0.25s ease; }
+.fb-cards .wp-block-post-title a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+.fb-cards .wp-block-post-title a:focus-visible { outline: 0; }
+.fb-cards .wp-block-post-title a:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 6px; }
+.fb-cards .wp-block-post:hover .wp-block-post-title a { text-decoration: underline; text-decoration-color: var(--mark); text-decoration-thickness: 0.06em; text-underline-offset: 0.16em; }
+.fb-cards .wp-block-post:hover .wp-block-post-featured-image { box-shadow: var(--shadow-raised); }
+.fb-cards .wp-block-post:hover .wp-block-post-featured-image img { transform: scale(1.03); }
+.fb-cards .wp-block-post-excerpt { margin-top: 0.5rem; font-size: var(--sans-3); line-height: 1.5; color: var(--slate); }
+.fb-cards .wp-block-post-excerpt p { margin: 0; }
+.fb-cards .wp-block-post .fb-meta { margin-top: auto; padding-top: 0.875rem; }
+@media (min-width: 700px) {
+	.fb-cards .wp-block-post-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 3.25rem var(--gap); }
+
+	/* Front page. Two larger stories, then rows of three. */
+	.fb-cards.is-lead .wp-block-post-template { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+	.fb-cards.is-lead .wp-block-post { grid-column: span 2; }
+	.fb-cards.is-lead .wp-block-post:nth-child(-n+2) { grid-column: span 3; }
+	.fb-cards.is-lead .wp-block-post:nth-child(-n+2) .wp-block-post-featured-image img { aspect-ratio: 16 / 9; }
+	.fb-cards.is-lead .wp-block-post:nth-child(-n+2) .wp-block-post-title { font-size: var(--serif-3); line-height: 1.12; letter-spacing: -0.016em; }
+	.fb-cards.is-lead .wp-block-post:nth-child(-n+2) .wp-block-post-excerpt { max-width: 34rem; }
+
+	/* Archives. One story per row, picture on the left. */
+	.fb-cards.is-list .wp-block-post-template { grid-template-columns: 1fr !important; gap: 3rem; }
+	.fb-cards.is-list .wp-block-post { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto auto 1fr; column-gap: var(--gap); align-items: start; }
+	.fb-cards.is-list .wp-block-post-featured-image { grid-row: 1 / span 3; }
+	.fb-cards.is-list .wp-block-post > :not(.wp-block-post-featured-image) { grid-column: 2; max-width: 40rem; }
+	.fb-cards.is-list .wp-block-post-title { margin-top: 0.125rem; font-size: var(--serif-3); line-height: 1.12; letter-spacing: -0.016em; }
+	.fb-cards.is-list .wp-block-post-excerpt { margin-top: 0.75rem; }
+	.fb-cards.is-list .wp-block-post .fb-meta { margin-top: 0; }
+}
+@media (min-width: 700px) and (max-width: 999px) {
+	.fb-cards:not(.is-list) .wp-block-post:nth-child(n+3) .wp-block-post-excerpt,
+	.fb-more .fb-cards .wp-block-post-excerpt { display: none; }
+	.fb-cards:not(.is-list):not(.is-lead) .wp-block-post-title,
+	.fb-cards.is-lead .wp-block-post:nth-child(n+3) .wp-block-post-title { font-size: var(--serif-1); }
+}
+.fb-pagination { margin-top: 3rem; font-weight: 500; }
+.fb-pagination a { display: inline-block; padding-block: 0.625rem; }
+
+/* ------------------------------------------------------------ formats link */
+/* The way to the formats page. The words stand on the band itself and the image card, the
+   fourth of the formats, lies beside them like a print on a table. The whole block is one link. */
+.fb-formats-link { position: relative; display: grid; gap: 2.25rem var(--gap); }
+.fb-formats-link > *,
+.fb-formats-link .fb-formats-link__text > * { margin: 0; }
+.fb-formats-link h2 a { color: var(--ink); text-decoration: none; }
+.fb-formats-link h2 a::after { content: ""; position: absolute; inset: -1rem; z-index: 1; }
+.fb-formats-link h2 a:focus-visible { outline: 0; }
+.fb-formats-link h2 a:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 0; }
+.fb-formats-link .fb-formats-link__text > p:not(.fb-go) { max-width: 31rem; margin-top: 1rem; font-size: var(--sans-4); line-height: 1.55; color: var(--ink-soft); }
+.wp-site-blocks .fb-formats-link__list { max-width: 31rem; margin-top: 1.5rem; padding: 0; list-style: none; columns: 2; column-gap: var(--gap); }
+.fb-formats-link__list li { margin: 0; padding-block: 0.25rem; break-inside: avoid; font-family: var(--serif); font-size: var(--serif-2); line-height: 1.2; letter-spacing: -0.012em; }
+.fb-formats-link .fb-go { margin-top: 1.5rem; }
+.fb-formats-link__card { margin: 0; }
+.fb-formats-link__card img { width: 100%; height: auto; box-shadow: var(--shadow-soft); transition: box-shadow 0.5s var(--ease), transform 0.5s var(--ease); }
+.fb-formats-link:hover .fb-formats-link__card img { box-shadow: var(--shadow-raised); transform: translateY(-3px); }
+.fb-formats-link:hover .fb-go::after { transform: translateX(3px); }
+.fb-formats-link:hover h2 a { text-decoration: underline; text-decoration-color: var(--mark); text-decoration-thickness: 0.05em; text-underline-offset: 0.16em; }
+@media (min-width: 800px) {
+	.fb-formats-link { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; }
+	.fb-formats-link .fb-formats-link__text { grid-column: 1 / span 6; }
+	.fb-formats-link__card { grid-column: 7 / span 6; }
+}
+
+/* ------------------------------------------------------------------- about */
+.fb-about { display: grid; gap: 1.5rem var(--gap); }
+.fb-close > .fb-about { margin-top: clamp(3.5rem, 8vw, 6.5rem); }
+.fb-about > *,
+.fb-about .fb-about__head > *,
+.fb-about .fb-about__text > * { margin: 0; }
+.fb-about .fb-about__name { margin-top: 1.25rem; font-size: var(--sans-3); line-height: 1.5; color: var(--slate); }
+.fb-about .fb-about__name strong { font-weight: 500; color: var(--ink); }
+.fb-about .fb-about__text p { max-width: 40rem; font-size: var(--sans-4); line-height: 1.65; }
+.fb-about .fb-about__text p + p { margin-top: 1.125rem; }
+.fb-about .fb-about__text .fb-link { margin-top: 0.75rem; font-size: var(--sans-3); }
+@media (min-width: 900px) {
+	.fb-about { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+	.fb-about .fb-about__head { grid-column: 1 / span 4; }
+	.fb-about .fb-about__text { grid-column: 5 / span 8; }
+}
+
+/* The signature at the top of the About page. The name in the headline face, what he does
+   under it, and where to write to him. */
+.fb-page-head > .wp-block-group > .fb-author { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 2rem; margin-top: clamp(1.5rem, 3vw, 2.25rem); }
+.fb-author > *,
+.fb-author .fb-author__who > * { margin: 0; }
+.fb-author .fb-author__name { font-family: var(--serif); font-size: var(--serif-2); font-weight: 500; line-height: 1.2; letter-spacing: -0.012em; }
+.fb-author .fb-author__role { margin-top: 0.125rem; font-size: var(--sans-3); line-height: 1.5; color: var(--slate); }
+.fb-author .fb-author__contact { font-size: var(--sans-3); line-height: 1.5; color: var(--slate); }
+.fb-author .fb-author__contact a { display: inline-block; margin-left: 0.375rem; padding-block: 0.625rem; font-weight: 500; text-decoration: none; }
+.fb-author .fb-author__contact a:hover { text-decoration: underline; }
+.fb-author .fb-author__contact a::after { content: ""; display: inline-block; width: 1em; height: 0.75em; margin-left: 0.5rem; vertical-align: -0.02em; background: currentColor; -webkit-mask: var(--arrow) center / contain no-repeat; mask: var(--arrow) center / contain no-repeat; transition: transform 0.3s var(--ease); }
+.fb-author .fb-author__contact a:hover::after { transform: translateX(3px); }
+
+/* ------------------------------------------------------- article and pages */
+/* The top of an article is plain. A title, a standfirst, a line of facts and the photograph. */
+.fb-article-head { padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(1.75rem, 3.6vw, 2.5rem); }
+.fb-article-head > .wp-block-group > * { margin: 0; }
+/* The title may run past the right edge of the column until its measure is 13.6 times its
+   size, as far as the margin of the page allows, so a long title sets in three lines and not
+   in four. */
+.fb-article-head .wp-block-post-title { margin-right: calc(-1 * clamp(0px, 13.6em - 100%, (100vw - 100%) / 2 - var(--pad))); font-size: var(--serif-6); font-weight: 500; line-height: 1.05; letter-spacing: -0.018em; text-wrap: balance; }
+.fb-article-head .wp-block-post-excerpt { margin-top: 1.25rem; font-size: var(--sans-5); line-height: 1.45; color: var(--ink-soft); }
+.fb-article-head .wp-block-post-excerpt p { margin: 0; }
+.fb-article-head .fb-meta { margin-top: 1.25rem; }
+/* On a phone the four facts do not fit on one line, so they are set in two pairs. The subject
+   and the author come first, and the line breaks before the date. */
+@media (max-width: 479px) {
+	.fb-article-head .fb-meta::before { content: ""; flex-basis: 100%; order: 1; }
+	.fb-article-head .fb-meta > .wp-block-post-date,
+	.fb-article-head .fb-meta > .wp-block-post-date ~ * { order: 2; }
+}
+
+.fb-page-head { padding-block: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.fb-page-head > .wp-block-group > * { margin-block: 0; }
+.fb-page-head h1 { font-size: var(--serif-6); font-weight: 500; line-height: 1.05; letter-spacing: -0.018em; text-wrap: balance; }
+.fb-page-head .fb-kicker { margin-bottom: 0.5rem; }
+.fb-page-head .fb-lede { max-width: 40rem; margin-top: 1.25rem; font-size: var(--sans-5); line-height: 1.45; color: var(--ink-soft); }
+.fb-page-head + .fb-section { padding-top: clamp(2.25rem, 5vw, 3.5rem); }
+.fb-page-head + .fb-more { margin-top: clamp(2.5rem, 6vw, 4.5rem); padding-top: clamp(3rem, 7vw, 5.5rem); }
+
+.fb-article-figure .wp-block-group > * { margin: 0; }
+.fb-article-figure .wp-block-post-featured-image { overflow: hidden; border-radius: var(--radius); background: var(--mist); }
+.fb-article-figure .wp-block-post-featured-image img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: var(--fb-focus, 50% 50%); }
+.fb-article-figure .fb-credit { margin-top: 0.75rem; }
+@media (max-width: 599px) {
+	.fb-article-figure.has-global-padding { padding-inline: 0; }
+	.fb-article-figure .wp-block-post-featured-image { border-radius: 0; }
+	.fb-article-figure .wp-block-post-featured-image img { aspect-ratio: 4 / 3; }
+	.fb-article-figure .fb-credit { padding-inline: var(--pad); }
+}
+
+/* Running text. */
+.wp-site-blocks .wp-block-post-content { padding-top: clamp(2rem, 5vw, 3.5rem); font-size: var(--sans-4); line-height: 1.68; }
+.wp-block-post-content > * { margin-block: 0; }
+.wp-block-post-content > * + * { margin-top: 1.375rem; }
+.wp-block-post-content > h2 { margin-top: 3rem; font-size: var(--serif-3); font-weight: 500; line-height: 1.15; letter-spacing: -0.014em; }
+.wp-block-post-content > h3 { margin-top: 2.25rem; font-size: var(--sans-4); }
+.wp-block-post-content > h2 + *,
+.wp-block-post-content > h3 + * { margin-top: 0.75rem; }
+.wp-block-post-content > ul,
+.wp-block-post-content > ol { padding-left: 1.25rem; }
+.wp-block-post-content li + li { margin-top: 0.5rem; }
+.wp-block-post-content li::marker { color: var(--slate); }
+.wp-block-post-content a { transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+.wp-block-post-content a:hover { text-decoration-thickness: 0.1em; }
+.wp-block-post-content strong { font-weight: 600; }
+/* A marked phrase reads as a light stress, with no highlight behind it. */
+.wp-block-post-content mark { padding: 0; background: none; color: inherit; font-weight: 500; }
+
+/* Key points and notes are asides. They sit on the tint, with no frame. */
+.wp-block-post-content > .is-style-brief,
+.wp-block-post-content > .is-style-note { padding: 1.5rem 1.75rem 1.625rem; border-radius: var(--radius); background: var(--mist); }
+.wp-block-post-content > .is-style-brief { margin-bottom: 2.5rem; line-height: 1.5; }
+.is-style-brief > *,
+.is-style-note > * { margin: 0; }
+.is-style-brief > .fb-eyebrow,
+.is-style-note > .fb-eyebrow,
+.fb-sources > .fb-eyebrow { font-size: var(--sans-3); font-weight: 600; line-height: 1.4; color: var(--ink); }
+.is-style-brief > ul { margin-top: 0.75rem; padding-left: 1.125rem; }
+.is-style-brief li + li { margin-top: 0.5625rem; }
+.is-style-brief li::marker { color: var(--copper); }
+.wp-block-post-content > .is-style-note { margin-block: 2.5rem; font-size: var(--sans-3); line-height: 1.55; color: var(--ink-soft); }
+.is-style-note > * + * { margin-top: 0.5rem; }
+
+/* Figures inside the text. A drawing in SVG runs wider than the column on a wide screen. The
+   files have no margin of their own, so the caption starts under the left edge of the drawing. Up to 899 pixels the drawing made for
+   phones is shown, and from 600 pixels it stops growing, so its lettering keeps a reading size. */
+.wp-block-post-content > .fb-figure,
+.wp-block-post-content > .wp-block-image { margin-block: 2.5rem; }
+.wp-block-post-content .fb-figure img,
+.wp-block-post-content .wp-block-image img { width: 100%; height: auto; border-radius: var(--radius); }
+.wp-block-post-content figure > figcaption { margin: 0.75rem 0 0; font-size: var(--sans-1); line-height: 1.45; color: var(--slate); text-align: left; }
+.wp-block-post-content figure > figcaption a { color: inherit; }
+.wp-block-post-content > .fb-figure:has(img[src$=".svg"]) > figcaption { max-width: none; margin: 0.75rem 0 0; }
+@media (min-width: 600px) and (max-width: 899px) {
+	.wp-block-post-content > .fb-figure:has(picture) { max-width: 30rem; margin-inline: 0 auto; }
+}
+@media (min-width: 900px) {
+	.wp-block-post-content > .fb-figure:has(img[src$=".svg"]),
+	.wp-block-post-content > .fb-figure.is-wide { max-width: var(--wide); margin-block: 3.25rem; }
+	/* The drawings are 1104 units wide. Shown wider, their lettering would be louder than the text. */
+	.wp-block-post-content > .fb-figure:has(img[src$=".svg"]) { max-width: min(var(--wide), 69rem); }
+	.wp-block-post-content > .fb-figure.is-wide > figcaption,
+	.wp-block-post-content > .fb-figure.alignwide > figcaption { max-width: var(--wp--style--global--content-size); margin-inline: auto; }
+	.wp-block-post-content > .alignwide { margin-block: 3.25rem; }
+}
+
+/* Pull quotes. The words in the headline face, the name under them in the text face. */
+.wp-block-post-content > .wp-block-pullquote { margin-block: 3rem; padding: 0; border: 0; text-align: left; }
+.wp-block-pullquote blockquote { margin: 0; padding: 0; border: 0; }
+.wp-block-pullquote blockquote p { margin: 0; font-family: var(--serif); font-size: var(--serif-3); font-weight: 400; line-height: 1.2; letter-spacing: -0.014em; color: var(--ink); text-wrap: balance; }
+.wp-block-pullquote.has-open-quote blockquote p:first-child { text-indent: -0.44em; }
+.wp-block-pullquote cite { display: block; margin-top: 1rem; font-size: var(--sans-3); font-style: normal; line-height: 1.4; color: var(--slate); text-wrap: balance; }
+.wp-block-post-content > .wp-block-quote { margin-block: 2rem; padding: 0 0 0 1.5rem; border: 0; color: var(--ink-soft); }
+.wp-block-quote cite { display: block; margin-top: 0.5rem; font-size: var(--sans-3); font-style: normal; color: var(--slate); }
+
+/* Tables. Rows are told apart by the tint, with no lines. */
+.wp-block-post-content > .wp-block-table { margin-block: 2rem 2.5rem; overflow-x: auto; }
+.wp-block-table table { width: 100%; border-collapse: collapse; font-size: var(--sans-3); line-height: 1.4; font-variant-numeric: lining-nums tabular-nums; }
+.wp-block-table thead,
+.wp-block-table tfoot { border: 0; }
+.wp-block-table th { padding: 0 0.875rem 0.625rem; border: 0; text-align: left; vertical-align: bottom; font-size: var(--sans-2); font-weight: 500; color: var(--slate); }
+.wp-block-table td { padding: 0.8125rem 0.875rem; border: 0; vertical-align: top; }
+.wp-block-table tbody tr:nth-child(odd) td { background: var(--mist); }
+.wp-block-table tbody tr:nth-child(odd) td:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.wp-block-table tbody tr:nth-child(odd) td:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.wp-block-table.has-index th:first-child,
+.wp-block-table.has-index td:first-child { width: 3.25rem; color: var(--slate); }
+.wp-block-table.has-index td:nth-child(2) { width: 52%; font-weight: 500; }
+.wp-block-table figcaption { padding-inline: 0.875rem; }
+@media (max-width: 599px) {
+	.wp-block-table table { font-size: var(--sans-2); }
+	.wp-block-table th, .wp-block-table td { padding-inline: 0.5rem; }
+	.wp-block-table.has-index th:first-child, .wp-block-table.has-index td:first-child { width: 2.25rem; }
+	.wp-block-table.has-index td:nth-child(2) { width: 50%; }
+}
+
+/* Sources */
+.wp-block-post-content > .fb-sources { margin-top: 3.25rem; font-size: var(--sans-3); line-height: 1.5; color: var(--ink-soft); }
+.fb-sources > * { margin: 0; }
+.fb-sources > ol { margin-top: 0.75rem; padding-left: 1.375rem; }
+.fb-sources li { padding-left: 0.375rem; }
+.fb-sources li + li { margin-top: 0.4375rem; }
+.fb-sources li::marker { color: var(--slate); font-variant-numeric: tabular-nums; }
+.fb-sources a { overflow-wrap: anywhere; }
+
+/* ----------------------------------------------------------- formats page */
+/* One story in four formats, laid out like the pages of a specimen book. On a wide screen the
+   note on why a format is written that way stands in the margin, and the sample stands beside
+   it on a plate of the tint, set in the measure and the size of its own medium. On a phone the
+   plate runs from edge to edge. */
+main:has(.fb-format) .fb-page-head > .wp-block-group,
+.wp-block-post-content:has(> .fb-format) > * { max-width: var(--wide); }
+.wp-block-post-content:has(> .fb-format) > p { padding-right: max(0px, min(100%, var(--wide)) - 44rem); font-size: var(--sans-5); line-height: 1.5; color: var(--ink-soft); }
+.wp-block-post-content > .fb-format { margin-top: clamp(3rem, 6vw, 4.5rem); }
+.fb-format > * { margin-block: 0; }
+.fb-format > :is(h2, h3) { font-family: var(--serif); font-size: var(--serif-3); font-weight: 500; line-height: 1.15; letter-spacing: -0.014em; }
+.fb-format .fb-format__why { max-width: 40rem; margin-top: 0.75rem; font-size: var(--sans-3); line-height: 1.6; color: var(--ink-soft); }
+.wp-block-post-content .fb-format__sample,
+.wp-block-post-content > .fb-format:not(:has(.fb-format__sample)) { padding: 1.75rem var(--pad) 2rem; background: var(--mist); font-size: var(--sans-3); line-height: 1.6; }
+.fb-format .fb-format__sample { margin: 1.5rem calc(-1 * var(--pad)) 0; }
+.fb-format__sample > * { max-width: 38rem; margin-block: 0; }
+.fb-format__sample > * + *,
+.fb-format:not(:has(.fb-format__sample)) > * + * { margin-top: 0.875rem; }
+.fb-format .fb-format__title { font-family: var(--serif); font-size: var(--serif-2); line-height: 1.18; letter-spacing: -0.012em; text-wrap: balance; }
+.fb-format .fb-format__title strong { font-weight: 500; }
+.fb-format .fb-format__title a { color: var(--ink); text-decoration-color: var(--mark); text-decoration-thickness: 0.05em; text-underline-offset: 0.16em; }
+.fb-format .fb-format__title a:hover { color: var(--blue); }
+.fb-format .fb-format__title + * { margin-top: 0.75rem; }
+/* A label inside a sample, such as the subject line of a newsletter, and the space before it. */
+.fb-format .fb-format__sample .fb-kicker { margin: 0; font-size: var(--sans-2); line-height: 1.5; color: var(--slate); }
+.fb-format .fb-format__sample .fb-kicker + * { margin-top: 0.25rem; }
+.fb-format .fb-format__sample > .wp-block-spacer { margin-top: 0; }
+.fb-format .fb-format__sample > .wp-block-spacer + * { margin-top: 0.75rem; }
+.fb-format .fb-format__sample a { padding-block: 0.8125rem; }
+.fb-format figure { margin-inline: 0; }
+.fb-format img { width: 100%; height: auto; }
+.fb-format ul, .fb-format ol { padding-left: 1.25rem; }
+/* The image card fills its plate. */
+.wp-block-post-content .fb-format__sample:has(> .fb-card:only-child) { padding: 0; background: none; }
+.fb-format .fb-card { max-width: none; margin: 0; }
+.fb-format .fb-card img { border-radius: 0; }
+.fb-format .fb-card figcaption { padding-inline: var(--pad); }
+/* Each sample is set in the material of its own medium. The article stands on a tint that thins
+   out towards the foot, because the text goes on. The newsletter is a white sheet in the measure
+   of an email. The post is a narrow column, and the two lines that show before a reader opens it
+   are in full ink while the rest is softer. The image card lies on the page like a print. */
+.wp-block-post-content .fb-format__sample.is-article { background: linear-gradient(180deg, var(--mist) 0%, rgb(235 239 247 / 0.5) 60%, rgb(235 239 247 / 0) 100%); }
+.fb-format .is-article .fb-format__title { font-size: var(--serif-3); line-height: 1.12; letter-spacing: -0.016em; }
+.fb-format .is-article .fb-format__title + * { margin-top: 1rem; font-size: var(--sans-4); line-height: 1.55; color: var(--ink-soft); }
+.wp-block-post-content .fb-format__sample.is-newsletter { max-width: 41.5rem; margin-inline: 0; padding-inline: 1.25rem; border-radius: var(--radius); background: #fff; box-shadow: 0 0 0 1px rgb(10 26 63 / 0.05), var(--shadow-soft); }
+.fb-format .is-newsletter > * { max-width: 36rem; }
+.wp-block-post-content .fb-format__sample.is-social { color: var(--slate); }
+.fb-format .is-social > :first-child { color: var(--ink); }
+.fb-format .is-card img { box-shadow: var(--shadow-soft); }
+@media (min-width: 600px) {
+	.wp-block-post-content .fb-format__sample,
+	.wp-block-post-content > .fb-format:not(:has(.fb-format__sample)) { padding: 2rem 2.25rem 2.25rem; border-radius: var(--radius); }
+	.fb-format .fb-format__sample { margin-inline: 0; }
+	.wp-block-post-content .fb-format__sample.is-newsletter { padding-inline: 2.25rem; }
+	.wp-block-post-content .fb-format__sample.is-social { max-width: 34rem; }
+	.fb-format .fb-card img { border-radius: var(--radius); }
+	.fb-format .fb-card figcaption { padding-inline: 0; }
+}
+@media (min-width: 1000px) {
+	.wp-block-post-content > .fb-format { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr; column-gap: var(--gap); align-items: start; }
+	.fb-format > :is(h2, h3),
+	.fb-format > .fb-format__why { grid-column: 1 / span 4; }
+	.fb-format > .fb-format__why { max-width: 22rem; }
+	.fb-format > .fb-format__sample { grid-column: 5 / span 8; grid-row: 1 / span 2; margin-top: 0; padding: 2.5rem 2.75rem 2.75rem; }
+	.wp-block-post-content .fb-format__sample.is-newsletter { padding-inline: 2.75rem; }
+}
+
+.fb-share { padding-top: 3rem; }
+.fb-share .fb-share__row { align-items: center; gap: 0.5rem 2rem; }
+.fb-share .fb-share__row > * { margin: 0; }
+.fb-share .fb-byline { flex: 1 1 18rem; max-width: 27rem; font-size: var(--sans-2); line-height: 1.5; color: var(--slate); }
+.fb-share .fb-byline a { padding-block: 0.875rem; }
+.fb-share .wp-block-button__link { display: inline-block; padding: 0.625rem 0; border: 0; border-radius: 0; background: none; color: var(--blue); font-size: var(--sans-3); font-weight: 500; line-height: 1.5; text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.22em; transition: color 0.2s ease; }
+.fb-share .wp-block-button__link:hover { color: var(--blue-dark); text-decoration-thickness: 0.1em; }
+
+.wp-site-blocks > main > article { padding-bottom: clamp(3rem, 7vw, 5.5rem); }
+main > .wp-block-post-content:last-child { padding-bottom: clamp(3.5rem, 8vw, 6rem); }
+
+/* ------------------------------------------------------------------ footer */
+.fb-footer { padding-block: clamp(3rem, 6vw, 4.5rem) 1.75rem; background: var(--navy); color: rgb(255 255 255 / 0.84); font-size: var(--sans-3); line-height: 1.55; }
+.fb-footer a { color: #fff; transition: color 0.2s ease; }
+.fb-footer p a { padding-block: 0.8125rem; text-decoration-color: rgb(255 255 255 / 0.55); }
+.fb-footer p a:hover { text-decoration-color: var(--mark); }
+.fb-footer .fb-footer__grid,
+.fb-footer .fb-footer__cols { display: grid; gap: 2.25rem var(--gap); }
+.fb-footer .fb-footer__grid > *,
+.fb-footer .fb-footer__cols > * { margin: 0; }
+.fb-footer .fb-footer__brand > *,
+.fb-footer .fb-footer__cols > * > * { margin: 0; }
+.fb-footer .fb-brand a { padding-block: 0; color: #fff; }
+.fb-footer .fb-footer__brand > .fb-brand + p { margin-top: 1.25rem; max-width: 23rem; }
+.fb-footer h2 { font-family: var(--sans); font-size: var(--sans-3); font-weight: 600; line-height: 1.55; letter-spacing: 0; color: #fff; }
+.fb-footer .fb-footer__cols h2 { margin-bottom: 0.5rem; }
+.fb-footer .fb-footer__cols .fb-footer__nav h2 { margin-bottom: 0.125rem; }
+.fb-footer ul { margin: 0; padding: 0; list-style: none; }
+.fb-footer li { margin: 0; }
+.fb-footer li a { display: inline-block; padding-block: 0.375rem; text-decoration: none; white-space: nowrap; }
+.fb-footer li a:hover { text-decoration: underline; text-decoration-color: var(--mark); text-decoration-thickness: 0.09em; }
+.fb-footer .fb-footer__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 2rem; margin-top: clamp(2.5rem, 5vw, 3.5rem); font-size: var(--sans-1); color: rgb(255 255 255 / 0.72); }
+.fb-footer .fb-footer__base > * { margin: 0; }
+/* Where a finger does the pointing, every link in the list is at least 44 pixels tall. */
+@media (max-width: 899px), (pointer: coarse) {
+	.fb-footer li a { padding-block: 0.625rem; }
+}
+@media (min-width: 640px) {
+	.fb-footer .fb-footer__cols { grid-template-columns: max-content minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(2rem, 4vw, 3rem); }
+}
+/* On a wide screen the name takes four of twelve columns, like the heading of the closing text
+   on the front page, so the columns that follow start on the same line as that text. */
+@media (min-width: 900px) {
+	.fb-footer .fb-footer__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+	/* The top of the mark stands level with the capitals of the headings of the columns. */
+	.fb-footer .fb-footer__brand { grid-column: 1 / span 4; padding-top: 0.375rem; }
+	.fb-footer .fb-footer__cols { grid-column: 5 / span 8; }
+}
+
+/* ------------------------------------------------------------------ motion */
+/* One entrance, on the lead story, and a short fade between pages. The photograph is there from
+   the first frame and only clears while the words rise into place, so nothing is still moving
+   after the words have settled. */
+@media (prefers-reduced-motion: no-preference) {
+	@keyframes fb-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+	@keyframes fb-settle { from { opacity: 0.35; transform: scale(1.035); } to { opacity: 1; transform: none; } }
+	.fb-hero .fb-hero__frame .wp-block-post-featured-image img { animation: fb-settle 0.9s var(--ease) backwards; }
+	.fb-hero .fb-hero__text > * { animation: fb-rise 0.8s var(--ease) backwards; }
+	.fb-hero .fb-hero__text > :nth-child(1) { animation-delay: 0.1s; }
+	.fb-hero .fb-hero__text > :nth-child(2) { animation-delay: 0.18s; }
+	.fb-hero .fb-hero__text > :nth-child(3) { animation-delay: 0.26s; }
+	.fb-hero .fb-hero__text > :nth-child(4) { animation-delay: 0.34s; }
+	@view-transition { navigation: auto; }
+	::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.24s; }
+}
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after { transition: none !important; animation: none !important; }
+	.fb-formats-link:hover .fb-formats-link__card img { transform: none; }
+	.fb-cards .wp-block-post:hover .wp-block-post-featured-image img { transform: none; }
+}
+
+/* ------------------------------------------------------------------- print */
+@media print {
+	.fb-topbar, .fb-masthead .wp-block-navigation, .fb-share, .fb-more, .fb-close, .fb-footer { display: none; }
+	.fb-masthead { background: none; color: var(--ink); --mark: var(--copper); }
+	.fb-masthead .fb-brand__tag { color: var(--slate); }
+	.wp-site-blocks { display: block; min-height: 0; }
+	.fb-sources a::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}
+
+/* A phone held sideways. The lead photograph is kept low so the headline is on the first screen. */
+@media (max-width: 899px) and (max-height: 480px) {
+	.fb-hero .fb-hero__frame .wp-block-post-featured-image img { aspect-ratio: 21 / 9; }
+}

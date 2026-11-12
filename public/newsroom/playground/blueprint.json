@@ -1,0 +1,53 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"features": {
+		"networking": false
+	},
+	"login": true,
+	"steps": [
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "url",
+				"url": "https://mcebral.com/newsroom/playground/dist/accnews.zip"
+			},
+			"options": {
+				"activate": true,
+				"importStarterContent": false
+			}
+		},
+		{
+			"step": "unzip",
+			"zipFile": {
+				"resource": "url",
+				"url": "https://mcebral.com/newsroom/playground/dist/content.zip"
+			},
+			"extractToPath": "/wordpress/wp-content/sample-newsroom-content"
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Sample Newsroom",
+				"blogdescription": "Accelerator technology news. A work sample by Michael Cebral",
+				"permalink_structure": "/%postname%/"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/wp-content/sample-newsroom-content/import.php';"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/wp-load.php'; if ( ! get_page_by_path( 'about' ) || ! get_page_by_path( 'formats' ) || (int) wp_count_posts( 'post' )->publish < 1 || 'accnews' !== get_stylesheet() ) { echo 'Sample Newsroom: the content was not imported.'; exit( 1 ); }"
+		},
+		{
+			"step": "rmdir",
+			"path": "/wordpress/wp-content/sample-newsroom-content"
+		}
+	]
+}
