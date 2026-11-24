@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Video work · Michael Cebral</title>
+<meta name="description" content="A private selection of films shot, animated and edited by Michael Cebral.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0f1b2d;        /* page, the navy of the CV deepened */
+    --navy: #1f3a5f;         /* the CV heading colour */
+    --paper: #eef1f5;        /* main text */
+    --mist: #9aa8bb;         /* secondary text */
+    --lamp: #f0c35a;         /* the one warm light: progress and the active film */
+    --glass: #050608;        /* inside the phone */
+    --serif: "Source Serif 4", Georgia, serif;
+    --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: radial-gradient(120% 90% at 70% 40%, #17294a 0%, var(--night) 60%);
+    color: var(--paper);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 4px; }
+
+  .stage {
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) auto;
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+    justify-content: center;
+    padding: 3rem clamp(1.5rem, 5vw, 4rem);
+  }
+
+  /* left column */
+  .intro h1 {
+    font-size: 2.6rem;
+    line-height: 1.1;
+    font-weight: 600;
+    margin: 0 0 .35rem;
+    letter-spacing: -.01em;
+  }
+  .intro .lede { font-size: 1.2rem; color: var(--mist); margin: 0 0 1.6rem; font-style: italic; }
+  .intro p { margin: 0 0 1.6rem; max-width: 30rem; }
+  .index { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(238,241,245,.14); }
+  .index li { border-bottom: 1px solid rgba(238,241,245,.14); }
+  .index button {
+    all: unset;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    width: 100%;
+    padding: .8rem .2rem;
+    font-size: 1.05rem;
+    color: var(--mist);
+    transition: color .2s;
+  }
+  .index button:hover { color: var(--paper); }
+  .index button[aria-current="true"] { color: var(--paper); }
+  .index button[aria-current="true"] .t::before {
+    content: ""; display: inline-block; width: .5rem; height: .5rem; border-radius: 50%;
+    background: var(--lamp); margin-right: .6rem; vertical-align: .12rem;
+  }
+  .index .d { font-variant-numeric: tabular-nums; font-size: .95rem; }
+  .intro .note { font-size: .9rem; color: var(--mist); margin: 2.2rem 0 0; }
+
+  /* the phone */
+  .phone {
+    --h: min(86vh, 860px);
+    height: var(--h);
+    aspect-ratio: 9 / 19.5;
+    border-radius: calc(var(--h) * .072);
+    padding: calc(var(--h) * .013);
+    background: linear-gradient(145deg, #3a3f47, #15171b 40%, #2b2f36);
+    box-shadow: 0 0 0 1px #4a5059 inset, 0 40px 80px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(0,0,0,.5);
+    position: relative;
+  }
+  .screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--h) * .06);
+    overflow: hidden;
+    background: var(--glass);
+    font-family: var(--ui);
+  }
+  .island {
+    position: absolute; top: 1.1%; left: 50%; transform: translateX(-50%);
+    width: 31%; height: 3.6%; background: #000; border-radius: 999px; z-index: 6;
+  }
+  .status {
+    position: absolute; inset: 0 0 auto 0; height: 6%;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 9% 0 10%; font-size: .78rem; font-weight: 600; color: #fff; z-index: 5;
+    pointer-events: none;
+  }
+  .status .bars { display: flex; gap: 3px; align-items: flex-end; }
+  .status .bars i { display: block; width: 3px; background: #fff; border-radius: 1px; }
+  .topbar {
+    position: absolute; top: 6%; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: center; gap: .6rem; padding: .4rem 1rem;
+    color: #fff; pointer-events: none;
+    text-shadow: 0 1px 8px rgba(0,0,0,.5);
+  }
+  .topbar img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,.85); }
+  .topbar .who { font-size: .85rem; font-weight: 600; line-height: 1.2; }
+  .topbar .who span { display: block; font-weight: 400; opacity: .75; font-size: .75rem; }
+
+  .feed {
+    height: 100%;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .feed::-webkit-scrollbar { display: none; }
+  .clip {
+    position: relative;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .clip .backdrop {
+    position: absolute; inset: -10%;
+    background-size: cover; background-position: center;
+    filter: blur(28px) brightness(.45) saturate(1.2);
+  }
+  .clip video {
+    position: relative;
+    width: 100%;
+    max-height: 100%;
+    display: block;
+    background: #000;
+    cursor: pointer;
+  }
+  .clip.square video, .clip.wide video { box-shadow: 0 10px 40px rgba(0,0,0,.45); }
+  .caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 0 4.4rem 2.4rem 1rem;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+    padding-top: 4rem;
+    pointer-events: none;
+  }
+  .caption h2 { font-size: 1rem; margin: 0 0 .25rem; font-weight: 650; line-height: 1.25; }
+  .caption p { font-size: .82rem; line-height: 1.4; margin: 0; opacity: .9; }
+  .caption .meta { font-size: .75rem; opacity: .7; margin-top: .35rem; }
+  .side {
+    position: absolute; right: .7rem; bottom: 2.6rem; z-index: 4;
+    display: flex; flex-direction: column; gap: .9rem; align-items: center;
+  }
+  .side button {
+    all: unset; cursor: pointer;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.16);
+    backdrop-filter: blur(6px);
+    color: #fff;
+  }
+  .side button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+  .side svg { width: 22px; height: 22px; }
+  .progress {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: rgba(255,255,255,.2); z-index: 4;
+  }
+  .progress i { display: block; height: 100%; width: 0; background: var(--lamp); }
+  .home-bar {
+    position: absolute; bottom: .6%; left: 50%; transform: translateX(-50%);
+    width: 36%; height: .5%; min-height: 4px; background: rgba(255,255,255,.8); border-radius: 999px; z-index: 6;
+    pointer-events: none;
+  }
+  .hint {
+    position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+    font-size: .75rem; color: #fff; background: rgba(0,0,0,.45);
+    padding: .35rem .7rem; border-radius: 999px; z-index: 5; pointer-events: none;
+    transition: opacity .6s;
+  }
+  .hint.gone { opacity: 0; }
+
+  /* on a real phone the page becomes the phone */
+  @media (max-width: 760px) {
+    body { background: var(--glass); }
+    .stage { display: block; padding: 0; height: 100%; }
+    .intro { display: none; }
+    .phone { height: 100%; width: 100%; aspect-ratio: auto; border-radius: 0; padding: 0; background: none; box-shadow: none; }
+    .screen { border-radius: 0; }
+    .island, .status, .home-bar { display: none; }
+    .topbar { top: env(safe-area-inset-top, 0); padding-top: .8rem; }
+    .clip { height: 100dvh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .feed { scroll-behavior: auto; }
+    .hint { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <section class="intro" aria-labelledby="title">
+    <h1 id="title">Michael Cebral</h1>
+    <p class="lede">Films I have shot, animated and edited</p>
+    <p>A science film painted from ocean data, a brand film and event films for associations in Lugo, my home town. Scroll the phone, or pick a film from the list. Tap a video to turn its sound on.</p>
+    <ol class="index" id="index"></ol>
+    <p class="note">This page is unlisted and not indexed by search engines. <a href="/">Go to mcebral.com</a></p>
+  </section>
+
+  <div class="phone">
+    <div class="screen">
+      <div class="island" aria-hidden="true"></div>
+      <div class="status" aria-hidden="true">
+        <span>9:41</span>
+        <span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span>
+      </div>
+      <div class="topbar">
+        <img src="/michael-portrait.webp" alt="">
+        <div class="who">Michael Cebral<span>Video work</span></div>
+      </div>
+      <div class="feed" id="feed" tabindex="0" aria-label="Video feed. Use the arrow keys to move between films."></div>
+      <div class="hint" id="hint">Scroll for more</div>
+      <div class="home-bar" aria-hidden="true"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var films = [
+    {
+      id: 'wind-that-feeds-the-sea', shape: 'square',
+      title: 'The wind that feeds the sea',
+      text: 'How the summer north wind brings cold, nutrient rich water up along the Rías Baixas, and the algae bloom that follows. Painted from real data, every stroke following an ocean model.',
+      meta: 'Data film, 2026', duration: 95
+    },
+    {
+      id: 'laikas-company-reel', shape: 'wide',
+      title: 'Laika’s Company',
+      text: 'Brand film for Laika’s Company, the space communication project I founded in 2026.',
+      meta: 'Brand film, 2026', duration: 180
+    },
+    {
+      id: 'copa-galicia-2027', shape: 'wide',
+      title: 'Copa Galicia 2027',
+      text: 'Launch film for the 2027 Copa Galicia, a regional team tournament of tute, the Galician card game.',
+      meta: 'Event launch film, 2026', duration: 139
+    },
+    {
+      id: 'simply-the-best-2026', shape: 'wide',
+      title: 'Simply The Best',
+      text: 'A tute tournament at the Lugo Congress Centre, filmed with a drone and a handheld gimbal, then graded and cut to music.',
+      meta: 'Event film, October 2026', duration: 64
+    }
+  ];
+
+  var feed = document.getElementById('feed');
+  var index = document.getElementById('index');
+  var hint = document.getElementById('hint');
+  var soundOn = false;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function fmt(s) { var m = Math.floor(s / 60), r = Math.round(s % 60); return m + ':' + (r < 10 ? '0' : '') + r; }
+
+  var icons = {
+    off: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>',
+    on: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>'
+  };
+
+  films.forEach(function (f, i) {
+    var poster = 'media/' + f.id + '.jpg';
+    var el = document.createElement('article');
+    el.className = 'clip ' + f.shape;
+    el.id = f.id;
+    el.setAttribute('aria-label', f.title);
+    el.innerHTML =
+      '<div class="backdrop" style="background-image:url(' + poster + ')"></div>' +
+      '<video src="media/' + f.id + '.mp4" poster="' + poster + '" playsinline muted loop preload="' + (i === 0 ? 'auto' : 'metadata') + '" aria-label="' + f.title + '"></video>' +
+      '<div class="caption"><h2>' + f.title + '</h2><p>' + f.text + '</p><div class="meta">' + f.meta + ' · ' + fmt(f.duration) + '</div></div>' +
+      '<div class="side"><button type="button" class="snd" aria-label="Turn sound on">' + icons.off + '</button></div>' +
+      '<div class="progress"><i></i></div>';
+    feed.appendChild(el);
+
+    var li = document.createElement('li');
+    li.innerHTML = '<button type="button" data-i="' + i + '"><span class="t">' + f.title + '</span><span class="d">' + fmt(f.duration) + '</span></button>';
+    index.appendChild(li);
+  });
+
+  var clips = Array.prototype.slice.call(feed.querySelectorAll('.clip'));
+  var buttons = Array.prototype.slice.call(index.querySelectorAll('button'));
+  var current = -1;
+
+  function setSound(on) {
+    soundOn = on;
+    clips.forEach(function (c) {
+      var v = c.querySelector('video'); v.muted = !on;
+      var b = c.querySelector('.snd');
+      b.innerHTML = on ? icons.on : icons.off;
+      b.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on');
+    });
+  }
+
+  function activate(i) {
+    if (i === current) return;
+    current = i;
+    clips.forEach(function (c, k) {
+      var v = c.querySelector('video');
+      if (k === i) {
+        v.muted = !soundOn;
+        if (!reduce || soundOn) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      } else { v.pause(); }
+    });
+    buttons.forEach(function (b, k) { b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting && e.intersectionRatio > 0.6) activate(clips.indexOf(e.target));
+    });
+  }, { root: feed, threshold: [0.6] });
+  clips.forEach(function (c) { io.observe(c); });
+
+  clips.forEach(function (c) {
+    var v = c.querySelector('video');
+    var bar = c.querySelector('.progress i');
+    v.addEventListener('timeupdate', function () {
+      if (v.duration) bar.style.width = (v.currentTime / v.duration * 100) + '%';
+    });
+    v.addEventListener('click', function () {
+      if (!soundOn) { setSound(true); v.play(); }
+      else if (v.paused) { v.play(); } else { v.pause(); }
+    });
+    c.querySelector('.snd').addEventListener('click', function () {
+      setSound(!soundOn);
+      if (soundOn) v.play();
+    });
+  });
+
+  function go(i) {
+    i = Math.max(0, Math.min(clips.length - 1, i));
+    feed.scrollTo({ top: clips[i].offsetTop, behavior: reduce ? 'auto' : 'smooth' });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.i); }); });
+  feed.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+    if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  });
+  feed.addEventListener('scroll', function () { hint.classList.add('gone'); }, { passive: true });
+  setTimeout(function () { hint.classList.add('gone'); }, 6000);
+
+  if (location.hash) {
+    var k = clips.findIndex(function (c) { return '#' + c.id === location.hash; });
+    if (k > 0) setTimeout(function () { go(k); }, 100);
+  }
+  activate(0);
+})();
+</script>
+</body>
+</html>

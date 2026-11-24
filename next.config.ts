@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
     async headers() {
         return [
             {
+                // The video reel is unlisted, so search engines are told to
+                // leave the page and its files out.
+                source: '/videos/:path*',
+                headers: [
+                    { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+                ],
+            },
+            {
                 // The Sample Newsroom demo runs in WordPress Playground, which
                 // downloads its blueprint and two zip files from here. That
                 // page lives on another site, so the browser needs to be told
@@ -45,6 +53,12 @@ const nextConfig: NextConfig = {
                 // folder by itself, so the address is pointed at the file.
                 source: '/newsroom',
                 destination: '/newsroom/index.html',
+            },
+            {
+                // A private reel of video work, kept in public/videos like the
+                // newsroom. It is linked only from the CV and the CERN letter.
+                source: '/videos',
+                destination: '/videos/index.html',
             },
         ];
     },
