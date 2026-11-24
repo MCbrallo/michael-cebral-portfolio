@@ -280,14 +280,14 @@
   };
 
   films.forEach(function (f, i) {
-    var poster = 'media/' + f.id + '.jpg';
+    var poster = '/videos/media/' + f.id + '.jpg';
     var el = document.createElement('article');
     el.className = 'clip ' + f.shape;
     el.id = f.id;
     el.setAttribute('aria-label', f.title);
     el.innerHTML =
       '<div class="backdrop" style="background-image:url(' + poster + ')"></div>' +
-      '<video src="media/' + f.id + '.mp4" poster="' + poster + '" playsinline muted loop preload="' + (i === 0 ? 'auto' : 'metadata') + '" aria-label="' + f.title + '"></video>' +
+      '<video src="/videos/media/' + f.id + '.mp4" poster="' + poster + '" playsinline muted loop preload="' + (i === 0 ? 'auto' : 'metadata') + '" aria-label="' + f.title + '"></video>' +
       '<div class="caption"><h2>' + f.title + '</h2><p>' + f.text + '</p><div class="meta">' + f.meta + ' · ' + fmt(f.duration) + '</div></div>' +
       '<div class="side"><button type="button" class="snd" aria-label="Turn sound on">' + icons.off + '</button></div>' +
       '<div class="progress"><i></i></div>';
